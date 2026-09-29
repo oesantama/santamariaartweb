@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="es" data-solo-claro="1">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Hoja de vida artística · Edgar Santamaría Caleño</title>
+  <meta name="description" content="Hoja de vida artística del Maestro Edgar Santamaría Caleño, pintor realista y ebanista." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="js/marca.js"></script>
+  <link rel="stylesheet" href="css/marca.css" />
+  <style>
+    /* =====================================================================
+       HOJA DE VIDA EN CÓDIGO
+       En pantalla es una página adaptable; al imprimir o "Guardar como PDF"
+       se acomoda en formato A4. El contenido de experiencia, exposiciones y
+       reconocimientos sale de la pestaña "trayectoria" (ver js/datos.js).
+       ===================================================================== */
+    @page { size: A4; margin: 14mm 0; }
+    @page :first { margin-top: 0; }
+    @media print {
+      body { background: #fff !important; font-size: 9.5pt; }
+      .no-imprimir { display: none !important; }
+      .cv { box-shadow: none !important; margin: 0 !important; max-width: none !important; }
+      .cv-grid { grid-template-columns: 62mm 1fr !important; }
+      section.bloque { break-inside: auto; }
+      .det-expo { display: none; } /* al imprimir, las exposiciones van en una línea */
+      li.bloque, aside section.bloque { break-inside: avoid; }
+      .cv header { padding-top: 8mm !important; padding-bottom: 8mm !important; }
+      .cv h2.text-3xl { font-size: 16pt; }
+      .cv h3.text-xl { font-size: 11.5pt; }
+      .cv p, .cv li { font-size: 8.6pt; line-height: 1.4; }
+      #secciones { row-gap: 0; }
+      #secciones > section + section, .space-y-10 > * + * { margin-top: 1.1rem !important; }
+      ol.space-y-5 > * + * { margin-top: .5rem !important; }
+      .cv-grid > div, .cv-grid > aside { padding-top: 7mm !important; padding-bottom: 7mm !important; }
+      * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    }
+  </style>
+</head>
+<body class="bg-[#d9d2c5] font-sans font-light text-tinta antialiased">
+
+  <div class="no-imprimir sticky top-0 z-50 flex flex-wrap items-center justify-between gap-3 bg-nogal/95 px-4 py-3 text-sm text-lino backdrop-blur" style="padding-top: calc(.75rem + env(safe-area-inset-top))">
+    <a href="index.html" class="hover:text-oroclaro">← Volver al sitio</a>
+    <div class="flex flex-wrap gap-2">
+      <button onclick="window.print()" class="rounded-full bg-lino px-4 py-2 text-nogal hover:bg-oroclaro">Guardar como PDF</button>
+      <a href="catalogo.html" class="rounded-full border border-lino/40 px-4 py-2 hover:border-oroclaro">Ver catálogo</a>
+    </div>
+  </div>
+
+  <article class="cv mx-auto my-6 max-w-5xl bg-lino shadow-2xl sm:my-10">
+    <!-- Encabezado -->
+    <header class="madera-oscura relative px-7 py-12 text-lino sm:px-12">
+      <div class="absolute inset-0 bg-[rgba(20,13,8,.45)]"></div>
+      <div class="relative flex flex-col gap-8 sm:flex-row sm:items-center">
+        <img id="retrato" alt="Edgar Santamaría Caleño" onerror="imgFallback(this)" class="h-32 w-32 rounded-full border-2 border-oro object-cover grayscale-[.3]" />
+        <div>
+          <h1 class="font-serif text-4xl font-medium leading-tight sm:text-5xl">Edgar Santamaría Caleño</h1>
+          <p class="mt-2 font-serif text-xl italic text-oroclaro">Artista plástico y ebanista · Maestro empírico</p>
+          <img src="img/marca/firma-dorada.png" alt="Firma" class="mt-3 h-10 w-auto" />
+          <p class="mt-2 text-sm text-lino/70">Nacido en San Martín de los Llanos, Meta · Trayectoria en Colombia y Estados Unidos</p>
+        </div>
+      </div>
+    </header>
+
+    <div class="cv-grid grid md:grid-cols-[18rem_1fr]">
+      <!-- Columna lateral -->
+      <aside class="space-y-9 bg-papel px-7 py-10 sm:px-10">
+        <section class="bloque">
+          <h2 class="font-serif text-xl font-semibold">Contacto</h2>
+          <ul class="mt-3 space-y-2 text-sm">
+            <li><a href="mailto:santamaria.art1@gmail.com" class="break-all hover:text-oro">santamaria.art1@gmail.com</a></li>
+            <li><a data-wa="Hola Maestro Santamaría, vi su hoja de vida y quisiera contactarlo." class="hover:text-oro">+57 320 829 6045</a></li>
+            <li><a data-wa-num="573173935276" data-wa="Hola Maestro Santamaría, vi su hoja de vida y quisiera contactarlo." class="hover:text-oro">+57 317 393 5276</a></li>
+            <li><a data-red="instagram" class="hover:text-oro">Instagram: @santamaria_art</a></li>
+            <li><a data-red="facebook" class="hover:text-oro">Facebook: santamaria.art</a></li>
+          </ul>
+        </section>
+        <section class="bloque">
+          <h2 class="font-serif text-xl font-semibold">Técnicas y oficios</h2>
+          <ul id="tecnicas" class="mt-3 flex flex-wrap gap-2 text-xs"></ul>
+        </section>
+        <section class="bloque">
+          <h2 class="font-serif text-xl font-semibold">En cifras</h2>
+          <dl class="mt-3 grid grid-cols-2 gap-3">
+            <div><dd class="font-serif text-3xl">+40</dd><dt class="text-xs text-gris">años de oficio</dt></div>
+            <div><dd class="font-serif text-3xl">13</dd><dt class="text-xs text-gris">años con fábrica de muebles propia</dt></div>
+            <div><dd class="font-serif text-3xl" data-n="exposicion"></dd><dt class="text-xs text-gris">exposiciones colectivas</dt></div>
+            <div><dd class="font-serif text-3xl" data-n="reconocimiento"></dd><dt class="text-xs text-gris">premios y reconocimientos</dt></div>
+          </dl>
+        </section>
+        <section class="bloque">
+          <h2 class="font-serif text-xl font-semibold">Servicios</h2>
+          <ul class="mt-3 space-y-1.5 text-sm leading-snug">
+            <li>Obra original y retratos por encargo</li>
+            <li>Marcos de autor y bastidores</li>
+            <li>Muebles, puertas y carpintería fina</li>
+            <li>Restauración en madera</li>
+            <li>Talleres de formación artística</li>
+            <li>Envíos internacionales asegurados</li>
+          </ul>
+        </section>
+        <section class="bloque">
+          <h2 class="font-serif text-xl font-semibold">Idiomas</h2>
+          <!-- Agregar inglés u otros idiomas cuando se confirme el nivel -->
+          <p class="mt-3 text-sm">Español (nativo)</p>
+        </section>
+      </aside>
+
+      <!-- Columna principal: se llena con los datos de trayectoria -->
+      <div class="space-y-10 px-7 py-10 sm:px-12">
+        <section class="bloque">
+          <h2 class="font-serif text-3xl">Perfil</h2>
+          <p id="resumen" class="mt-3 leading-relaxed"></p>
+          <p id="empirico" class="mt-3 font-serif text-lg italic leading-snug text-moriche"></p>
+        </section>
+        <div id="secciones" class="space-y-10"></div>
+      </div>
+    </div>
+
+    <section class="no-imprimir border-t border-tinta/15 px-7 py-10 sm:px-12">
+      <h2 class="font-serif text-3xl">Certificados y reconocimientos</h2>
+      <p class="mt-2 text-sm text-gris">Documentos originales. Toque cualquiera para verlo en grande.</p>
+      <div id="galeriaCert" class="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-6"></div>
+    </section>
+
+    <footer class="flex flex-wrap justify-between gap-2 border-t border-tinta/15 px-7 py-5 text-xs text-gris sm:px-12">
+      <span>Hoja de vida artística · Actualizada <span id="fecha"></span></span>
+      <span class="font-serif italic">Obra original, hecha a mano y firmada por su autor.</span>
+    </footer>
+  </article>
+
+  <script src="js/datos.js"></script>
+  <script>
+    // Orden en que aparecen las secciones de la trayectoria
+    const ORDEN = ['experiencia', 'reconocimiento', 'exposicion', 'hito', 'formacion'];
+    let FOTOS = [];
+
+    function pintarTodo() {
+      document.getElementById('retrato').src = enlaceDrive(CONFIG.retrato);
+      document.getElementById('resumen').textContent = PERFIL.resumen;
+      document.getElementById('empirico').textContent = PERFIL.empirico;
+      document.getElementById('tecnicas').innerHTML = PERFIL.tecnicas
+        .map(t => `<li class="rounded-full border border-oro/60 px-3 py-1">${esc(t)}</li>`).join('');
+
+      document.getElementById('secciones').innerHTML = ORDEN.map(tipo => {
+        // Lo más reciente primero, como se acostumbra en una hoja de vida
+        const items = TRAYECTORIA.filter(t => (t.tipo || 'hito') === tipo).sort((a, b) => porAnio(a, b, true));
+        if (!items.length) return '';
+        return `<section class="bloque">
+          <h2 class="font-serif text-3xl">${TIPOS[tipo]}</h2>
+          <ol class="mt-5 space-y-5">${items.map(t => `
+            <li class="bloque grid gap-1 sm:grid-cols-[6.5rem_1fr] sm:gap-5">
+              <span class="font-serif text-lg italic text-oro">${esc(t.anio)}</span>
+              <div>
+                <h3 class="font-serif text-xl font-semibold leading-snug">${esc(t.titulo)}</h3>
+                ${t.lugar ? `<p class="text-sm text-gris">${esc(t.lugar)}</p>` : ''}
+                ${t.detalle ? `<p class="${tipo === 'exposicion' ? 'det-expo ' : ''}mt-1 leading-relaxed text-tinta/85">${esc(t.detalle)}</p>` : ''}
+                ${certificadosDe(t).length ? `<button data-cert="${esc(t.certificado)}" data-tit="${esc(t.titulo)}" class="no-imprimir mt-1 text-sm text-oro underline underline-offset-4">Ver certificado</button>` : ''}
+              </div>
+            </li>`).join('')}
+          </ol></section>`;
+      }).join('');
+
+      FOTOS = [...TRAYECTORIA].sort((a, b) => porAnio(a, b)).flatMap(t => certificadosDe(t).map(src => ({ src, titulo: [t.titulo, t.anio].filter(Boolean).join(' · ') })));
+      document.getElementById('galeriaCert').innerHTML = FOTOS.map((f, i) => `
+        <button data-foto="${i}" class="group overflow-hidden bg-papel text-left">
+          <img src="${esc(f.src)}" alt="${esc(f.titulo)}" loading="lazy" class="aspect-[4/3] w-full object-cover transition group-hover:scale-105" />
+          <span class="block p-2 text-xs leading-snug text-gris">${esc(f.titulo)}</span>
+        </button>`).join('');
+
+      document.querySelectorAll('[data-n]').forEach(el => el.textContent = TRAYECTORIA.filter(t => t.tipo === el.dataset.n).length);
+      document.getElementById('fecha').textContent = new Date().toLocaleDateString('es-CO', { month: 'long', year: 'numeric' });
+    }
+
+    document.addEventListener('click', e => {
+      const c = e.target.closest('[data-cert]');
+      if (c) return abrirVisor(certificadosDe({ certificado: c.dataset.cert }), 0, c.dataset.tit);
+      const f = e.target.closest('[data-foto]');
+      if (f) abrirVisor(FOTOS, +f.dataset.foto);
+    });
+
+    aplicarEnlacesComunes();
+    cargarDatos(pintarTodo);
+  </script>
+</body>
+</html>

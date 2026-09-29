@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="es" data-solo-claro="1">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Catálogo de autor · Edgar Santamaría Caleño</title>
+  <meta name="description" content="Catálogo de autor del Maestro Edgar Santamaría Caleño: colección, taller de madera, formación y envíos." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="js/marca.js"></script>
+  <link rel="stylesheet" href="css/marca.css" />
+  <style>
+    /* =====================================================================
+       CATÁLOGO EN CÓDIGO
+       Cada ".hoja" mide exactamente A4 (210 × 297 mm). En pantalla se ven como
+       páginas una debajo de otra (y se reducen en celulares); al imprimir o
+       "Guardar como PDF" salen como un catálogo de 6 páginas.
+       ===================================================================== */
+    @page { size: A4; margin: 0; }
+    body { background: #d9d2c5; font-family: 'Jost', sans-serif; font-weight: 350; color: #2E2621; }
+    .hoja { width: 210mm; height: 297mm; position: relative; overflow: hidden; margin: 0 auto 28px;
+            background-color: #EEE7DA; box-shadow: 0 10px 40px -10px rgba(40,25,10,.35); }
+    .serif { font-family: 'Cormorant Garamond', serif; }
+    .hoja p { font-size: 9.6pt; line-height: 1.58; }
+    .folio { position: absolute; bottom: 10mm; left: 18mm; right: 18mm; display: flex; justify-content: space-between; font-size: 7pt; letter-spacing: .06em; color: #6F6258; }
+    .folio .n { font-family: 'Cormorant Garamond', serif; font-size: 10pt; font-style: italic; }
+    .lienzo img { display: block; width: 100%; height: 100%; object-fit: cover; }
+    @media print {
+      body { background: none; }
+      .hoja { margin: 0; box-shadow: none; zoom: 1 !important; break-after: page; }
+      .no-imprimir { display: none !important; }
+      * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Barra de herramientas (no sale al imprimir) -->
+  <div class="no-imprimir sticky top-0 z-50 mb-7 flex flex-wrap items-center justify-between gap-3 bg-nogal/95 px-4 py-3 text-sm text-lino backdrop-blur" style="padding-top: calc(.75rem + env(safe-area-inset-top))">
+    <a href="index.html" class="hover:text-oroclaro">← Volver al sitio</a>
+    <div class="flex flex-wrap gap-2">
+      <button onclick="window.print()" class="rounded-full bg-lino px-4 py-2 text-nogal hover:bg-oroclaro">Guardar como PDF</button>
+      <a data-wa="Hola Maestro Santamaría, vi su catálogo y quisiera más información." class="rounded-full border border-lino/40 px-4 py-2 hover:border-oroclaro">WhatsApp</a>
+    </div>
+  </div>
+
+  <div id="catalogo">
+
+  <!-- 1 · PORTADA -->
+  <section class="hoja madera-oscura text-lino">
+    <div class="absolute inset-0" style="background: radial-gradient(ellipse at 50% 35%, rgba(185,145,80,.16), rgba(0,0,0,.4) 75%)"></div>
+    <div class="absolute left-1/2 top-[24mm] -translate-x-1/2">
+      <div class="marco"><div class="paspartu"><div class="lienzo" style="width:124mm;height:84mm"><img id="obraPortada" alt="Obra destacada" onerror="imgFallback(this)"></div></div></div>
+    </div>
+    <div class="absolute inset-x-0 top-[158mm] text-center">
+      <h1 class="serif" style="font-size:46pt;font-weight:400;line-height:.96">Donde el lienzo<br><em style="color:#D9BD86">encuentra la madera</em></h1>
+      <p class="serif mt-[7mm] italic" style="font-size:14.5pt;color:#d8ccb6;line-height:1.35">Pintura y ebanistería de autor.<br>Del Llano a Nueva York, cuatro décadas de oficio.</p>
+      <div class="mx-auto my-[8mm] h-[.35mm] w-[22mm] bg-oro"></div>
+      <p class="serif" style="font-size:19pt;font-weight:500">Maestro Edgar Santamaría Caleño</p>
+      <p class="mt-[2mm]" style="font-size:8.5pt;letter-spacing:.14em;color:#D9BD86">Artista plástico y ebanista</p>
+      <p class="mt-[1.5mm]" style="font-size:8pt;letter-spacing:.1em;color:#b3a58f">Meta, Colombia</p>
+    </div>
+    <img src="img/marca/firma-dorada.png" alt="Firma Santamaría" class="absolute bottom-[11mm] left-1/2 h-[17mm] w-auto -translate-x-1/2">
+  </section>
+
+  <!-- 2 · SEMBLANZA -->
+  <section class="hoja">
+    <div class="absolute inset-y-0 left-0 w-[74mm] madera-oscura">
+      <img id="retrato" alt="Soy yo y qué…, autorretrato" onerror="imgFallback(this)" class="h-full w-full object-cover" style="object-position:38% center">
+    </div>
+    <div class="absolute left-[88mm] right-[18mm] top-[22mm]">
+      <h2 class="serif" style="font-size:31pt;line-height:1.02;font-weight:500">Del Llano a Nueva York, y de vuelta a casa</h2>
+      <div class="mt-[7mm] space-y-[3mm]">
+        <p>Edgar Santamaría Caleño nació en San Martín de los Llanos, Meta. Desde niño degradaba colores y sombras en sus cuadernos para pintar los paisajes y personajes de su región, moldeaba arcilla y tallaba madera. A los veinte años se fue a Bogotá, donde pintó sin parar durante doce años.</p>
+        <p>De regreso a su pueblo, y con el oficio de carpintero heredado de su familia, fundó una fábrica de muebles que durante trece años surtió al departamento del Meta. En 2016 llegó a Nueva York y volvió a los lienzos: expuso en muestras colectivas de Nueva York y Nueva Jersey y recibió reconocimientos de consulados, de la Asamblea Nacional del Ecuador y de premios de la comunidad latina.</p>
+        <p>Su técnica es libre: realismo en la mirada de sus personajes y montañas de color vibrante que envuelven la escena. Pinta el folclor y la gente del Llano, retratos y la ciudad que lo acogió. Sus influencias son el realismo y el impresionismo.</p>
+        <p class="serif italic" style="font-size:13pt;line-height:1.35">Hoy trabaja desde su taller en el Meta, donde cada obra nace completa, con su bastidor y su marco.</p>
+      </div>
+      <img src="img/marca/firma-oscura.png" alt="Firma" class="mt-[5mm] h-[15mm] w-auto">
+    </div>
+    <div class="absolute bottom-[24mm] left-[88mm] right-[18mm] flex border-t border-tinta/25 pt-[4mm]">
+      <div class="flex-1" style="font-size:7.6pt;color:#6F6258"><b class="serif block" style="font-size:25pt;font-weight:500;color:#2E2621;line-height:1">+40</b>años de oficio</div>
+      <div class="flex-1" style="font-size:7.6pt;color:#6F6258"><b class="serif block" style="font-size:25pt;font-weight:500;color:#2E2621;line-height:1" data-n="exposicion"></b>exposiciones en Nueva York y Nueva Jersey</div>
+      <div class="flex-1" style="font-size:7.6pt;color:#6F6258"><b class="serif block" style="font-size:25pt;font-weight:500;color:#2E2621;line-height:1" data-n="reconocimiento"></b>premios y reconocimientos</div>
+    </div>
+    <div class="folio" style="left:88mm"><span>Semblanza del maestro</span><span class="n">2</span></div>
+  </section>
+
+  <!-- 3 · COLECCIÓN (se genera con las obras marcadas como "destacada") -->
+  <div id="paginasColeccion"></div>
+
+  <!-- TRAYECTORIA Y RECONOCIMIENTOS (se genera con la pestaña "trayectoria") -->
+  <section class="hoja" data-num>
+    <div class="px-[18mm] pt-[20mm]">
+      <h2 class="serif" style="font-size:32pt;font-weight:500">Trayectoria y reconocimientos</h2>
+      <p class="mt-[2mm] max-w-[150mm]" style="color:#6F6258">Exposiciones colectivas y premios en Nueva York y Nueva Jersey, respaldados por certificados originales.</p>
+      <div class="mt-[8mm] grid grid-cols-[70mm_1fr] gap-[10mm]">
+        <div>
+          <h3 class="serif border-t-[.4mm] border-oro pt-[3mm]" style="font-size:15pt;font-weight:600">Premios y reconocimientos</h3>
+          <ol id="catPremios" class="mt-[3mm] space-y-[3.2mm]"></ol>
+          <div id="catTrofeos" class="mt-[6mm] grid grid-cols-3 gap-[2.5mm]"></div>
+        </div>
+        <div>
+          <h3 class="serif border-t-[.4mm] border-oro pt-[3mm]" style="font-size:15pt;font-weight:600">Exposiciones colectivas</h3>
+          <ol id="catExpos" class="mt-[3mm] space-y-[2.2mm]"></ol>
+        </div>
+      </div>
+    </div>
+    <div class="folio"><span>Trayectoria</span><span class="n"></span></div>
+  </section>
+
+  <!-- 4 · TALLER DE MADERA -->
+  <section class="hoja" data-num>
+    <div class="madera-banda relative h-[58mm] text-lino">
+      <div class="absolute inset-0" style="background:linear-gradient(180deg,rgba(20,12,6,.15),rgba(20,12,6,.72))"></div>
+      <div class="absolute inset-x-[18mm] bottom-[10mm]">
+        <h2 class="serif" style="font-size:36pt;font-weight:500">El taller de madera</h2>
+        <p class="serif mt-[2mm] italic" style="font-size:13pt;color:#D9BD86">Ebanistería fina para el arte, el hogar y la arquitectura</p>
+      </div>
+    </div>
+    <p class="mx-[18mm] mt-[7mm]" style="font-size:10pt!important">Cuatro décadas de oficio con la madera, puestas al servicio de cada proyecto: desde el bastidor que sostiene una pintura hasta la puerta que recibe a quienes llegan a casa. Cada pieza se diseña a la medida, se trabaja a mano y se entrega con el rigor de una obra de arte.</p>
+    <div id="serviciosMadera"></div>
+    <div class="absolute inset-x-0 bottom-0 h-[46mm] bg-moriche px-[18mm] pt-[8mm] text-lino">
+      <p class="serif italic" style="font-size:12pt!important;color:#D9BD86">Madera que sostiene el arte. Oficio que sostiene el tiempo.</p>
+      <div class="mt-[3mm] grid grid-cols-4 gap-[6mm]" style="font-size:8.4pt;line-height:1.4">
+        <div class="border-l border-oroclaro/50 pl-[3mm]">Coleccionistas, artistas y galerías</div>
+        <div class="border-l border-oroclaro/50 pl-[3mm]">Hogares, fincas y casas de campo</div>
+        <div class="border-l border-oroclaro/50 pl-[3mm]">Arquitectos y diseñadores de interiores</div>
+        <div class="border-l border-oroclaro/50 pl-[3mm]">Hoteles, restaurantes y constructoras</div>
+      </div>
+      <div class="folio" style="color:#a9b2a3"><span>El taller de madera</span><span class="n"></span></div>
+    </div>
+  </section>
+
+  <!-- 5 · FORMACIÓN -->
+  <section class="hoja" data-num>
+    <div class="relative h-[88mm]">
+      <img id="fotoTaller" alt="Taller de formación" onerror="imgFallback(this)" class="h-full w-full object-cover">
+      <div class="absolute inset-0" style="background:linear-gradient(180deg,rgba(51,68,58,.2),rgba(36,26,19,.55))"></div>
+    </div>
+    <div class="absolute inset-x-[18mm] top-[100mm]">
+      <h2 class="serif" style="font-size:34pt;font-weight:500;color:#33443A">El oficio que se hereda</h2>
+      <div class="mt-[6mm] grid grid-cols-2 gap-[10mm]">
+        <p>El maestro aprendió en el taller, y en el taller enseña. Pone cuatro décadas de experiencia al servicio de nuevas generaciones, con programas que unen técnica, sensibilidad artística y preservación del patrimonio cultural.</p>
+        <p>Para academias, Casas de la Cultura, colegios, universidades, cajas de compensación y entidades territoriales. Cada programa se diseña a la medida de su población y termina con una muestra de resultados ante la comunidad.</p>
+      </div>
+      <div class="mt-[9mm] grid grid-cols-2 gap-x-[10mm] gap-y-[6mm]">
+        <div class="border-t border-moriche/35 pt-[2.6mm]"><h3 class="serif" style="font-size:13.5pt;font-weight:600">Pintura al óleo y acrílico</h3><p style="font-size:8.5pt!important">Color, composición, veladuras y empaste, del boceto a la obra terminada.</p></div>
+        <div class="border-t border-moriche/35 pt-[2.6mm]"><h3 class="serif" style="font-size:13.5pt;font-weight:600">Dibujo en carbón y pastel</h3><p style="font-size:8.5pt!important">Valores, luz y sombra para el retrato y el paisaje realista.</p></div>
+        <div class="border-t border-moriche/35 pt-[2.6mm]"><h3 class="serif" style="font-size:13.5pt;font-weight:600">Ebanistería y talla básica</h3><p style="font-size:8.5pt!important">Herramientas manuales, lectura de la veta, ensambles y acabados.</p></div>
+        <div class="border-t border-moriche/35 pt-[2.6mm]"><h3 class="serif" style="font-size:13.5pt;font-weight:600">Del bastidor al marco</h3><p style="font-size:8.5pt!important">Construcción de soportes profesionales, un saber que casi ninguna academia enseña.</p></div>
+      </div>
+      <p class="mt-[8mm]" style="font-size:8.6pt!important;color:#6F6258"><b style="font-weight:500;color:#2E2621">Formatos:</b> talleres intensivos, cursos por ciclos, clases magistrales y demostraciones en vivo para ferias y festivales.</p>
+    </div>
+    <p class="serif absolute inset-x-[18mm] bottom-[24mm] border-l-[.4mm] border-oro pl-[6mm] italic" style="font-size:19pt!important;line-height:1.3;color:#33443A">Preservar un oficio es preservar una forma de mirar el mundo.</p>
+    <div class="folio"><span>Formación y talleres comunitarios</span><span class="n"></span></div>
+  </section>
+
+  <!-- 6 · CONTRAPORTADA -->
+  <section class="hoja madera-oscura text-lino">
+    <div class="absolute inset-0 bg-[rgba(20,13,8,.5)]"></div>
+    <div class="relative px-[18mm] pt-[22mm]">
+      <h2 class="serif max-w-[150mm]" style="font-size:30pt;font-weight:500;line-height:1.05">Del taller en el Meta a su colección, en cualquier lugar del mundo</h2>
+      <p class="serif mt-[4mm] max-w-[145mm] italic" style="font-size:12.5pt!important;color:#d8ccb6;line-height:1.4">Cada obra viaja con el mismo cuidado con el que fue creada. El embalaje se fabrica en el propio taller, con criterio de ebanista.</p>
+      <div class="mt-[11mm] grid grid-cols-3 gap-[8mm]">
+        <div class="border-t-[.35mm] border-oro pt-[4mm]"><h3 class="serif" style="font-size:14.5pt;font-weight:600">Tubo rígido</h3><p class="mt-[2mm]" style="font-size:8.2pt!important;color:#d6cbb8">Para lienzos y papeles sin montar, enrollados con protección libre de ácido y film de burbuja.</p></div>
+        <div class="border-t-[.35mm] border-oro pt-[4mm]"><h3 class="serif" style="font-size:14.5pt;font-weight:600">Caja de madera reforzada</h3><p class="mt-[2mm]" style="font-size:8.2pt!important;color:#d6cbb8">Para obra enmarcada. Interior acolchado, esquineros, barrera contra la humedad y madera tratada bajo norma NIMF 15.</p></div>
+        <div class="border-t-[.35mm] border-oro pt-[4mm]"><h3 class="serif" style="font-size:14.5pt;font-weight:600">Certificado de autenticidad</h3><p class="mt-[2mm]" style="font-size:8.2pt!important;color:#d6cbb8">Firmado por el maestro, con fotografía, técnica, medidas, año y registro único de la obra.</p></div>
+      </div>
+      <p class="mt-[7mm]" style="font-size:8.4pt!important;color:#b9ab94">Todos los envíos incluyen seguro, número de seguimiento y acompañamiento personalizado hasta la entrega.</p>
+    </div>
+    <div class="absolute inset-x-[18mm] bottom-[22mm] grid grid-cols-[1fr_34mm] items-end gap-[10mm] border-t border-oroclaro/35 pt-[9mm]">
+      <div>
+        <p class="serif" style="font-size:21pt!important;font-weight:500">Maestro Edgar Santamaría Caleño</p>
+        <p class="mb-[6mm] mt-[1.4mm]" style="font-size:8pt!important;letter-spacing:.1em;color:#D9BD86">Pintura realista, ebanistería de autor y formación</p>
+        <p class="serif" style="font-size:15pt!important;line-height:1.5"><span class="inline-block w-[22mm] font-sans" style="font-size:7.5pt;color:#a39680">Correo</span>santamaria.art1@gmail.com</p>
+        <p class="serif" style="font-size:15pt!important;line-height:1.5"><span class="inline-block w-[22mm] font-sans" style="font-size:7.5pt;color:#a39680">WhatsApp</span>(+57) 320 829 6045 · 317 393 5276</p>
+        <p class="serif" style="font-size:15pt!important;line-height:1.5"><span class="inline-block w-[22mm] font-sans" style="font-size:7.5pt;color:#a39680">Redes</span>@santamaria_art · fb/santamaria.art</p>
+      </div>
+      <div class="text-center" style="font-size:6.8pt;color:#a39680;line-height:1.4">
+        <div class="mx-auto mb-[2mm] h-[30mm] w-[30mm] [&>svg]:h-full [&>svg]:w-full"><svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" class="segno"><path transform="scale(4)" class="qrline" stroke="#e9dfc9" d="M0 0.5h7m1 0h6m1 0h1m2 0h7m-25 1h1m5 0h1m2 0h2m1 0h1m1 0h1m1 0h1m1 0h1m5 0h1m-25 1h1m1 0h3m1 0h1m3 0h3m3 0h1m1 0h1m1 0h3m1 0h1m-25 1h1m1 0h3m1 0h1m1 0h2m1 0h1m1 0h1m1 0h1m2 0h1m1 0h3m1 0h1m-25 1h1m1 0h3m1 0h1m1 0h2m3 0h1m1 0h1m2 0h1m1 0h3m1 0h1m-25 1h1m5 0h1m1 0h2m2 0h3m1 0h1m1 0h1m5 0h1m-25 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-17 1h2m-10 1h1m3 0h1m1 0h4m1 0h2m1 0h1m1 0h6m2 0h1m-25 1h6m1 0h1m1 0h1m1 0h1m3 0h1m4 0h2m1 0h1m-23 1h7m1 0h1m1 0h1m3 0h1m1 0h1m1 0h4m-23 1h1m2 0h1m3 0h2m1 0h2m3 0h1m3 0h1m2 0h2m-23 1h1m1 0h1m1 0h2m3 0h3m1 0h1m1 0h1m1 0h1m2 0h4m-25 1h1m7 0h3m1 0h2m1 0h1m4 0h1m2 0h1m-22 1h3m1 0h3m1 0h4m1 0h1m2 0h5m-20 1h2m6 0h2m4 0h4m1 0h2m-24 1h5m1 0h1m7 0h9m-15 1h2m1 0h2m3 0h1m3 0h1m-21 1h7m1 0h4m4 0h1m1 0h1m1 0h1m-21 1h1m5 0h1m2 0h4m1 0h3m3 0h5m-25 1h1m1 0h3m1 0h1m1 0h1m1 0h1m3 0h1m1 0h7m-23 1h1m1 0h3m1 0h1m2 0h5m1 0h1m1 0h3m2 0h3m-25 1h1m1 0h3m1 0h1m2 0h1m1 0h1m1 0h2m1 0h3m2 0h1m1 0h1m-24 1h1m5 0h1m3 0h2m3 0h1m2 0h6m-24 1h7m1 0h3m3 0h2m1 0h2m3 0h3"/></svg>
+</div>
+        Escanee para escribir<br>por WhatsApp
+      </div>
+    </div>
+  </section>
+  </div>
+
+  <script src="js/datos.js"></script>
+  <script>
+    /* Servicios del taller de madera (editar aquí si cambian) */
+    const SERVICIOS_MADERA = [
+      { grupo: 'Para el arte', items: [
+        ['Marcos de autor', 'Diseñados en diálogo con cada obra. Talla, ensamble y acabado a mano, con ceras, pátinas, dorados o maderas al natural.'],
+        ['Molduras personalizadas', 'Perfiles a medida para obra gráfica, fotografía y espejos. Réplica, restauración o reinterpretación de molduras clásicas.'],
+        ['Bastidores indeformables', 'Madera seca, ensambles de precisión, travesaños y cuñas de retensado. No se alabean, incluso en clima tropical.']] },
+      { grupo: 'Para el hogar y la arquitectura', items: [
+        ['Muebles a medida', 'Mesas, comedores, bibliotecas, aparadores y piezas únicas pensadas para su espacio y hechas para durar generaciones.'],
+        ['Puertas y portones', 'Puertas principales e interiores, portones y ventanería en madera maciza, con tallas o líneas contemporáneas.'],
+        ['Carpintería integral', 'Closets, cocinas, escaleras, pasamanos y revestimientos, además de la restauración de muebles antiguos.']] }
+    ];
+    document.getElementById('serviciosMadera').innerHTML = SERVICIOS_MADERA.map(g => `
+      <p class="serif mx-[18mm] mt-[7mm] italic" style="font-size:13pt!important;color:#8E4F32">${g.grupo}</p>
+      <div class="mx-[18mm] mt-[2.5mm] grid grid-cols-3 gap-[9mm]">
+        ${g.items.map(([t, d]) => `<div class="border-t-[.4mm] border-oro pt-[3mm]"><h3 class="serif mb-[2mm]" style="font-size:14pt;font-weight:600">${t}</h3><p style="font-size:8.2pt!important;line-height:1.48">${d}</p></div>`).join('')}
+      </div>`).join('');
+
+    /* Páginas de colección: 4 obras destacadas por página */
+    function fichaObra(o, i) {
+      return `<div>
+        <div class="flex h-[68mm] items-end"><div class="marco"><div class="paspartu"><div class="lienzo" style="height:55mm;max-width:76mm">
+          <img src="${esc(fotoObra(o))}" alt="${esc(o.titulo)}" onerror="imgFallback(this)" style="width:auto;max-width:76mm;height:55mm;object-fit:cover"></div></div></div></div>
+        <p class="serif mt-[5mm]" style="font-size:15.5pt!important;font-weight:600;line-height:1.1"><span class="mr-[2mm] italic" style="font-weight:400;color:#B8914F">${['I','II','III','IV'][i]}</span>${esc(o.titulo)}</p>
+        <p class="mb-[2mm] mt-[1.4mm]" style="font-size:7.8pt!important;color:#6F6258;line-height:1.45">${esc([o.tecnica, o.medidas, o.anio].filter(Boolean).join(' · '))}<br>${/^(no|vendida)/i.test(o.disponible || '') ? 'Colección privada · Se aceptan encargos similares' : 'Precio a consultar · Incluye certificado de autenticidad'}</p>
+        ${o.concepto ? `<p class="serif italic" style="font-size:10.6pt!important;line-height:1.33">${esc(o.concepto)}</p>` : ''}
+      </div>`;
+    }
+
+    function paginaTrayectoria() {
+      const premios = TRAYECTORIA.filter(t => t.tipo === 'reconocimiento').sort((a, b) => porAnio(a, b));
+      const expos = TRAYECTORIA.filter(t => t.tipo === 'exposicion').sort((a, b) => porAnio(a, b));
+      document.getElementById('catPremios').innerHTML = premios.map(t => `
+        <li><p style="font-size:9pt!important;line-height:1.3"><b style="font-weight:500">${esc(t.titulo)}</b>${t.anio ? ` <span style="color:#B8914F">${esc(t.anio)}</span>` : ''}</p>
+        <p style="font-size:7.6pt!important;line-height:1.35;color:#6F6258">${esc(t.detalle)}</p></li>`).join('');
+      document.getElementById('catExpos').innerHTML = expos.map(t => `
+        <li class="grid grid-cols-[11mm_1fr] gap-[2mm]"><span class="serif italic" style="font-size:10pt;color:#B8914F">${esc(t.anio)}</span>
+        <div><p style="font-size:8.6pt!important;line-height:1.25"><b style="font-weight:500">${esc(t.titulo)}</b></p>
+        <p style="font-size:7.3pt!important;line-height:1.3;color:#6F6258">${esc(t.lugar)}</p></div></li>`).join('');
+      // Miniaturas de los trofeos y reconocimientos principales
+      const fotos = premios.slice(0, 3).map(t => certificadosDe(t)[0]).filter(Boolean);
+      document.getElementById('catTrofeos').innerHTML = fotos.map(src => `<div style="height:30mm;background:#241A13"><img src="${esc(src)}" alt="" style="width:100%;height:100%;object-fit:contain"></div>`).join('');
+    }
+
+    function paginasColeccion() {
+      const lista = OBRAS.filter(o => esSi(o.destacada));
+      const obras = lista.length ? lista : OBRAS.slice(0, 4);
+      const grupos = []; for (let i = 0; i < obras.length; i += 4) grupos.push(obras.slice(i, i + 4));
+      document.getElementById('paginasColeccion').innerHTML = grupos.map((g, n) => `
+        <section class="hoja" data-num style="background:#F6F2EA">
+          <div class="px-[18mm] pt-[20mm]">
+            <div class="mb-[9mm] flex items-end justify-between gap-[12mm]">
+              <h2 class="serif whitespace-nowrap" style="font-size:32pt;font-weight:500">Colección${grupos.length > 1 ? ` <span class="italic" style="color:#B8914F">${n + 1}</span>` : ''}</h2>
+              <p style="font-size:8.6pt!important;max-width:84mm;color:#6F6258">Retrato, paisaje y folclor llanero en óleo y empaste. Cada pieza se entrega con bastidor y marco hechos por el propio autor.</p>
+            </div>
+            <div class="grid grid-cols-2 gap-x-[12mm] gap-y-[7mm]">${g.map(fichaObra).join('')}</div>
+          </div>
+          <p class="absolute inset-x-[18mm] bottom-[20mm] border-t border-tinta/20 pt-[3.4mm]" style="font-size:8.2pt!important;color:#6F6258"><b style="font-weight:500;color:#2E2621">Obras y retratos por encargo.</b> Consulte por formatos, temáticas y comisiones para colecciones privadas y corporativas.</p>
+          <div class="folio"><span>Colección</span><span class="n"></span></div>
+        </section>`).join('');
+    }
+
+    function numerarPaginas() {
+      document.querySelectorAll('.hoja').forEach((h, i) => { const n = h.querySelector('.folio .n'); if (n) n.textContent = i + 1; });
+    }
+
+    // En celulares, las hojas A4 se reducen para caber en la pantalla
+    function ajustarEscala() {
+      const z = Math.min(1, (window.innerWidth - 24) / 794);
+      document.querySelectorAll('.hoja').forEach(h => h.style.zoom = z);
+    }
+
+    function pintarTodo() {
+      const destacada = OBRAS.find(o => esSi(o.destacada) && o.categoria !== 'ebanisteria') || OBRAS[0];
+      document.getElementById('obraPortada').src = CONFIG.portadaCatalogo ? enlaceDrive(CONFIG.portadaCatalogo) : fotoObra(destacada);
+      document.getElementById('retrato').src = enlaceDrive(CONFIG.retrato);
+      document.getElementById('fotoTaller').src = enlaceDrive(CONFIG.fotoTaller);
+      paginasColeccion(); paginaTrayectoria();
+      document.querySelectorAll('[data-n]').forEach(el => el.textContent = TRAYECTORIA.filter(t => t.tipo === el.dataset.n).length);
+      numerarPaginas(); ajustarEscala();
+    }
+
+    aplicarEnlacesComunes();
+    cargarDatos(pintarTodo);
+    addEventListener('resize', ajustarEscala);
+    // Al imprimir se quita la reducción para que salga en tamaño real
+    addEventListener('beforeprint', () => document.querySelectorAll('.hoja').forEach(h => h.style.zoom = 1));
+    addEventListener('afterprint', ajustarEscala);
+  </script>
+</body>
+</html>

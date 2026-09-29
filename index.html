@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Edgar Santamaría Caleño · Pintura realista y ebanistería de autor</title>
+  <meta name="description" content="Pintor colombiano de San Martín de los Llanos. Retrato realista, paisaje y folclor llanero en óleo y empaste. Exposiciones y premios en Nueva York y Nueva Jersey. Marcos, muebles y puertas en madera." />
+  <meta property="og:title" content="Maestro Edgar Santamaría Caleño" />
+  <meta property="og:description" content="Donde el lienzo encuentra la madera. Pintura realista y ebanistería de autor." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="js/marca.js"></script>
+  <link rel="stylesheet" href="css/marca.css" />
+  <style>
+    /* Ficha de la obra: aparece al pasar el cursor; en celular siempre visible */
+    @media (hover: hover) {
+      .obra .ficha { opacity: 0; transform: translateY(8px); transition: opacity .35s, transform .35s; }
+      .obra:hover .ficha, .obra:focus-within .ficha { opacity: 1; transform: none; }
+      .obra img { transition: transform .8s cubic-bezier(.2,.7,.2,1); }
+      .obra:hover img { transform: scale(1.04); }
+    }
+  </style>
+</head>
+
+<body class="bg-lino font-sans font-light text-tinta antialiased transition-colors dark:bg-nogal dark:text-lino">
+
+  <!-- ============ NAVEGACIÓN ============ -->
+  <header id="nav" class="fixed inset-x-0 top-0 z-50 transition-all duration-300" style="padding-top: env(safe-area-inset-top)">
+    <nav class="mx-auto flex max-w-7xl items-center justify-between px-5 py-5 md:px-10" aria-label="Principal">
+      <a href="#inicio" class="flex items-center gap-3">
+        <img src="img/marca/firma-oscura.png" alt="Santamaría" class="h-9 w-auto dark:hidden" />
+        <img src="img/marca/firma-dorada.png" alt="Santamaría" class="hidden h-9 w-auto dark:block" />
+      </a>
+      <ul class="hidden items-center gap-7 text-sm lg:flex">
+        <li><a href="#maestro" class="hover:text-oro">El maestro</a></li>
+        <li><a href="#coleccion" class="hover:text-oro">Colección</a></li>
+        <li><a href="#servicios" class="hover:text-oro">Servicios</a></li>
+        <li><a href="#trayectoria" class="hover:text-oro">Trayectoria</a></li>
+        <li><a href="catalogo.html" class="hover:text-oro">Catálogo</a></li>
+        <li><a href="hoja-de-vida.html" class="hover:text-oro">Hoja de vida</a></li>
+        <li><a href="#contacto" class="hover:text-oro">Contacto</a></li>
+      </ul>
+      <div class="flex items-center gap-2">
+        <button id="btnTema" class="grid h-10 w-10 place-items-center rounded-full hover:bg-black/5 dark:hover:bg-white/10" aria-label="Cambiar entre modo claro y oscuro">
+          <svg class="h-5 w-5 dark:hidden" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+          <svg class="hidden h-5 w-5 dark:block" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+        </button>
+        <button id="btnMenu" class="grid h-10 w-10 place-items-center rounded-full lg:hidden" aria-label="Abrir menú" aria-expanded="false" aria-controls="menuMovil">
+          <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h10"/></svg>
+        </button>
+      </div>
+    </nav>
+    <div id="menuMovil" class="hidden border-t border-oro/30 bg-lino/95 px-5 pb-6 backdrop-blur dark:bg-nogal/95 lg:hidden">
+      <ul class="flex flex-col gap-4 pt-5 font-serif text-2xl">
+        <li><a href="#maestro">El maestro</a></li>
+        <li><a href="#coleccion">Colección</a></li>
+        <li><a href="#servicios">Servicios</a></li>
+        <li><a href="#trayectoria">Trayectoria</a></li>
+        <li><a href="catalogo.html">Catálogo</a></li>
+        <li><a href="hoja-de-vida.html">Hoja de vida</a></li>
+        <li><a href="#contacto">Contacto</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main>
+    <!-- ============ 1. HERO ============ -->
+    <section id="inicio">
+      <div class="mx-auto grid min-h-[100svh] max-w-7xl items-center gap-12 px-5 pb-16 pt-32 md:grid-cols-12 md:px-10">
+        <div class="md:col-span-6">
+          <h1 class="aparecer font-serif text-5xl font-normal leading-[0.98] sm:text-6xl lg:text-7xl">Donde el lienzo encuentra la madera</h1>
+          <p class="aparecer aparecer-2 mt-7 max-w-lg text-lg leading-relaxed text-gris dark:text-lino/70">
+            Pintor llanero de mirada realista y color vibrante, y ebanista de oficio. Más de 40 años de trabajo, <span data-n="exposicion"></span> exposiciones colectivas y premios en Nueva York y Nueva Jersey.
+          </p>
+          <div class="aparecer aparecer-3 mt-10 flex flex-wrap gap-4">
+            <a href="#coleccion" class="rounded-full bg-tinta px-7 py-3.5 text-sm text-lino transition hover:bg-arcilla dark:bg-lino dark:text-nogal dark:hover:bg-oroclaro">Ver colección</a>
+            <a data-wa="Hola Maestro Santamaría, vi su página web y me gustaría conocer más sobre su obra." class="inline-flex items-center gap-2 rounded-full border border-tinta/30 px-7 py-3.5 text-sm transition hover:border-oro hover:text-oro dark:border-lino/30">
+              <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.4 14.2c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.5-3.9-4.7-4.1-.1-.2-1.1-1.5-1.1-2.9s.7-2 1-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.4 0 .5l-.4.6-.4.4c-.1.2-.3.3-.1.6.2.3.8 1.3 1.6 2.1 1.1 1 2.1 1.3 2.4 1.4.3.2.5.1.6-.1l.9-1.1c.2-.3.4-.2.7-.1l2 1c.3.1.5.2.5.3.1.2.1.6-.1 1.2z"/></svg>
+              Contactar por WhatsApp
+            </a>
+          </div>
+          <p class="aparecer aparecer-3 mt-6 flex flex-wrap gap-5 text-sm">
+            <a href="catalogo.html" class="underline decoration-oro/60 underline-offset-4 hover:text-oro">Ver catálogo de autor</a>
+            <a href="hoja-de-vida.html" class="underline decoration-oro/60 underline-offset-4 hover:text-oro">Ver hoja de vida</a>
+          </p>
+        </div>
+        <figure class="aparecer aparecer-2 md:col-span-6 lg:col-span-5 lg:col-start-8">
+          <div class="marco mx-auto max-w-md"><div class="paspartu">
+            <img id="obraHero" src="" alt="Obra destacada" onerror="imgFallback(this)" class="aspect-[4/5] w-full cursor-zoom-in object-cover" />
+          </div></div>
+          <figcaption id="obraHeroTxt" class="mt-5 text-center font-serif italic text-gris dark:text-lino/60"></figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- ============ 2. SOBRE EL MAESTRO ============ -->
+    <section id="maestro" class="bg-papel py-24 dark:bg-nogal2 md:py-32">
+      <div class="mx-auto grid max-w-7xl gap-14 px-5 md:grid-cols-12 md:px-10">
+        <div class="md:col-span-5">
+          <img id="retrato" src="" alt="Soy yo y qué…, autorretrato del maestro" onerror="imgFallback(this)" class="aspect-[4/5] w-full object-cover" loading="lazy" />
+        </div>
+        <div class="md:col-span-6 md:col-start-7">
+          <h2 class="font-serif text-4xl leading-tight md:text-5xl">Del Llano a Nueva York, y de vuelta a casa</h2>
+          <div class="mt-8 space-y-5 text-[1.05rem] leading-relaxed text-tinta/85 dark:text-lino/80">
+            <p>Edgar Santamaría Caleño nació en San Martín de los Llanos, Meta. Desde niño degradaba colores y sombras en sus cuadernos para pintar los paisajes y personajes de su región, moldeaba arcilla y tallaba madera. A los veinte años se fue a Bogotá, donde pintó sin parar durante doce años.</p>
+            <p>De regreso a su pueblo, y con el oficio de carpintero heredado de su familia, fundó una fábrica de muebles que durante trece años surtió al departamento del Meta. En 2016 llegó a Nueva York, donde volvió a los lienzos y expuso en muestras colectivas de Nueva York y Nueva Jersey, con reconocimientos de consulados, la Asamblea Nacional del Ecuador y premios de la comunidad latina.</p>
+            <p>Su técnica es libre: realismo en la mirada de sus personajes y montañas de color vibrante que envuelven la escena. Pinta el folclor y la gente del Llano, retratos y la ciudad que lo acogió. Hoy trabaja desde su taller en el Meta, donde cada obra nace completa, con su bastidor y su marco.</p>
+          </div>
+          <img src="img/marca/firma-oscura.png" alt="Firma de Edgar Santamaría" class="mt-8 h-16 w-auto dark:hidden" />
+          <img src="img/marca/firma-dorada.png" alt="" class="mt-8 hidden h-16 w-auto dark:block" />
+          <dl class="mt-10 grid grid-cols-3 gap-6 border-t border-tinta/15 pt-8 dark:border-lino/15">
+            <div class="flex flex-col"><dt class="text-sm text-gris dark:text-lino/60">años de oficio</dt><dd class="order-first font-serif text-4xl">+40</dd></div>
+            <div class="flex flex-col"><dt class="text-sm text-gris dark:text-lino/60">exposiciones en Nueva York y Nueva Jersey</dt><dd class="order-first font-serif text-4xl" data-n="exposicion"></dd></div>
+            <div class="flex flex-col"><dt class="text-sm text-gris dark:text-lino/60">premios y reconocimientos</dt><dd class="order-first font-serif text-4xl" data-n="reconocimiento"></dd></div>
+          </dl>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 3. GALERÍA ============ -->
+    <section id="coleccion" class="py-24 md:py-32">
+      <div class="mx-auto max-w-7xl px-5 md:px-10">
+        <div class="flex flex-col justify-between gap-8 lg:flex-row lg:items-end">
+          <div>
+            <h2 class="font-serif text-4xl md:text-5xl">Colección</h2>
+            <p class="mt-4 max-w-md text-gris dark:text-lino/60">Retrato, paisaje y folclor llanero. Cada obra se entrega con bastidor, marco de autor y certificado de autenticidad.</p>
+          </div>
+          <div id="filtros" class="flex flex-wrap gap-2" role="group" aria-label="Filtrar colección">
+            <button data-filtro="todas" class="filtro">Todas</button>
+            <button data-filtro="pintura" class="filtro">Óleo y acrílico</button>
+            <button data-filtro="dibujo" class="filtro">Carbón y pastel</button>
+            <button data-filtro="ebanisteria" class="filtro">Marcos y ebanistería</button>
+          </div>
+        </div>
+        <div id="galeria" class="mt-14 gap-8 sm:columns-2 lg:columns-3" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <!-- ============ 4. SERVICIOS ============ -->
+    <section id="servicios" class="bg-nogal py-24 text-lino md:py-32">
+      <div class="mx-auto max-w-7xl px-5 md:px-10">
+        <h2 class="max-w-2xl font-serif text-4xl leading-tight md:text-5xl">Del taller en el Meta a su colección, en cualquier lugar del mundo</h2>
+        <div class="mt-16 grid gap-12 md:grid-cols-3 md:gap-10">
+          <article class="border-t border-oro pt-7">
+            <h3 class="font-serif text-2xl">Obras originales por encargo</h3>
+            <p class="mt-3 leading-relaxed text-lino/70">Retratos realistas, paisajes y escenas a partir de sus recuerdos o fotografías, en óleo, acrílico, carbón o pastel. Se entregan enmarcadas y firmadas.</p>
+          </article>
+          <article class="border-t border-oro pt-7">
+            <h3 class="font-serif text-2xl">Enmarcado y ebanistería</h3>
+            <p class="mt-3 leading-relaxed text-lino/70">Trece años al frente de su propia fábrica de muebles. Marcos tallados a mano, bastidores indeformables, muebles, puertas, portones, closets, cocinas y restauración.</p>
+          </article>
+          <article class="border-t border-oro pt-7">
+            <h3 class="font-serif text-2xl">Envíos mundiales asegurados</h3>
+            <p class="mt-3 leading-relaxed text-lino/70">Tubo rígido para lienzos o caja de madera reforzada bajo norma NIMF 15. Cada envío viaja asegurado, con seguimiento y certificado de autenticidad firmado.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 5. TRAYECTORIA ============ -->
+    <section id="trayectoria" class="py-24 md:py-32">
+      <div class="mx-auto grid max-w-7xl gap-16 px-5 md:grid-cols-12 md:px-10">
+        <div class="md:col-span-7">
+          <h2 class="font-serif text-4xl md:text-5xl">Trayectoria</h2>
+          <p class="mt-4 max-w-md text-gris dark:text-lino/60">Del taller familiar en San Martín de los Llanos a las salas de Nueva York y Nueva Jersey.</p>
+          <ol id="lineaTiempo" class="mt-12 border-l border-oro/50"></ol>
+          <div class="mt-12 border-t border-tinta/15 pt-8 dark:border-lino/15">
+            <p class="font-serif text-2xl"><span data-n="exposicion"></span> exposiciones colectivas entre 2018 y 2021</p>
+            <p id="listaExpos" class="mt-3 leading-relaxed text-gris dark:text-lino/60"></p>
+            <button id="btnCertificados" class="mt-6 rounded-full border border-tinta/25 px-5 py-2.5 text-sm hover:border-oro hover:text-oro dark:border-lino/25">Ver los certificados</button>
+          </div>
+        </div>
+        <aside class="space-y-5 md:col-span-5">
+          <a href="catalogo.html" class="block bg-nogal p-8 text-lino transition hover:bg-nogal2">
+            <h3 class="font-serif text-2xl">Catálogo de autor</h3>
+            <p class="mt-2 text-sm leading-relaxed text-lino/70">Colección, taller de madera, formación y envíos. Se puede ver en línea o guardar como PDF.</p>
+            <span class="mt-5 inline-block rounded-full bg-lino px-5 py-2.5 text-sm text-nogal">Abrir catálogo</span>
+          </a>
+          <a href="hoja-de-vida.html" class="block border border-tinta/15 bg-papel p-8 transition hover:border-oro dark:border-lino/15 dark:bg-nogal2">
+            <h3 class="font-serif text-2xl">Hoja de vida artística</h3>
+            <p class="mt-2 text-sm leading-relaxed text-gris dark:text-lino/60">Perfil, técnicas, experiencia y reconocimientos, para galerías, curadores e instituciones.</p>
+            <span class="mt-5 inline-block rounded-full bg-tinta px-5 py-2.5 text-sm text-lino dark:bg-lino dark:text-nogal">Ver hoja de vida</span>
+          </a>
+        </aside>
+      </div>
+    </section>
+
+    <!-- ============ 6. FORMACIÓN ============ -->
+    <section id="formacion" class="bg-moriche py-24 text-lino md:py-32">
+      <div class="mx-auto grid max-w-7xl items-center gap-14 px-5 md:grid-cols-2 md:px-10">
+        <div>
+          <h2 class="font-serif text-4xl md:text-5xl">El oficio que se hereda</h2>
+          <p class="mt-6 text-lg leading-relaxed text-lino/80">El maestro aprendió en el taller, y en el taller enseña. Lleva su experiencia a Casas de la Cultura, academias, colegios y comunidades con talleres de pintura, dibujo en carbón y pastel, talla y ebanistería, y construcción de bastidores y marcos.</p>
+          <p class="mt-4 leading-relaxed text-lino/70">Talleres intensivos, cursos por ciclos, clases magistrales y demostraciones en vivo, diseñados a la medida de cada institución.</p>
+          <a data-wa="Hola Maestro Santamaría, represento a una institución y queremos información sobre sus talleres de formación." class="mt-9 inline-block rounded-full bg-lino px-7 py-3.5 text-sm text-moriche transition hover:bg-oroclaro">Solicitar propuesta para su institución</a>
+        </div>
+        <figure>
+          <img id="fotoTaller" src="" alt="Taller de formación en artes plásticas" onerror="imgFallback(this)" class="aspect-[5/4] w-full object-cover" loading="lazy" />
+          <figcaption class="mt-4 font-serif text-xl italic text-oroclaro">Preservar un oficio es preservar una forma de mirar el mundo.</figcaption>
+        </figure>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============ 7. CONTACTO ============ -->
+  <footer id="contacto" class="bg-papel pt-24 dark:bg-nogal2 md:pt-32">
+    <div class="mx-auto grid max-w-7xl gap-16 px-5 md:grid-cols-2 md:px-10">
+      <div>
+        <h2 class="font-serif text-4xl md:text-5xl">Conversemos sobre su próxima obra</h2>
+        <p class="mt-5 max-w-md text-gris dark:text-lino/60">Obra disponible, encargos, enmarcado, ebanistería o talleres. Respondemos personalmente.</p>
+        <div class="mt-10 space-y-6">
+          <div>
+            <p class="text-sm text-gris dark:text-lino/60">Correo</p>
+            <a href="mailto:santamaria.art1@gmail.com" class="break-all font-serif text-2xl hover:text-oro">santamaria.art1@gmail.com</a>
+          </div>
+          <div class="flex flex-wrap items-center gap-3">
+            <span class="w-44 font-serif text-2xl">+57 320 829 6045</span>
+            <a data-wa="Hola Maestro Santamaría, quisiera hacer una consulta." class="rounded-full bg-moriche px-4 py-2 text-sm text-lino hover:bg-tinta">WhatsApp</a>
+            <a href="tel:+573208296045" class="rounded-full border border-tinta/25 px-4 py-2 text-sm hover:border-oro dark:border-lino/25">Llamar</a>
+          </div>
+          <div class="flex flex-wrap items-center gap-3">
+            <span class="w-44 font-serif text-2xl">+57 317 393 5276</span>
+            <a data-wa-num="573173935276" data-wa="Hola Maestro Santamaría, quisiera hacer una consulta." class="rounded-full bg-moriche px-4 py-2 text-sm text-lino hover:bg-tinta">WhatsApp</a>
+            <a href="tel:+573173935276" class="rounded-full border border-tinta/25 px-4 py-2 text-sm hover:border-oro dark:border-lino/25">Llamar</a>
+          </div>
+        </div>
+        <div class="mt-10 flex flex-wrap gap-3">
+          <a data-red="instagram" class="inline-flex items-center gap-2 rounded-full border border-tinta/20 px-4 py-2.5 text-sm hover:border-oro hover:text-oro dark:border-lino/20">
+            <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".8" fill="currentColor"/></svg>@santamaria_art
+          </a>
+          <a data-red="facebook" class="inline-flex items-center gap-2 rounded-full border border-tinta/20 px-4 py-2.5 text-sm hover:border-oro hover:text-oro dark:border-lino/20">
+            <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 8V6.5c0-.7.2-1.2 1.2-1.2H17V2.2A24 24 0 0 0 14.4 2C12 2 10.5 3.4 10.5 6v2H8v3.3h2.5V22H14V11.3h2.7L17 8z"/></svg>santamaria.art
+          </a>
+        </div>
+      </div>
+
+      <!-- Formulario: envía a santamaria.art1@gmail.com con FormSubmit.
+           La primera vez llega un correo de activación que hay que confirmar una sola vez.
+           Si el servicio falla, se abre el correo del visitante con el mensaje listo. -->
+      <form id="formContacto" class="space-y-5" novalidate>
+        <div class="grid gap-5 sm:grid-cols-2">
+          <label class="block"><span class="text-sm text-gris dark:text-lino/60">Nombre</span>
+            <input name="nombre" required autocomplete="name" class="mt-2 w-full border-0 border-b border-tinta/30 bg-transparent px-0 py-2 focus:border-oro focus:ring-0 dark:border-lino/30" /></label>
+          <label class="block"><span class="text-sm text-gris dark:text-lino/60">Correo electrónico</span>
+            <input name="email" type="email" required autocomplete="email" class="mt-2 w-full border-0 border-b border-tinta/30 bg-transparent px-0 py-2 focus:border-oro focus:ring-0 dark:border-lino/30" /></label>
+        </div>
+        <label class="block"><span class="text-sm text-gris dark:text-lino/60">Motivo</span>
+          <select name="motivo" class="mt-2 w-full border-0 border-b border-tinta/30 bg-transparent px-0 py-2 focus:border-oro focus:ring-0 dark:border-lino/30 dark:bg-nogal2">
+            <option>Adquirir una obra</option><option>Obra o retrato por encargo</option><option>Enmarcado y bastidores</option>
+            <option>Muebles, puertas y ebanistería</option><option>Talleres y formación</option><option>Otro</option>
+          </select></label>
+        <label class="block"><span class="text-sm text-gris dark:text-lino/60">Mensaje</span>
+          <textarea name="mensaje" rows="5" required class="mt-2 w-full resize-none border-0 border-b border-tinta/30 bg-transparent px-0 py-2 focus:border-oro focus:ring-0 dark:border-lino/30"></textarea></label>
+        <input type="text" name="_honey" class="hidden" tabindex="-1" autocomplete="off" />
+        <button type="submit" class="rounded-full bg-tinta px-8 py-3.5 text-sm text-lino transition hover:bg-arcilla disabled:opacity-50 dark:bg-lino dark:text-nogal">Enviar mensaje</button>
+        <p id="estadoForm" class="min-h-[1.5rem] text-sm" role="status"></p>
+      </form>
+    </div>
+    <div class="mx-auto mt-24 flex max-w-7xl flex-col justify-between gap-3 border-t border-tinta/15 px-5 py-8 text-sm text-gris dark:border-lino/15 dark:text-lino/50 md:flex-row md:px-10" style="padding-bottom: calc(2rem + env(safe-area-inset-bottom))">
+      <p>© <span data-anio></span> Maestro Edgar Santamaría Caleño. Meta, Colombia.</p>
+      <p class="flex flex-wrap gap-5"><a href="catalogo.html" class="hover:text-oro">Catálogo</a><a href="hoja-de-vida.html" class="hover:text-oro">Hoja de vida</a><span class="font-serif italic">Obra original, hecha a mano y firmada por su autor.</span></p>
+    </div>
+  </footer>
+
+  <a data-wa="Hola Maestro Santamaría, vi su página web y quisiera hacer una consulta." aria-label="Escribir por WhatsApp"
+     class="fixed bottom-5 right-5 z-40 grid h-14 w-14 place-items-center rounded-full bg-moriche text-lino shadow-xl transition hover:scale-105" style="margin-bottom: env(safe-area-inset-bottom)">
+    <svg class="h-7 w-7" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.4 14.2c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.5-3.9-4.7-4.1-.1-.2-1.1-1.5-1.1-2.9s.7-2 1-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.4 0 .5l-.4.6-.4.4c-.1.2-.3.3-.1.6.2.3.8 1.3 1.6 2.1 1.1 1 2.1 1.3 2.4 1.4.3.2.5.1.6-.1l.9-1.1c.2-.3.4-.2.7-.1l2 1c.3.1.5.2.5.3.1.2.1.6-.1 1.2z"/></svg>
+  </a>
+
+  <script src="js/datos.js"></script>
+  <script>
+    /* ================= GALERÍA ================= */
+    let filtroActual = 'todas';
+
+    function tarjeta(obra, i) {
+      const disponible = !/^(no|vendida|vendido)$/i.test(obra.disponible || '');
+      const detalle = [obra.tecnica, obra.medidas, obra.anio].filter(Boolean).join(' · ');
+      const accion = disponible
+        ? `<a href="${enlaceWA(`Hola Maestro Santamaría, me interesa ${obra.categoria === 'ebanisteria' ? 'su trabajo de' : 'la obra'} "${obra.titulo}". ¿Podría darme más información?`)}" target="_blank" rel="noopener" class="mt-4 inline-block rounded-full bg-lino px-5 py-2 text-sm text-nogal transition hover:bg-oroclaro">${obra.categoria === 'ebanisteria' ? 'Cotizar' : 'Adquirir / Consultar'}</a>`
+        : `<a href="${enlaceWA(`Hola Maestro Santamaría, vi la obra "${obra.titulo}" y me gustaría encargar una pieza similar.`)}" target="_blank" rel="noopener" class="mt-4 inline-block rounded-full border border-lino/40 px-5 py-2 text-sm transition hover:border-oroclaro">Colección privada · Encargar una similar</a>`;
+      return `
+        <article class="obra mb-8 break-inside-avoid cursor-zoom-in">
+          <div class="relative overflow-hidden bg-nogal/10">
+            <img src="${esc(fotoObra(obra))}" alt="${esc(obra.titulo)}" data-i="${i}" onerror="imgFallback(this)" loading="lazy" class="${obra.imagen ? 'h-auto' : 'aspect-[4/5] object-cover'} w-full cursor-zoom-in" />
+            <div class="ficha absolute inset-x-0 bottom-0 bg-gradient-to-t from-nogal/95 via-nogal/70 to-transparent p-6 pt-16 text-lino">
+              <p class="text-xs text-oroclaro">${CATEGORIAS[obra.categoria]}</p>
+              <h3 class="mt-1 font-serif text-2xl leading-tight">${esc(obra.titulo)}</h3>
+              <p class="mt-1 text-sm text-lino/75">${esc(detalle)}</p>
+              ${accion}
+            </div>
+          </div>
+        </article>`;
+    }
+
+    // En "Todas" solo aparecen obras con fotografía; los marcadores se ven dentro de su categoría
+    const listaActual = () => filtroActual === 'todas' ? OBRAS.filter(o => o.imagen) : OBRAS.filter(o => o.categoria === filtroActual);
+
+    function mostrarGaleria(filtro = filtroActual) {
+      filtroActual = filtro;
+      const lista = listaActual();
+      document.getElementById('galeria').innerHTML = lista.length
+        ? lista.map((o, i) => tarjeta(o, i)).join('')
+        : '<p class="text-gris">Pronto habrá nuevas obras en esta categoría. Escríbanos para conocer las piezas disponibles.</p>';
+      document.querySelectorAll('.filtro').forEach(b => {
+        const activo = b.dataset.filtro === filtro;
+        b.setAttribute('aria-pressed', activo);
+        b.className = 'filtro rounded-full border px-5 py-2 text-sm transition ' + (activo
+          ? 'border-tinta bg-tinta text-lino dark:border-lino dark:bg-lino dark:text-nogal'
+          : 'border-tinta/25 hover:border-oro dark:border-lino/25');
+      });
+    }
+    // Clic en una obra: se abre en grande, y se puede pasar a las demás de la misma categoría
+    document.getElementById('galeria').addEventListener('click', e => {
+      if (e.target.closest('a')) return; // los botones de WhatsApp funcionan normal
+      const img = e.target.closest('article.obra')?.querySelector('img[data-i]'); if (!img) return;
+      const actual = listaActual()[+img.dataset.i];
+      const lista = listaActual().filter(o => o.imagen);
+      if (!actual.imagen) return;
+      abrirVisor(lista.map(o => ({ src: fotoObra(o), titulo: [o.titulo, o.tecnica, o.anio].filter(Boolean).join(' · ') })), lista.indexOf(actual));
+    });
+    document.getElementById('filtros').addEventListener('click', e => {
+      const b = e.target.closest('.filtro'); if (b) mostrarGaleria(b.dataset.filtro);
+    });
+
+    /* ================= TRAYECTORIA ================= */
+    function mostrarTrayectoria() {
+      // En inicio: formación, experiencia, premios e hitos. Las exposiciones se resumen aparte.
+      const clave = TRAYECTORIA.filter(t => t.tipo !== 'exposicion').sort((a, b) => porAnio(a, b));
+      document.getElementById('lineaTiempo').innerHTML = clave.map(t => {
+        const certs = certificadosDe(t);
+        return `
+        <li class="relative pb-10 pl-8 last:pb-0">
+          <span class="absolute -left-[5px] top-2 h-2.5 w-2.5 rounded-full ${t.tipo === 'reconocimiento' ? 'bg-arcilla' : 'bg-oro'}"></span>
+          <p class="font-serif text-lg italic text-oro">${esc(t.anio)}${t.tipo === 'reconocimiento' ? ' · Reconocimiento' : ''}</p>
+          <h3 class="mt-1 font-serif text-2xl leading-snug">${esc(t.titulo)}</h3>
+          ${t.lugar ? `<p class="mt-1 text-sm text-gris dark:text-lino/60">${esc(t.lugar)}</p>` : ''}
+          ${t.detalle ? `<p class="mt-2 max-w-lg leading-relaxed text-tinta/80 dark:text-lino/75">${esc(t.detalle)}</p>` : ''}
+          ${certs.length ? `<button data-cert="${esc(t.certificado)}" data-tit="${esc(t.titulo)}" class="mt-2 text-sm text-oro underline underline-offset-4">Ver certificado</button>` : ''}
+        </li>`;
+      }).join('');
+      const expos = TRAYECTORIA.filter(t => t.tipo === 'exposicion');
+      document.getElementById('listaExpos').textContent = expos.map(t => t.titulo.split(' · ')[0]).filter((v, i, a) => a.indexOf(v) === i).join(' · ');
+      document.querySelectorAll('[data-n]').forEach(el => el.textContent = TRAYECTORIA.filter(t => t.tipo === el.dataset.n).length);
+    }
+    document.getElementById('lineaTiempo').addEventListener('click', e => {
+      const b = e.target.closest('[data-cert]'); if (!b) return;
+      abrirVisor(certificadosDe({ certificado: b.dataset.cert }), 0, b.dataset.tit);
+    });
+    document.getElementById('btnCertificados').addEventListener('click', () => {
+      const fotos = [...TRAYECTORIA].sort((a, b) => porAnio(a, b)).flatMap(t => certificadosDe(t).map(src => ({ src, titulo: [t.titulo, t.anio].filter(Boolean).join(' · ') })));
+      abrirVisor(fotos, 0);
+    });
+
+    /* ================= ARRANQUE ================= */
+    function pintarTodo() {
+      const destacada = OBRAS.find(o => esSi(o.destacada) && o.categoria !== 'ebanisteria') || OBRAS[0];
+      if (destacada) {
+        document.getElementById('obraHero').src = fotoObra(destacada);
+        document.getElementById('obraHero').onclick = () => abrirVisor([{ src: fotoObra(destacada), titulo: destacada.titulo }]);
+        document.getElementById('obraHero').alt = destacada.titulo;
+        document.getElementById('obraHeroTxt').textContent = [destacada.titulo, destacada.tecnica, destacada.anio].filter(Boolean).join(' · ');
+      }
+      document.getElementById('retrato').src = enlaceDrive(CONFIG.retrato);
+      document.getElementById('fotoTaller').src = enlaceDrive(CONFIG.fotoTaller);
+      mostrarGaleria(); mostrarTrayectoria();
+    }
+    aplicarEnlacesComunes();
+    cargarDatos(pintarTodo);
+
+    /* Menú móvil */
+    const btnMenu = document.getElementById('btnMenu'), menuMovil = document.getElementById('menuMovil');
+    btnMenu.addEventListener('click', () => btnMenu.setAttribute('aria-expanded', !menuMovil.classList.toggle('hidden')));
+    menuMovil.querySelectorAll('a').forEach(a => a.addEventListener('click', () => { menuMovil.classList.add('hidden'); btnMenu.setAttribute('aria-expanded', 'false'); }));
+
+    /* Barra de navegación con fondo al bajar */
+    const nav = document.getElementById('nav');
+    const alScroll = () => ['bg-lino/90', 'dark:bg-nogal/90', 'backdrop-blur', 'shadow-sm'].forEach(c => nav.classList.toggle(c, scrollY > 40));
+    addEventListener('scroll', alScroll, { passive: true }); alScroll();
+
+    /* Formulario de contacto */
+    const form = document.getElementById('formContacto'), estado = document.getElementById('estadoForm');
+    form.addEventListener('submit', async e => {
+      e.preventDefault();
+      const d = Object.fromEntries(new FormData(form));
+      if (d._honey) return;
+      if (!d.nombre.trim() || !d.mensaje.trim()) { estado.textContent = 'Escriba su nombre y su mensaje para poder enviarlo.'; return; }
+      if (!/^\S+@\S+\.\S+$/.test(d.email)) { estado.textContent = 'Revise su correo: debe tener el formato nombre@dominio.com.'; return; }
+      const boton = form.querySelector('button[type=submit]');
+      boton.disabled = true; boton.textContent = 'Enviando…'; estado.textContent = '';
+      try {
+        const r = await fetch(`https://formsubmit.co/ajax/${CONFIG.correo}`, {
+          method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify({ ...d, _subject: `Consulta web: ${d.motivo}`, _template: 'table' })
+        });
+        if (!r.ok) throw new Error();
+        form.reset(); estado.textContent = 'Mensaje enviado. El maestro le responderá pronto a su correo.';
+      } catch {
+        const cuerpo = `Nombre: ${d.nombre}\nCorreo: ${d.email}\nMotivo: ${d.motivo}\n\n${d.mensaje}`;
+        location.href = `mailto:${CONFIG.correo}?subject=${encodeURIComponent('Consulta web: ' + d.motivo)}&body=${encodeURIComponent(cuerpo)}`;
+        estado.textContent = 'Abrimos su programa de correo con el mensaje listo para enviar.';
+      } finally { boton.disabled = false; boton.textContent = 'Enviar mensaje'; }
+    });
+  </script>
+</body>
+</html>

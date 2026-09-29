@@ -1,0 +1,9 @@
+# Archivos del sistema
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editores y herramientas
+.vscode/
+node_modules/
+~$*
