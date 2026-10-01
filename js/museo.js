@@ -192,11 +192,42 @@
     tronco: std(0x4f4337, { roughness: 1 }),
     sombra: new T.MeshBasicMaterial({ color: 0x000000, transparent: true, opacity: .22, depthWrite: false })
   };
+  // Textura de empedrado / adoquines artesanales
+  function texEmpedrado() {
+    return lienzo(512, 512, (x, w, h) => {
+      x.fillStyle = '#483c30'; x.fillRect(0, 0, w, h);
+      const filas = 16, cols = 8;
+      const altoFila = h / filas, anchoCol = w / cols;
+      const tonosPiedra = ['#a1907b', '#b9ab96', '#877864', '#c4b7a4', '#948371', '#7b6c59', '#a99884', '#8f806e'];
+      for (let f = 0; f < filas; f++) {
+        const desfasar = (f % 2) * (anchoCol / 2);
+        for (let c = -1; c <= cols; c++) {
+          const px = c * anchoCol + desfasar + (Math.sin(f + c * 2) * 2.5);
+          const py = f * altoFila + (Math.cos(f * 2 + c) * 2.5);
+          const pw = anchoCol - 5 + (Math.sin(f * 3 + c) * 3);
+          const ph = altoFila - 5 + (Math.cos(c * 3 + f) * 3);
+          const colorPiedra = tonosPiedra[(f * 7 + c * 3 + 12) % tonosPiedra.length];
+
+          x.fillStyle = colorPiedra;
+          x.beginPath();
+          if (x.roundRect) x.roundRect(px + 2, py + 2, pw, ph, 7); else x.rect(px + 2, py + 2, pw, ph);
+          x.fill();
+
+          x.strokeStyle = 'rgba(255, 255, 255, 0.28)'; x.lineWidth = 1.5;
+          x.beginPath(); x.moveTo(px + 4, py + ph - 4); x.lineTo(px + 4, py + 4); x.lineTo(px + pw - 4, py + 4); x.stroke();
+
+          x.strokeStyle = 'rgba(0, 0, 0, 0.38)'; x.lineWidth = 1.5;
+          x.beginPath(); x.moveTo(px + pw - 4, py + 4); x.lineTo(px + pw - 4, py + ph - 4); x.lineTo(px + 4, py + ph - 4); x.stroke();
+        }
+      }
+    });
+  }
+
   M.piso1 = std(0xffffff, { map: repetir(texMadera('#8b5e3b', '#3f2716', { tablas: 8 }), 6, 4, Math.PI / 2), roughness: .6 });
   M.piso2 = std(0xffffff, { map: repetir(texMadera('#6b4429', '#26170c', { tablas: 8 }), 6, 4, Math.PI / 2), roughness: .65 });
   M.panelado = std(0xffffff, { map: repetir(texTablas('#7a5234', '#2e1c0f'), 9, 1), roughness: .8 });
   M.hierba = std(0xffffff, { map: repetir(texRuido('#566b33', ['#3f5226', '#6f8442', '#7b8a48', '#4a5f2c']), 70, 70) });
-  M.piedra = std(0xffffff, { map: repetir(texRuido('#b6a58a', ['#9c8b70', '#cfc1a6', '#8a7a62'], 5000), 2, 14) });
+  M.piedra = std(0xffffff, { map: repetir(texEmpedrado(), 2, 18), roughness: .82 });
   M.patio = std(0xffffff, { map: repetir(texRuido('#a58e72', ['#8d775d', '#c0a98b', '#7b6853'], 6000), 14, 3) });
   M.teja = std(0xffffff, {
     map: repetir(lienzo(256, 256, (x, w, h) => {
@@ -337,6 +368,13 @@
     luzSol.intensity = intSol * (fuera ? 1.0 : 0.15);
     hemi.color.copy(lerpC(k0.hemiSky, k1.hemiSky));
     hemi.groundColor.copy(lerpC(k0.hemiGnd, k1.hemiGnd));
+
+    // Actualizar luces solares del camino
+    const intSolar = Math.max(0, (nocheVal - 0.12) / 0.88);
+    lucesSolaresCamino.forEach(({ luz, cristal }) => {
+      luz.intensity = intSolar * 1.35;
+      cristal.material.opacity = 0.25 + intSolar * 0.7;
+    });
   }
 
   const suelo = new T.Mesh(new T.PlaneGeometry(500, 500), M.hierba);
@@ -345,6 +383,31 @@
   camino.rotation.x = -Math.PI / 2; camino.position.set(0, .005, 19); escena.add(camino);
   const patio = new T.Mesh(new T.PlaneGeometry(28, 4.2), M.patio);
   patio.rotation.x = -Math.PI / 2; patio.position.set(0, .01, 2.1); escena.add(patio);
+
+  // Estacas / Luces solares de jardín a las orillas del camino
+  const lucesSolaresCamino = [];
+  const matEstacaMetal = std(0x22262b, { roughness: 0.4, metalness: 0.6 });
+
+  function crearEstacaSolar(x, z) {
+    const g = new T.Group(); g.position.set(x, 0, z);
+    bloque(-.025, .025, 0, .42, -.025, .025, matEstacaMetal, g);
+    bloque(-.04, .04, .42, .45, -.04, .04, matEstacaMetal, g);
+    const matCristal = basico({ color: 0xffeaad, transparent: true, opacity: 0.3 });
+    const cristal = bloque(-.045, .045, .45, .56, -.045, .045, matCristal, g);
+    bloque(-.06, .06, .56, .59, -.06, .06, matEstacaMetal, g);
+    const luzSolar = new T.PointLight(0xffca75, 0, 4.0, 1.6);
+    luzSolar.position.set(0, .50, 0); g.add(luzSolar);
+
+    const s = new T.Mesh(new T.CircleGeometry(.12, 12), M.sombra);
+    s.rotation.x = -Math.PI / 2; s.position.y = .01; g.add(s);
+    escena.add(g);
+    lucesSolaresCamino.push({ luz: luzSolar, cristal });
+  }
+
+  for (let z = 4.5; z <= 29; z += 3.8) {
+    crearEstacaSolar(-1.75, z);
+    crearEstacaSolar(1.75, z);
+  }
 
   // Colinas lejanas
   [[-90, -160, 60, 9], [40, -190, 80, 12], [150, -140, 55, 8], [-170, -90, 50, 7], [120, 60, 60, 6], [-140, 90, 70, 8]].forEach(([x, z, r, h]) => {
