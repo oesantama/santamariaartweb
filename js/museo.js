@@ -1031,7 +1031,7 @@
     'Cocina integral': 'Cocinas a la medida: muebles bajos y altos, alacenas, mesones y acabados pensados para el uso diario.',
     'Closet a la medida': 'Closets y vestieres con puertas batientes, cajoneras y maleteros, diseñados para el espacio de cada habitación.',
     'Puerta tallada': SERVICIOS.maderaHogar.find(s => /puerta/i.test(s[0]))?.[1],
-    'Comedor de madera maciza': SERVICIOS.maderaHogar.find(s => /mueble/i.test(s[0]))?.[1],
+    'Comedor de ebanistería con sillas torneadas': SERVICIOS.maderaHogar.find(s => /mueble/i.test(s[0]))?.[1] || 'Comedores y sillas de ebanistería con torneados tradicionales en madera maciza.',
     'Biblioteca': 'Bibliotecas, estanterías y muebles de estudio que aprovechan cada centímetro del muro.',
     'Marcos y bastidores': `${SERVICIOS.maderaArte[0][1]} ${SERVICIOS.maderaArte[2][1]}`,
     'Banco de trabajo': 'Aquí nace cada pieza: selección y secado de la madera, ensambles tradicionales y acabados a mano.'
@@ -1041,7 +1041,7 @@
     'Cocina integral': [V(-7.9, OJO.p2, -10.9), V(-7.9, P2 + 1.1, -15)],
     'Closet a la medida': [V(-7.6, OJO.p2, -11.1), V(-12, P2 + 1.25, -11.1)],
     'Puerta tallada': [V(-8.4, OJO.p2 - .1, -3.4), V(-12, P2 + 1.3, -3.4)],
-    'Comedor de madera maciza': [V(-1.2, P2 + 2.3, -5.6), V(-1.2, P2 + .6, -9.8)],
+    'Comedor de ebanistería con sillas torneadas': [V(-1.2, P2 + 2.3, -5.6), V(-1.2, P2 + .6, -9.8)],
     'Biblioteca': [V(-1.2, OJO.p2, -11.9), V(-1.2, P2 + 1.3, -15)],
     'Marcos y bastidores': [V(5.1, OJO.p2, -11.4), V(5.1, P2 + 1.55, -15)],
     'Banco de trabajo': [V(4.6, P2 + 1.95, -2.9), V(4.6, P2 + .85, -6.4)]
@@ -1049,12 +1049,12 @@
   MADERA.forEach(p => {
     const indice = PARADAS.length;
     p.grupo.traverse(o => { if (o.isMesh || o.isInstancedMesh) { o.userData.parada = indice; INTERACTIVOS.push(o); } });
-    const [pos, mira] = VISTAS[p.nombre];
+    const [pos, mira] = VISTAS[p.nombre] || [V(-1.2, P2 + 2.3, -5.6), V(-1.2, P2 + .6, -9.8)];
     PARADAS.push({
       id: 'madera-' + indice, piso: PISO2, nombre: p.nombre, zona: 'p2', pos, mira,
       ficha: {
         sup: PISO2, titulo: p.nombre, detalle: p.nombre === 'Banco de trabajo' ? 'El corazón del taller' : 'Pieza a la medida · Representación ilustrativa',
-        texto: TEXTOS_MADERA[p.nombre],
+        texto: TEXTOS_MADERA[p.nombre] || 'Pieza de ebanistería artesanal en madera maciza.',
         acciones: [
           { txt: 'Cotizar por WhatsApp', href: enlaceWA(`Hola Maestro Santamaría, vi su taller en la casa-museo virtual y quisiera cotizar: ${p.nombre.toLowerCase()}.`), clase: 'boton-oscuro', externo: true },
           { txt: 'Catálogo de ebanistería', href: 'catalogo-ebanisteria.html', clase: 'boton-borde' }
