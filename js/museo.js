@@ -31,9 +31,22 @@
     return;
   }
   let renderer;
-  try {
-    renderer = new T.WebGLRenderer({ canvas: $('escena'), antialias: true, powerPreference: 'high-performance' });
-  } catch (e) {
+  const canvasElem = $('escena');
+  const opcionesWebGL = [
+    { canvas: canvasElem, antialias: true, powerPreference: 'high-performance' },
+    { canvas: canvasElem, antialias: true, powerPreference: 'default' },
+    { canvas: canvasElem, antialias: false, powerPreference: 'default', failIfMajorPerformanceCaveat: false }
+  ];
+  for (const opt of opcionesWebGL) {
+    try {
+      const testRenderer = new T.WebGLRenderer(opt);
+      if (testRenderer && testRenderer.getContext()) {
+        renderer = testRenderer;
+        break;
+      }
+    } catch (e) {}
+  }
+  if (!renderer) {
     aviso('Este navegador o dispositivo no tiene activada la aceleración 3D (WebGL). Puede ver toda la información en la versión clásica.');
     return;
   }
