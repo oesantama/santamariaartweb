@@ -31,6 +31,11 @@
     return;
   }
   let renderer;
+  let modoClima = 'soleado';
+  let nubes3D = null;
+  let sistemaLluvia = null;
+  let geoLluvia = null;
+  let numGotas = 1600;
   const canvasElem = $('escena');
   const opcionesWebGL = [
     { canvas: canvasElem, antialias: true, powerPreference: 'high-performance' },
@@ -1412,9 +1417,11 @@
   // Exposición de controles en consola y ventana
   window.museo = {
     irA: idx => irAParada(idx),
+    PARADAS,
+    estado,
+    camara,
     setHora: (h) => { horaManual = Math.max(0, Math.min(24, h)); actualizarCicloDiaNoche(); console.log(`Hora fijada manualmente a las ${h}:00 hs`); },
     fijarHoraReal: () => { horaManual = null; actualizarCicloDiaNoche(); console.log('Modo hora real activado.'); },
     cambiarClima: modo => cambiarClima(modo)
   };
-  window.museo = { irA, PARADAS, estado, camara };
 })();
