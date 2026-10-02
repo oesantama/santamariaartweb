@@ -494,11 +494,75 @@
     s.rotation.x = -Math.PI / 2; s.position.y = .01; g.add(s);
     escena.add(g);
   }
-  // Chozas / Caneyes colocados al lado de la casa (visibles desde la fachada)
-  crearChozaPaja(-17.5, 3.5, 0.25);
-  crearChozaPaja(17.5, 3.5, -0.25);
 
-  // 2. LAGUNA LLANERA CON AGUA REFLECTANTE Detrás de la Casa
+  /* ---------- CREACIÓN DEL COLUMPIO DE JARDÍN (IMAGEN 2) ---------- */
+  function crearColumpioJardin(x, z, rotY = 0) {
+    const g = new T.Group(); g.position.set(x, 0, z); g.rotation.y = rotY;
+    const matMaderaOscura = std(0x4a3425, { roughness: 0.8 });
+    const matMaderaBanco = std(0x5c4230, { roughness: 0.75 });
+    const matEnredadera = std(0x2d5e23, { roughness: 0.85 });
+    const matCojin = std(0x7a8b94, { roughness: 0.9 });
+    const matCadena = std(0x2b2b2b, { metalness: 0.8, roughness: 0.3 });
+
+    // 1. Estructura de marco de madera maciza (pergola)
+    const p1 = new T.Mesh(new T.BoxGeometry(0.25, 3.4, 0.25), matMaderaOscura); p1.position.set(-1.8, 1.7, 0); g.add(p1);
+    const p2 = new T.Mesh(new T.BoxGeometry(0.25, 3.4, 0.25), matMaderaOscura); p2.position.set(1.8, 1.7, 0); g.add(p2);
+    const viga = new T.Mesh(new T.BoxGeometry(4.1, 0.25, 0.3), matMaderaOscura); viga.position.set(0, 3.3, 0); g.add(viga);
+
+    // 2. Enredadera de hojas verdes cubriendo las columnas y viga superior
+    [p1, p2].forEach(p => {
+      for (let y = 0.2; y < 3.2; y += 0.15) {
+        const h = new T.Mesh(new T.DodecahedronGeometry(0.18 + Math.random() * 0.08), matEnredadera);
+        h.position.set(p.position.x + (Math.random() - 0.5) * 0.2, y, (Math.random() - 0.5) * 0.2);
+        g.add(h);
+      }
+    });
+    for (let vx = -1.9; vx <= 1.9; vx += 0.25) {
+      const hV = new T.Mesh(new T.DodecahedronGeometry(0.14 + Math.random() * 0.06), matEnredadera);
+      hV.position.set(vx, 3.35 + (Math.random() - 0.5) * 0.1, (Math.random() - 0.5) * 0.18);
+      g.add(hV);
+    }
+    [-1.8, 1.8].forEach(px => {
+      for (let i = 0; i < 8; i++) {
+        const hSuelo = new T.Mesh(new T.DodecahedronGeometry(0.12 + Math.random() * 0.08), matEnredadera);
+        hSuelo.position.set(px + (Math.random() - 0.5) * 0.6, 0.05, (Math.random() - 0.5) * 0.6);
+        g.add(hSuelo);
+      }
+    });
+
+    // 3. Cadenas de suspensión
+    [-1.3, 1.3].forEach(cx => {
+      const cadena = new T.Mesh(new T.CylinderGeometry(0.015, 0.015, 2.0, 6), matCadena);
+      cadena.position.set(cx, 2.2, 0); g.add(cadena);
+    });
+
+    // 4. Asiento suspendido con respaldar y apoyabrazos
+    const asientoGrupo = new T.Group(); asientoGrupo.position.set(0, 0.85, 0);
+    const baseBanco = new T.Mesh(new T.BoxGeometry(2.7, 0.15, 0.9), matMaderaBanco); baseBanco.position.set(0, 0, 0); asientoGrupo.add(baseBanco);
+    const respaldar = new T.Mesh(new T.BoxGeometry(2.7, 0.75, 0.12), matMaderaBanco); respaldar.position.set(0, 0.45, -0.39); asientoGrupo.add(respaldar);
+    const armL = new T.Mesh(new T.BoxGeometry(0.12, 0.35, 0.88), matMaderaBanco); armL.position.set(-1.3, 0.25, 0); asientoGrupo.add(armL);
+    const armR = new T.Mesh(new T.BoxGeometry(0.12, 0.35, 0.88), matMaderaBanco); armR.position.set(1.3, 0.25, 0); asientoGrupo.add(armR);
+
+    // 5. Cojines grises confortables en el columpio (como Imagen 2)
+    [-0.8, -0.2, 0.4, 0.9].forEach(cx => {
+      const cojin = new T.Mesh(new T.BoxGeometry(0.5, 0.22, 0.5), matCojin);
+      cojin.position.set(cx, 0.18, 0.02);
+      cojin.rotation.y = (Math.random() - 0.5) * 0.2;
+      cojin.rotation.z = (Math.random() - 0.5) * 0.1;
+      asientoGrupo.add(cojin);
+    });
+    g.add(asientoGrupo);
+
+    const s = new T.Mesh(new T.PlaneGeometry(4.5, 2.2), M.sombra);
+    s.rotation.x = -Math.PI / 2; s.position.y = 0.01; g.add(s);
+    escena.add(g);
+  }
+
+  // Chozas / Elementos al lado de la casa (visibles desde la fachada)
+  crearColumpioJardin(-16.5, 3.5, 0.25); // Izquierda: Columpio de jardín con enredaderas (Imagen 2)
+  crearChozaPaja(17.5, 3.5, -0.25);       // Derecha: Choza de paja / caney
+
+  // 2. LAGUNA LLANERA CON AGUA REFLECTANTE (Al inicio del camino empedrado, mirando hacia atrás)
   const texAgua = lienzo(256, 256, (x, w, h) => {
     x.fillStyle = '#1c6282'; x.fillRect(0, 0, w, h);
     x.strokeStyle = 'rgba(130, 215, 245, 0.45)'; x.lineWidth = 2;
@@ -509,14 +573,14 @@
   });
   const matAgua = std(0xffffff, { map: repetir(texAgua, 6, 3), roughness: 0.2, metalness: 0.1 });
   const laguna = new T.Mesh(new T.PlaneGeometry(100, 48), matAgua);
-  laguna.rotation.x = -Math.PI / 2; laguna.position.set(0, 0.015, -45); escena.add(laguna);
+  laguna.rotation.x = -Math.PI / 2; laguna.position.set(0, 0.015, 68); escena.add(laguna);
 
   // Lirios de agua en la laguna
   const matLirios = std(0x2d6832, { roughness: 0.8 });
   for (let l = 0; l < 18; l++) {
     const lirio = new T.Mesh(new T.CircleGeometry(0.8 + Math.random() * 0.6, 10), matLirios);
     lirio.rotation.x = -Math.PI / 2;
-    lirio.position.set((Math.random() - 0.5) * 80, 0.02, -45 + (Math.random() - 0.5) * 35);
+    lirio.position.set((Math.random() - 0.5) * 80, 0.02, 68 + (Math.random() - 0.5) * 35);
     escena.add(lirio);
   }
 
@@ -542,41 +606,163 @@
     s.rotation.x = -Math.PI / 2; s.position.y = .01; g.add(s);
     escena.add(g);
   }
-  // Grupo de ganado cebú cerca de la laguna y el morichal
-  [[-14, -38, 0.4], [-8, -48, -0.6], [12, -42, 2.2], [18, -46, -1.8], [-22, -46, 0.8]].forEach(p => crearVacaCebu(...p));
+  // Grupo de ganado cebú cerca de la laguna al inicio del camino
+  [[-14, 56, 0.4], [-8, 64, -0.6], [12, 60, 2.2], [18, 68, -1.8], [-22, 66, 0.8]].forEach(p => crearVacaCebu(...p));
 
-  // 4. PALMAS DE MORICHE REALISTAS (MORICHAL LLANERO COMO LA FOTO)
-  const geoHoja = new T.CircleGeometry(2.8, 10, -0.42, .84); geoHoja.rotateX(-Math.PI / 2);
-  function moricheRealista(x, z, alto = 14) {
-    const g = new T.Group(); g.position.set(x, 0, z);
-    const tronco = new T.Mesh(new T.CylinderGeometry(.22, .35, alto, 12), M.tronco);
-    tronco.position.y = alto / 2; g.add(tronco);
-    for (let y = 1; y < alto; y += .8) {
-      const an = new T.Mesh(new T.TorusGeometry(.24 + (1 - y / alto) * .08, .012, 6, 12), M.tronco);
+  // 4. PALMAS DE MORICHE REALISTAS CON JARDINES DE FLORES AL PIE
+  function crearJardinAlPie(g) {
+    const matMulch = std(0x342216, { roughness: 0.95 });
+    const matPiedraBorde = std(0x766a5c, { roughness: 0.85 });
+    const matHojasVerdes = std(0x386128, { roughness: 0.8 });
+    const matCentroFlor = std(0xffd700, { roughness: 0.5 });
+
+    // Colores de flores variadas y vistosas
+    const matFlores = [
+      std(0xe62b2b, { roughness: 0.7 }), // Rojo brillante
+      std(0xfcd116, { roughness: 0.7 }), // Amarillo canario
+      std(0xe83e8c, { roughness: 0.7 }), // Magenta / Rosa vivo
+      std(0xffffff, { roughness: 0.7 }), // Blanco puro
+      std(0xf57c00, { roughness: 0.7 }), // Naranja encendido
+      std(0x8e44ad, { roughness: 0.7 })  // Violeta
+    ];
+
+    // 1. Cama circular de tierra/mulch orgánico al pie del tronco
+    const mulch = new T.Mesh(new T.CylinderGeometry(1.9, 2.15, 0.12, 16), matMulch);
+    mulch.position.y = 0.06; g.add(mulch);
+
+    // 2. Anillo / borde de piedras de jardín
+    const bordeStones = new T.Mesh(new T.TorusGeometry(2.1, 0.1, 8, 24), matPiedraBorde);
+    bordeStones.rotation.x = Math.PI / 2; bordeStones.position.y = 0.08; g.add(bordeStones);
+
+    // 3. Follaje verde de jardín
+    for (let i = 0; i < 10; i++) {
+      const ang = (i / 10) * Math.PI * 2 + Math.random() * 0.3;
+      const rad = 0.6 + Math.random() * 1.1;
+      const arb = new T.Mesh(new T.DodecahedronGeometry(0.25 + Math.random() * 0.15), matHojasVerdes);
+      arb.scale.set(1.3, 0.6, 1.3);
+      arb.position.set(Math.cos(ang) * rad, 0.18, Math.sin(ang) * rad);
+      g.add(arb);
+    }
+
+    // 4. Abundantes flores 3D de varios colores radiando al pie de la palmera
+    const numFlores = 28;
+    for (let f = 0; f < numFlores; f++) {
+      const ang = Math.random() * Math.PI * 2;
+      const r = 0.5 + Math.random() * 1.35;
+      const fx = Math.cos(ang) * r;
+      const fz = Math.sin(ang) * r;
+
+      const florGrupo = new T.Group();
+      florGrupo.position.set(fx, 0.14 + Math.random() * 0.1, fz);
+
+      const tallo = new T.Mesh(new T.CylinderGeometry(0.012, 0.012, 0.22, 6), matHojasVerdes);
+      tallo.position.y = 0.11; florGrupo.add(tallo);
+
+      const matColor = matFlores[f % matFlores.length];
+      const florHead = new T.Group(); florHead.position.y = 0.22;
+      
+      const centro = new T.Mesh(new T.SphereGeometry(0.038, 6, 6), matCentroFlor);
+      florHead.add(centro);
+
+      for (let p = 0; p < 5; p++) {
+        const pAng = (p / 5) * Math.PI * 2;
+        const petalo = new T.Mesh(new T.SphereGeometry(0.042, 6, 6), matColor);
+        petalo.scale.set(1.2, 0.4, 0.8);
+        petalo.position.set(Math.cos(pAng) * 0.055, 0, Math.sin(pAng) * 0.055);
+        petalo.rotation.y = pAng;
+        florHead.add(petalo);
+      }
+      florHead.rotation.x = (Math.random() - 0.5) * 0.3;
+      florHead.rotation.z = (Math.random() - 0.5) * 0.3;
+      florGrupo.add(florHead);
+      g.add(florGrupo);
+    }
+  }
+
+  function crearGeoFronda3D() {
+    const shape = new T.Shape();
+    shape.moveTo(0, 0);
+    shape.quadraticCurveTo(0.4, 1.2, 0.9, 2.7);
+    shape.quadraticCurveTo(0.55, 3.0, 0.0, 3.3);
+    shape.quadraticCurveTo(-0.55, 3.0, -0.9, 2.7);
+    shape.quadraticCurveTo(-0.4, 1.2, 0, 0);
+    const geom = new T.ExtrudeGeometry(shape, { depth: 0.03, bevelEnabled: true, bevelSegments: 2, steps: 1, bevelSize: 0.01, bevelThickness: 0.01 });
+    geom.rotateX(-Math.PI / 2);
+    return geom;
+  }
+  const GEO_FRONDA_3D = crearGeoFronda3D();
+
+  function moricheRealista(x, z, alto = 14, inclinacion = 0) {
+    const g = new T.Group(); g.position.set(x, 0, z); g.rotation.y = Math.random() * Math.PI * 2;
+    if (inclinacion) g.rotation.z = inclinacion;
+
+    // 1. Tronco Anillado con Base Ensanchada (Raíces de Moriche)
+    const baseTronco = new T.Mesh(new T.CylinderGeometry(0.36, 0.58, 1.4, 12), M.tronco);
+    baseTronco.position.y = 0.7; g.add(baseTronco);
+
+    const tronco = new T.Mesh(new T.CylinderGeometry(0.22, 0.36, alto - 1.4, 12), M.tronco);
+    tronco.position.y = (alto + 1.4) / 2; g.add(tronco);
+
+    // Anillos fibrosos del tronco
+    for (let y = 0.9; y < alto; y += 0.65) {
+      const an = new T.Mesh(new T.TorusGeometry(0.24 + (1 - y / alto) * 0.1, 0.016, 6, 12), M.tronco);
       an.rotation.x = Math.PI / 2; an.position.y = y; g.add(an);
     }
 
+    // Cuello de fibra seca bajo la copa
+    const cuelloFibra = new T.Mesh(new T.CylinderGeometry(0.32, 0.22, 0.8, 10), M.hojaSeca);
+    cuelloFibra.position.y = alto - 0.4; g.add(cuelloFibra);
+
     const copa = new T.Group(); copa.position.y = alto; g.add(copa);
-    for (let s = 0; s < 10; s++) {
-      const p = new T.Group(); p.rotation.y = s / 10 * Math.PI * 2;
-      const hs = new T.Mesh(geoHoja, M.hojaSeca);
-      hs.rotation.z = -1.35; hs.position.x = .1; p.add(hs); copa.add(p);
+
+    // 2. Racimos de Frutos de Moriche (Racimos de Aguaje/Moriche rojizos característicos)
+    const matFruto = std(0x9e3412, { roughness: 0.6 });
+    for (let r = 0; r < 3; r++) {
+      const racimoAng = (r / 3) * Math.PI * 2 + 0.4;
+      const racimoGroup = new T.Group(); racimoGroup.rotation.y = racimoAng;
+      
+      const talloRacimo = new T.Mesh(new T.CylinderGeometry(0.03, 0.03, 1.2, 6), M.hojaSeca);
+      talloRacimo.position.set(0.25, -0.5, 0); talloRacimo.rotation.z = -0.6; racimoGroup.add(talloRacimo);
+
+      for (let k = 0; k < 22; k++) {
+        const fruto = new T.Mesh(new T.SphereGeometry(0.09 + Math.random() * 0.03, 6, 6), matFruto);
+        fruto.scale.set(1, 1.3, 1);
+        fruto.position.set(0.5 + (Math.random() - 0.5) * 0.35, -0.8 - Math.random() * 0.6, (Math.random() - 0.5) * 0.35);
+        racimoGroup.add(fruto);
+      }
+      copa.add(racimoGroup);
     }
-    for (let i = 0; i < 22; i++) {
-      const p = new T.Group(); p.rotation.y = i / 22 * Math.PI * 2 + (Math.random() * .2);
-      const h = new T.Mesh(geoHoja, M.hoja);
-      h.rotation.z = (i % 2 ? 0.15 : -0.25) - Math.random() * 0.4;
-      h.position.x = .15; p.add(h); copa.add(p);
+
+    // 3. Hojas Abanico de Moriche (Frondas Palmeadas)
+    for (let s = 0; s < 12; s++) {
+      const p = new T.Group(); p.rotation.y = s / 12 * Math.PI * 2;
+      const h = new T.Mesh(GEO_FRONDA_3D, M.hojaSeca);
+      h.scale.set(0.85, 0.85, 0.85); h.rotation.z = -1.45; h.position.x = 0.1; p.add(h); copa.add(p);
     }
-    const s = new T.Mesh(new T.CircleGeometry(3.2, 20), M.sombra);
+    for (let m = 0; m < 16; m++) {
+      const p = new T.Group(); p.rotation.y = m / 16 * Math.PI * 2 + 0.2;
+      const h = new T.Mesh(GEO_FRONDA_3D, M.hoja);
+      h.scale.set(1.1, 1.1, 1.1); h.rotation.z = -0.45 - Math.random() * 0.15; h.position.x = 0.15; p.add(h); copa.add(p);
+    }
+    for (let t = 0; t < 12; t++) {
+      const p = new T.Group(); p.rotation.y = t / 12 * Math.PI * 2 + 0.1;
+      const h = new T.Mesh(GEO_FRONDA_3D, M.hoja);
+      h.scale.set(0.95, 0.95, 0.95); h.rotation.z = 0.25 + Math.random() * 0.2; h.position.x = 0.12; p.add(h); copa.add(p);
+    }
+
+    // 4. JARDÍN DE FLORES VIVAZ EN LA BASE (Reemplaza el monte verde)
+    crearJardinAlPie(g);
+
+    const s = new T.Mesh(new T.CircleGeometry(3.5, 20), M.sombra);
     s.rotation.x = -Math.PI / 2; s.position.y = .02; g.add(s);
     escena.add(g);
   }
   [
-    [-22, 6, 14], [-26, 2, 16], [-19, -12, 15], [-24, -20, 17],
-    [23, 4, 14], [28, -6, 16], [20, -18, 15], [26, -26, 17],
-    [-38, 20, 16], [38, 22, 17], [-12, -44, 15], [16, -48, 16],
-    [-35, -42, 18], [35, -40, 18], [0, -58, 16]
+    [-22, 6, 14, 0.02], [-26, 2, 16, -0.03], [-19, -12, 15, 0], [-24, -20, 17, 0.02],
+    [23, 4, 14, -0.02], [28, -6, 16, 0.03], [20, -18, 15, 0], [26, -26, 17, -0.02],
+    [-28, 14, 15, 0.03], [30, 14, 15.5, -0.03], [-38, 20, 16, 0.02], [38, 22, 17, -0.02],
+    [-14, 52, 15, 0], [16, 56, 16, 0], [-32, 62, 18, -0.03], [32, 60, 18, 0.03],
+    [0, 82, 16, 0], [-8, 66, 13.5, 0.02], [8, 68, 14, -0.02], [-24, 78, 17, 0.02], [24, 76, 17, -0.02]
   ].forEach(p => moricheRealista(...p));
 
   /* ---------- 5. LA CASA ---------- */
@@ -710,8 +896,8 @@
   marcoAtril.position.set(0, 0, 0);
   atril.add(marcoAtril);
 
-  // 1. Mástil central posterior (soporte detrás del tablero)
-  bloque(-.035, .035, 0, 2.25, -.06, -.01, M.cedro, marcoAtril);
+  // 1. Mástil central posterior (permanece oculto detrás del tablero)
+  bloque(-.035, .035, 0, 1.45, -.06, -.01, M.cedro, marcoAtril);
 
   // 2. Patas de apoyo (quedan DETRÁS y DEBAJO del tablero sin tapar la cartelera)
   const pataIzq = bloque(-.03, .03, 0, 2.2, -.05, 0, M.nogal, marcoAtril);
@@ -726,13 +912,13 @@
   // Travesaño horizontal inferior de refuerzo
   bloque(-.52, .52, .25, .32, -.08, -.03, M.nogal, marcoAtril);
 
-  // 3. Repisa de ebanistería (soporta la cartelera)
+  // 3. Repisa de ebanistería (soporta la cartelera desde abajo)
   const repisa = bloque(-.62, .62, .82, .89, -.05, .09, M.cedro, marcoAtril);
   repisa.rotation.x = -.18;
   bloque(-.48, -.42, .76, .82, -.03, .07, M.nogal, marcoAtril);
   bloque(.42, .48, .76, .82, -.03, .07, M.nogal, marcoAtril);
 
-  // 4. Tablero / Cartelera con marco fino de madera
+  // 4. Tablero / Cartelera limpia con marco fino de madera
   const grupoTablero = new T.Group();
   grupoTablero.position.set(0, 1.58, .02);
   grupoTablero.rotation.x = -.18;
@@ -741,12 +927,9 @@
   // Marco exterior de ebanistería
   bloque(-.58, .58, -.74, .74, -.02, .02, M.cedro, grupoTablero);
 
-  // Lienzo impreso principal
+  // Lienzo impreso principal (completamente despejado sin palos ni sujetadores superiores)
   const tablero = bloque(-.55, .55, -.71, .71, .001, .021, M.nogal, grupoTablero);
   tablero.material = [M.nogal, M.nogal, M.nogal, M.nogal, basico({ map: texAtril }), M.nogal];
-
-  // Sujetador superior del atril (cabezal de madera)
-  bloque(-.08, .08, .72, .78, -.04, .04, M.cedro, grupoTablero);
 
   const sombraAtril = new T.Mesh(new T.CircleGeometry(.85, 20), M.sombra);
   sombraAtril.rotation.x = -Math.PI / 2; sombraAtril.position.y = .02; atril.add(sombraAtril);
