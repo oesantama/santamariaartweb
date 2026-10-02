@@ -65,7 +65,7 @@
   renderer.toneMapping = T.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1.05;
   const escena = new T.Scene();
-  escena.fog = new T.Fog(0xd8a57c, 70, 260);
+  escena.fog = new T.Fog(0xefc49e, 65, 270);
   const camara = new T.PerspectiveCamera(tactil ? 70 : 62, 1, 0.05, 500);
   camara.rotation.order = 'YXZ';
   const ANISO = Math.min(8, renderer.capabilities.getMaxAnisotropy());
@@ -212,22 +212,26 @@
   });
 
   /* ---------- 4. EXTERIOR ---------- */
-  // Cielo de atardecer llanero
+  // Cielo de amanecer llanero (rosados, dorados y azul matutino)
   const cielo = new T.Mesh(new T.SphereGeometry(320, 32, 16), new T.ShaderMaterial({
     side: T.BackSide, depthWrite: false, fog: false,
-    uniforms: { arriba: { value: new T.Color('#22375a') }, medio: { value: new T.Color('#b66f58') }, horizonte: { value: new T.Color('#f5c47e') } },
+    uniforms: {
+      arriba: { value: new T.Color('#1f3763') },
+      medio: { value: new T.Color('#d47763') },
+      horizonte: { value: new T.Color('#ffc17a') }
+    },
     vertexShader: 'varying vec3 vP; void main(){ vP = normalize(position); gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }',
-    fragmentShader: 'uniform vec3 arriba; uniform vec3 medio; uniform vec3 horizonte; varying vec3 vP; void main(){ float h = vP.y; vec3 c = h > .16 ? mix(medio, arriba, smoothstep(.16, .7, h)) : mix(horizonte, medio, smoothstep(-.02, .16, h)); gl_FragColor = vec4(c, 1.0); }'
+    fragmentShader: 'uniform vec3 arriba; uniform vec3 medio; uniform vec3 horizonte; varying vec3 vP; void main(){ float h = vP.y; vec3 c = h > .15 ? mix(medio, arriba, smoothstep(.15, .68, h)) : mix(horizonte, medio, smoothstep(-.02, .15, h)); gl_FragColor = vec4(c, 1.0); }'
   }));
   escena.add(cielo);
-  const sol = new T.Mesh(new T.CircleGeometry(9, 32), basico({ color: 0xffe2a6, fog: false }));
-  sol.position.set(-95, 22, -230); sol.lookAt(0, 0, 0); escena.add(sol);
-  const halo = new T.Mesh(new T.CircleGeometry(30, 32), basico({ color: 0xffc98a, transparent: true, opacity: .25, fog: false, depthWrite: false }));
-  halo.position.set(-95, 22, -232); halo.lookAt(0, 0, 0); escena.add(halo);
+  const sol = new T.Mesh(new T.CircleGeometry(11, 32), basico({ color: 0xfff0cb, fog: false }));
+  sol.position.set(-95, 18, -230); sol.lookAt(0, 0, 0); escena.add(sol);
+  const halo = new T.Mesh(new T.CircleGeometry(38, 32), basico({ color: 0xffd19e, transparent: true, opacity: .35, fog: false, depthWrite: false }));
+  halo.position.set(-95, 18, -232); halo.lookAt(0, 0, 0); escena.add(halo);
 
-  const hemi = new T.HemisphereLight(0xcfd8e6, 0x4a5530, .55); escena.add(hemi);
-  const luzSol = new T.DirectionalLight(0xffd3a1, 1.1); luzSol.position.set(-40, 30, 50); escena.add(luzSol);
-  const luzRelleno = new T.DirectionalLight(0x9fb3d6, .25); luzRelleno.position.set(40, 20, -30); escena.add(luzRelleno);
+  const hemi = new T.HemisphereLight(0xd9e4f5, 0x485832, .62); escena.add(hemi);
+  const luzSol = new T.DirectionalLight(0xffdfb3, 1.25); luzSol.position.set(-45, 26, 50); escena.add(luzSol);
+  const luzRelleno = new T.DirectionalLight(0xa5c4ea, .3); luzRelleno.position.set(45, 20, -30); escena.add(luzRelleno);
 
   const suelo = new T.Mesh(new T.PlaneGeometry(500, 500), M.hierba);
   suelo.rotation.x = -Math.PI / 2; suelo.position.y = -0.02; escena.add(suelo);
