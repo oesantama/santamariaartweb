@@ -211,9 +211,9 @@
     }), 10, 6)
   });
 
-  /* ---------- 4. EXTERIOR ---------- */
-  // Cielo de 9:00 AM en los morichales llaneros (Azul claro despejado)
-  const cielo = new T.Mesh(new T.SphereGeometry(320, 32, 16), new T.ShaderMaterial({
+  /* ---------- 4. EXTERIOR Y SISTEMA DINÁMICO 24H ---------- */
+  // 1. Cielo con Shader Dinámico
+  const matCielo = new T.ShaderMaterial({
     side: T.BackSide, depthWrite: false, fog: false,
     uniforms: {
       arriba: { value: new T.Color('#2c6eb8') },
@@ -222,19 +222,122 @@
     },
     vertexShader: 'varying vec3 vP; void main(){ vP = normalize(position); gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }',
     fragmentShader: 'uniform vec3 arriba; uniform vec3 medio; uniform vec3 horizonte; varying vec3 vP; void main(){ float h = vP.y; vec3 c = h > .15 ? mix(medio, arriba, smoothstep(.15, .68, h)) : mix(horizonte, medio, smoothstep(-.02, .15, h)); gl_FragColor = vec4(c, 1.0); }'
-  }));
+  });
+  const cielo = new T.Mesh(new T.SphereGeometry(320, 32, 16), matCielo);
   escena.add(cielo);
 
-  // Sol radiante de 9:00 AM
-  const sol = new T.Mesh(new T.CircleGeometry(10, 32), basico({ color: 0xfffbe6, fog: false }));
-  sol.position.set(-70, 85, -200); sol.lookAt(0, 0, 0); escena.add(sol);
-  const halo = new T.Mesh(new T.CircleGeometry(32, 32), basico({ color: 0xe0f2ff, transparent: true, opacity: .35, fog: false, depthWrite: false }));
-  halo.position.set(-70, 85, -202); halo.lookAt(0, 0, 0); escena.add(halo);
+  // 2. Campo de Estrellas Nocturnas (Mundo Llanero)
+  const numEstrellas = 1200;
+  const geoEstrellas = new T.BufferGeometry();
+  const posEstrellas = new Float32Array(numEstrellas * 3);
+  for (let i = 0; i < numEstrellas; i++) {
+    const r = 310;
+    const theta = Math.random() * Math.PI * 2;
+    const phi = Math.acos(Math.random() * 0.95);
+    posEstrellas[i * 3] = r * Math.sin(phi) * Math.cos(theta);
+    posEstrellas[i * 3 + 1] = r * Math.cos(phi);
+    posEstrellas[i * 3 + 2] = r * Math.sin(phi) * Math.sin(theta);
+  }
+  geoEstrellas.setAttribute('position', new T.BufferAttribute(posEstrellas, 3));
+  const matEstrellas = new T.PointsMaterial({ color: 0xffffff, size: 2.2, transparent: true, opacity: 0, fog: false });
+  const estrellas = new T.Points(geoEstrellas, matEstrellas);
+  escena.add(estrellas);
 
-  // Iluminación radiante de mañana despejada
+  // 3. Sol
+  const sol = new T.Mesh(new T.CircleGeometry(11, 32), basico({ color: 0xfffbe6, fog: false }));
+  escena.add(sol);
+  const halo = new T.Mesh(new T.CircleGeometry(35, 32), basico({ color: 0xe0f2ff, transparent: true, opacity: .35, fog: false, depthWrite: false }));
+  escena.add(halo);
+
+  // 4. Luna Llena y Halo Lunar Nocturno
+  const texLuna = lienzo(256, 256, (x, w, h) => {
+    const rad = w / 2 - 8;
+    const g = x.createRadialGradient(w / 2, h / 2, 0, w / 2, h / 2, rad);
+    g.addColorStop(0, '#ffffff'); g.addColorStop(0.65, '#e8f0fe'); g.addColorStop(1, '#bcd2ee');
+    x.fillStyle = g; x.beginPath(); x.arc(w / 2, h / 2, rad, 0, Math.PI * 2); x.fill();
+    x.fillStyle = 'rgba(120, 140, 175, 0.22)';
+    [[100, 90, 22], [160, 130, 28], [85, 148, 16], [145, 75, 14], [165, 168, 18]].forEach(([cx, cy, cr]) => {
+      x.beginPath(); x.arc(cx, cy, cr, 0, Math.PI * 2); x.fill();
+    });
+  });
+  const luna = new T.Mesh(new T.CircleGeometry(12, 32), basico({ map: texLuna, transparent: true, fog: false }));
+  escena.add(luna);
+  const haloLuna = new T.Mesh(new T.CircleGeometry(42, 32), basico({ color: 0x94baff, transparent: true, opacity: .3, fog: false, depthWrite: false }));
+  escena.add(haloLuna);
+
+  // 5. Luces de escena
   const hemi = new T.HemisphereLight(0xdbf0ff, 0x556e3b, .75); escena.add(hemi);
-  const luzSol = new T.DirectionalLight(0xfff5e6, 1.35); luzSol.position.set(-50, 75, 60); escena.add(luzSol);
+  const luzSol = new T.DirectionalLight(0xfff5e6, 1.35); escena.add(luzSol);
   const luzRelleno = new T.DirectionalLight(0xbde3ff, .35); luzRelleno.position.set(50, 40, -30); escena.add(luzRelleno);
+
+  // 6. Claves atmosféricas de 0:00 a 24:00 horas
+  const CLAVES_TIEMPO = [
+    { h: 0.0,  arriba: '#030816', medio: '#081126', horiz: '#111d38', fog: 0x091224, solCol: 0xffffff, luzCol: 0x789edd, luzInt: 0.45, hemiSky: 0x152238, hemiGnd: 0x091220, noche: 1 },
+    { h: 5.0,  arriba: '#030816', medio: '#081126', horiz: '#111d38', fog: 0x091224, solCol: 0xffffff, luzCol: 0x789edd, luzInt: 0.45, hemiSky: 0x152238, hemiGnd: 0x091220, noche: 1 },
+    { h: 5.8,  arriba: '#171c3b', medio: '#994c50', horiz: '#f29857', fog: 0xd48763, solCol: 0xffaa66, luzCol: 0xffa873, luzInt: 0.70, hemiSky: 0x9e5f54, hemiGnd: 0x48352b, noche: 0.4 },
+    { h: 7.0,  arriba: '#1e52a8', medio: '#4d9ae6', horiz: '#b5dfff', fog: 0xbce2ff, solCol: 0xfff0cb, luzCol: 0xffeabf, luzInt: 1.25, hemiSky: 0xd9e4f5, hemiGnd: 0x485832, noche: 0 },
+    { h: 12.0, arriba: '#0d4bb3', medio: '#398be8', horiz: '#a3d5ff', fog: 0xace0ff, solCol: 0xfffbe6, luzCol: 0xffffff, luzInt: 1.40, hemiSky: 0xdbf0ff, hemiGnd: 0x556e3b, noche: 0 },
+    { h: 17.5, arriba: '#241438', medio: '#c94924', horiz: '#ffa238', fog: 0xd47d4e, solCol: 0xff7733, luzCol: 0xff8c42, luzInt: 1.20, hemiSky: 0xb55a4c, hemiGnd: 0x3d2b24, noche: 0 },
+    { h: 19.0, arriba: '#0a1128', medio: '#3b1c47', horiz: '#73333f', fog: 0x1b192e, solCol: 0xff8866, luzCol: 0x5d6296, luzInt: 0.50, hemiSky: 0x272440, hemiGnd: 0x141324, noche: 0.7 },
+    { h: 24.0, arriba: '#030816', medio: '#081126', horiz: '#111d38', fog: 0x091224, solCol: 0xffffff, luzCol: 0x789edd, luzInt: 0.45, hemiSky: 0x152238, hemiGnd: 0x091220, noche: 1 }
+  ];
+
+  let horaManual = null;
+
+  function actualizarCicloDiaNoche() {
+    const d = new Date();
+    const hora = horaManual !== null ? horaManual : (d.getHours() + d.getMinutes() / 60 + d.getSeconds() / 3600);
+
+    let k0 = CLAVES_TIEMPO[0], k1 = CLAVES_TIEMPO[CLAVES_TIEMPO.length - 1];
+    for (let i = 0; i < CLAVES_TIEMPO.length - 1; i++) {
+      if (hora >= CLAVES_TIEMPO[i].h && hora <= CLAVES_TIEMPO[i + 1].h) {
+        k0 = CLAVES_TIEMPO[i]; k1 = CLAVES_TIEMPO[i + 1]; break;
+      }
+    }
+    const t = (hora - k0.h) / (k1.h - k0.h);
+    const lerpC = (cA, cB) => new T.Color(cA).lerp(new T.Color(cB), t);
+    const lerpVal = (vA, vB) => vA + (vB - vA) * t;
+
+    matCielo.uniforms.arriba.value.copy(lerpC(k0.arriba, k1.arriba));
+    matCielo.uniforms.medio.value.copy(lerpC(k0.medio, k1.medio));
+    matCielo.uniforms.horizonte.value.copy(lerpC(k0.horiz, k1.horiz));
+    escena.fog.color.copy(lerpC(k0.fog, k1.fog));
+
+    const nocheVal = lerpVal(k0.noche, k1.noche);
+    matEstrellas.opacity = nocheVal;
+
+    const esDia = hora >= 6 && hora < 18;
+    if (esDia) {
+      const progSol = (hora - 6) / 12;
+      const angSol = progSol * Math.PI;
+      const posX = -Math.cos(angSol) * 210;
+      const posY = Math.sin(angSol) * 160 + 10;
+      sol.position.set(posX, posY, -180); sol.lookAt(0, 0, 0);
+      halo.position.set(posX, posY, -182); halo.lookAt(0, 0, 0);
+      sol.visible = true; halo.visible = true;
+      luna.visible = false; haloLuna.visible = false;
+      luzSol.position.set(posX * 0.4, Math.max(20, posY * 0.6), 50);
+    } else {
+      const hNoche = hora >= 18 ? hora - 18 : hora + 6;
+      const progLuna = hNoche / 12;
+      const angLuna = progLuna * Math.PI;
+      const posX = -Math.cos(angLuna) * 210;
+      const posY = Math.sin(angLuna) * 160 + 10;
+      luna.position.set(posX, posY, -180); luna.lookAt(0, 0, 0);
+      haloLuna.position.set(posX, posY, -182); haloLuna.lookAt(0, 0, 0);
+      haloLuna.material.opacity = 0.35 * nocheVal;
+      sol.visible = false; halo.visible = false;
+      luna.visible = true; haloLuna.visible = true;
+      luzSol.position.set(posX * 0.4, Math.max(20, posY * 0.6), 50);
+    }
+
+    luzSol.color.copy(lerpC(k0.luzCol, k1.luzCol));
+    const intSol = lerpVal(k0.luzInt, k1.luzInt);
+    const fuera = camara.position.z > 0.5;
+    luzSol.intensity = intSol * (fuera ? 1.0 : 0.15);
+    hemi.color.copy(lerpC(k0.hemiSky, k1.hemiSky));
+    hemi.groundColor.copy(lerpC(k0.hemiGnd, k1.hemiGnd));
+  }
 
   const suelo = new T.Mesh(new T.PlaneGeometry(500, 500), M.hierba);
   suelo.rotation.x = -Math.PI / 2; suelo.position.y = -0.02; escena.add(suelo);
@@ -1163,10 +1266,8 @@
       estado.yaw += giro * 1.6 * dt;
       mover(a * v, l * v);
     }
-    // Dentro de la casa el sol casi no entra; afuera ilumina todo
-    const fuera = camara.position.z > 0.5;
-    luzSol.intensity += ((fuera ? 1.1 : .12) - luzSol.intensity) * Math.min(1, dt * 3);
-    hemi.intensity += ((fuera ? .55 : .42) - hemi.intensity) * Math.min(1, dt * 3);
+    // Ciclo dinámico según hora real o manual
+    actualizarCicloDiaNoche();
     camara.rotation.set(estado.pitch, estado.yaw, 0);
     renderer.render(escena, camara);
     requestAnimationFrame(cuadro);
@@ -1185,6 +1286,11 @@
     viajar([v.pos], v.mira, 'afuera', () => mostrarFicha(PARADAS[0].ficha), 6);
   }, 250);
 
-  // Acceso para pruebas desde la consola: museo.irA(5)
+  // Exposición de controles en consola y ventana
+  window.museo = {
+    irA: idx => irAParada(idx),
+    setHora: (h) => { horaManual = Math.max(0, Math.min(24, h)); actualizarCicloDiaNoche(); console.log(`Hora fijada manualmente a las ${h}:00 hs`); },
+    fijarHoraReal: () => { horaManual = null; actualizarCicloDiaNoche(); console.log('Modo hora real activado.'); }
+  };
   window.museo = { irA, PARADAS, estado, camara };
 })();
