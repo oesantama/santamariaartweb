@@ -39,6 +39,9 @@
       <span>Casa-Museo</span>
     </a>
     <nav class="barra-acciones">
+      <button id="btnSoleado" class="boton boton-vidrio btn-clima" onclick="if(window.museo && window.museo.cambiarClima) window.museo.cambiarClima('soleado')">☀️ Soleado</button>
+      <button id="btnNublado" class="boton boton-vidrio btn-clima" onclick="if(window.museo && window.museo.cambiarClima) window.museo.cambiarClima('nublado')">⛅ Nublado</button>
+      <button id="btnLluvia" class="boton boton-vidrio btn-clima" onclick="if(window.museo && window.museo.cambiarClima) window.museo.cambiarClima('lluvia')">🌧️ Lluvia</button>
       <button id="btnPlano" class="boton boton-vidrio" aria-expanded="false" aria-controls="plano">Plano</button>
       <button id="btnAutor" class="boton boton-vidrio">El autor</button>
       <a href="sitio.html" class="boton boton-vidrio"><span class="largo">Versión clásica</span><span class="corto">Clásica</span></a>

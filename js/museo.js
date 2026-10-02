@@ -274,13 +274,13 @@
   const estrellas = new T.Points(geoEstrellas, matEstrellas);
   escena.add(estrellas);
 
-  // 3. Sol
+  // 3. Sol (Limpio sin halo exterior)
   const sol = new T.Mesh(new T.CircleGeometry(11, 32), basico({ color: 0xfffbe6, fog: false }));
   escena.add(sol);
-  const halo = new T.Mesh(new T.CircleGeometry(35, 32), basico({ color: 0xe0f2ff, transparent: true, opacity: .35, fog: false, depthWrite: false }));
-  escena.add(halo);
+  const halo = new T.Mesh(new T.CircleGeometry(35, 32), basico({ color: 0xe0f2ff, transparent: true, opacity: 0, fog: false, depthWrite: false }));
+  halo.visible = false; escena.add(halo);
 
-  // 4. Luna Llena y Halo Lunar Nocturno
+  // 4. Luna Llena Nocturna (Limpia sin halo exterior)
   const texLuna = lienzo(256, 256, (x, w, h) => {
     const rad = w / 2 - 8;
     const g = x.createRadialGradient(w / 2, h / 2, 0, w / 2, h / 2, rad);
@@ -293,8 +293,8 @@
   });
   const luna = new T.Mesh(new T.CircleGeometry(12, 32), basico({ map: texLuna, transparent: true, fog: false }));
   escena.add(luna);
-  const haloLuna = new T.Mesh(new T.CircleGeometry(42, 32), basico({ color: 0x94baff, transparent: true, opacity: .3, fog: false, depthWrite: false }));
-  escena.add(haloLuna);
+  const haloLuna = new T.Mesh(new T.CircleGeometry(42, 32), basico({ color: 0x94baff, transparent: true, opacity: 0, fog: false, depthWrite: false }));
+  haloLuna.visible = false; escena.add(haloLuna);
 
   // 5. Luces de escena
   const hemi = new T.HemisphereLight(0xdbf0ff, 0x556e3b, .75); escena.add(hemi);
@@ -344,8 +344,7 @@
       const posX = -Math.cos(angSol) * 210;
       const posY = Math.sin(angSol) * 160 + 10;
       sol.position.set(posX, posY, -180); sol.lookAt(0, 0, 0);
-      halo.position.set(posX, posY, -182); halo.lookAt(0, 0, 0);
-      sol.visible = true; halo.visible = true;
+      sol.visible = true; halo.visible = false;
       luna.visible = false; haloLuna.visible = false;
       luzSol.position.set(posX * 0.4, Math.max(20, posY * 0.6), 50);
     } else {
@@ -355,10 +354,8 @@
       const posX = -Math.cos(angLuna) * 210;
       const posY = Math.sin(angLuna) * 160 + 10;
       luna.position.set(posX, posY, -180); luna.lookAt(0, 0, 0);
-      haloLuna.position.set(posX, posY, -182); haloLuna.lookAt(0, 0, 0);
-      haloLuna.material.opacity = 0.35 * nocheVal;
       sol.visible = false; halo.visible = false;
-      luna.visible = true; haloLuna.visible = true;
+      luna.visible = true; haloLuna.visible = false;
       luzSol.position.set(posX * 0.4, Math.max(20, posY * 0.6), 50);
     }
 
@@ -784,20 +781,64 @@
     const pomo = new T.Mesh(new T.SphereGeometry(.05, 12, 8), M.oro); pomo.position.set(.45, 1.1, .12); g.add(pomo);
     pieza('Puerta tallada', g);
   }
-  // 9.4 Comedor con seis sillas
+  // 9.4 Comedor de ebanistería con seis sillas Windsor de barrotes torneados (exactas a la imagen)
   {
     const g = new T.Group(); g.position.set(-1.2, P2, -9.8);
-    bloque(-1.2, 1.2, .74, .8, -.55, .55, M.nogal, g);
-    [[-1.05, -.42], [1.05, -.42], [-1.05, .42], [1.05, .42]].forEach(([x, z]) => bloque(x - .05, x + .05, 0, .74, z - .05, z + .05, M.nogal, g));
-    function silla(x, z, rot) {
+    // Mesa principal con patas torneadas
+    bloque(-1.25, 1.25, .74, .81, -.58, .58, M.nogal, g);
+    const geoPataMesa = new T.CylinderGeometry(.05, .035, .74, 12);
+    [[-1.1, -.44], [1.1, -.44], [-1.1, .44], [1.1, .44]].forEach(([px, pz]) => {
+      const pm = new T.Mesh(geoPataMesa, M.nogal); pm.position.set(px, .37, pz); g.add(pm);
+      const an = new T.Mesh(new T.TorusGeometry(.058, .01, 8, 16), M.nogal);
+      an.rotation.x = Math.PI / 2; an.position.set(px, .55, pz); g.add(an);
+    });
+
+    // Silla torneada de ebanista
+    function sillaTorneada(x, z, rot) {
       const s = new T.Group(); s.position.set(x, 0, z); s.rotation.y = rot; g.add(s);
-      bloque(-.23, .23, .44, .49, -.22, .22, M.cedro, s);
-      [[-.2, -.19], [.2, -.19], [-.2, .19], [.2, .19]].forEach(([a, b]) => bloque(a - .02, a + .02, 0, .44, b - .02, b + .02, M.cedro, s));
-      [-.2, .2].forEach(a => bloque(a - .025, a + .025, .44, 1.05, .17, .22, M.cedro, s));
-      [.62, .8, .98].forEach(y => bloque(-.2, .2, y - .025, y + .025, .18, .21, M.cedro, s));
+      
+      const asiento = bloque(-.25, .25, .44, .49, -.23, .23, M.nogal, s);
+      asiento.rotation.x = -.03;
+
+      const geoPataSilla = new T.CylinderGeometry(.028, .018, .44, 12);
+      [[-.20, -.18], [.20, -.18], [-.20, .18], [.20, .18]].forEach(([px, pz]) => {
+        const pata = new T.Mesh(geoPataSilla, M.nogal);
+        pata.position.set(px, .22, pz);
+        pata.rotation.z = (px > 0 ? -.06 : .06);
+        pata.rotation.x = (pz > 0 ? -.05 : .05);
+        s.add(pata);
+
+        const anillop = new T.Mesh(new T.TorusGeometry(.032, .008, 8, 16), M.nogal);
+        anillop.rotation.x = Math.PI / 2; anillop.position.set(px, .32, pz); s.add(anillop);
+      });
+
+      bloque(-.20, .20, .18, .21, -.015, .015, M.nogal, s);
+      bloque(-.015, .015, .18, .21, -.18, .18, M.nogal, s);
+
+      const geoMontante = new T.CylinderGeometry(.022, .024, .62, 10);
+      [-.22, .22].forEach(px => {
+        const m = new T.Mesh(geoMontante, M.nogal);
+        m.position.set(px, .78, .19); m.rotation.x = -.08; s.add(m);
+        const a = new T.Mesh(new T.TorusGeometry(.028, .007, 8, 12), M.nogal);
+        a.rotation.x = Math.PI / 2; a.position.set(px, .76, .19); s.add(a);
+      });
+
+      const copete = bloque(-.26, .26, 1.04, 1.13, .16, .21, M.nogal, s);
+      copete.rotation.x = -.08;
+
+      const geoBarrote = new T.CylinderGeometry(.012, .012, .54, 8);
+      for (let i = -2; i <= 2; i++) {
+        const bx = i * 0.088;
+        const b = new T.Mesh(geoBarrote, M.nogal);
+        b.position.set(bx, .76, .19); b.rotation.x = -.08; s.add(b);
+        
+        const bulbo = new T.Mesh(new T.SphereGeometry(.019, 8, 8), M.nogal);
+        bulbo.scale.set(1, 1.4, 1); bulbo.position.set(bx, .76, .19); s.add(bulbo);
+      }
     }
-    [-.7, 0, .7].forEach(x => { silla(x, -.85, Math.PI); silla(x, .85, 0); });
-    pieza('Comedor de madera maciza', g);
+
+    [-.75, 0, .75].forEach(x => { sillaTorneada(x, -.88, Math.PI); sillaTorneada(x, .88, 0); });
+    pieza('Comedor de ebanistería con sillas torneadas', g);
   }
   // 9.5 Biblioteca (muro del fondo, centro)
   {
@@ -1331,6 +1372,7 @@
     }
     // Ciclo dinámico según hora real o manual
     actualizarCicloDiaNoche();
+    animarEscena(dt);
     camara.rotation.set(estado.pitch, estado.yaw, 0);
     renderer.render(escena, camara);
     requestAnimationFrame(cuadro);
@@ -1349,11 +1391,30 @@
     viajar([v.pos], v.mira, 'afuera', () => mostrarFicha(PARADAS[0].ficha), 6);
   }, 250);
 
+  // Animación del clima y de la escena
+  function animarEscena(dt) {
+    if (modoClima === 'lluvia') {
+      const pos = geoLluvia.attributes.position.array;
+      for (let i = 0; i < numGotas; i++) {
+        pos[i * 3 + 1] -= 52 * dt;
+        if (pos[i * 3 + 1] < 0) pos[i * 3 + 1] = 42;
+      }
+      geoLluvia.attributes.position.needsUpdate = true;
+    }
+    if (nubes3D && nubes3D.visible) {
+      nubes3D.children.forEach(n => {
+        n.position.x += 2.0 * dt;
+        if (n.position.x > 160) n.position.x = -160;
+      });
+    }
+  }
+
   // Exposición de controles en consola y ventana
   window.museo = {
     irA: idx => irAParada(idx),
     setHora: (h) => { horaManual = Math.max(0, Math.min(24, h)); actualizarCicloDiaNoche(); console.log(`Hora fijada manualmente a las ${h}:00 hs`); },
-    fijarHoraReal: () => { horaManual = null; actualizarCicloDiaNoche(); console.log('Modo hora real activado.'); }
+    fijarHoraReal: () => { horaManual = null; actualizarCicloDiaNoche(); console.log('Modo hora real activado.'); },
+    cambiarClima: modo => cambiarClima(modo)
   };
   window.museo = { irA, PARADAS, estado, camara };
 })();
