@@ -5,7 +5,8 @@ El sitio separa sus dos oficios. Todo está hecho en código, sin archivos PDF s
 
 | Oficio | Página | Archivo |
 |---|---|---|
-| Los dos | Inicio, con las secciones **El pintor** y **El ebanista** | `index.html` |
+| Los dos | **Casa-museo 3D** (página de inicio): la casa, el atril del autor, piso 1 pintor, piso 2 ebanista | `index.html` |
+| Los dos | Versión clásica, con las secciones **El pintor** y **El ebanista** | `sitio.html` |
 | Pintor | Catálogo de arte (A4, botón **Guardar como PDF**) | `catalogo-arte.html` |
 | Pintor | Hoja de vida artística, con certificados | `hoja-de-vida-artista.html` |
 | Ebanista | Catálogo de ebanistería (A4, botón **Guardar como PDF**) | `catalogo-ebanisteria.html` |
@@ -15,15 +16,18 @@ El sitio separa sus dos oficios. Todo está hecho en código, sin archivos PDF s
 
 ```
 santamaria-web/
-├── index.html
+├── index.html            ← casa-museo 3D
+├── sitio.html            ← versión clásica
 ├── catalogo-arte.html · catalogo-ebanisteria.html
 ├── hoja-de-vida-artista.html · hoja-de-vida-ebanista.html
 ├── js/
 │   ├── datos.js          ← TODO el contenido: perfiles, servicios, obras, trayectoria y contactos
 │   ├── catalogo.js       ← código común de los dos catálogos
 │   ├── hoja-de-vida.js   ← plantilla común de las dos hojas de vida
+│   ├── museo.js          ← la casa-museo 3D: escena, recorrido y navegación
+│   ├── vendor/three.min.js ← motor 3D Three.js r149 (licencia MIT)
 │   └── marca.js          ← colores y tipografías de la marca
-├── css/                  ← marca.css, catalogo.css, hoja-de-vida.css
+├── css/                  ← marca.css, catalogo.css, hoja-de-vida.css, museo.css
 ├── img/
 │   ├── obras/            ← fotos de las obras y de los trabajos en madera
 │   ├── certificados/     ← fotos de los certificados y premios
@@ -52,9 +56,22 @@ En `js/datos.js`: `PERFIL.arte` y `PERFIL.madera` (resumen, técnicas o competen
 
 **Alternativa sin tocar código:** la plantilla `contenido/contenido-pagina-santamaria.xlsx` se sube a Google Sheets y se publica como CSV (instrucciones en su pestaña LEAME).
 
+## La casa-museo 3D
+
+- **Exterior:** casa llanera de dos pisos al atardecer, con palmas de moriche y un atril en la entrada que abre la información del autor y los catálogos.
+- **Piso 1 · Sala del pintor:** las obras de `OBRAS` que tienen foto se cuelgan solas (hasta 12), con su marco, cartela y luz. El muro de reconocimientos abre los certificados.
+- **Piso 2 · Taller del ebanista:** cocina integral, closet, puerta tallada, comedor, biblioteca, marcos y bastidores, y banco de trabajo. Son piezas modeladas en 3D, marcadas como *representación ilustrativa* hasta tener fotos de trabajos reales.
+- **Navegación:** arrastrar para mirar, clic en el piso para caminar, W A S D o flechas, rueda del mouse, clic en una obra o mueble para ver su ficha, y recorrido guiado con las flechas de abajo o el **Plano**. En celular funciona igual con el dedo.
+- **Textos de las piezas de madera y puntos de vista:** en `js/museo.js`, objetos `TEXTOS_MADERA` y `VISTAS`.
+
 ## Ver el sitio en el computador
 
-Abra `index.html` con doble clic. Para una vista idéntica a la publicada, con Visual Studio Code instale la extensión **Live Server** y use *Open with Live Server*.
+El museo 3D **no abre con doble clic** sobre `index.html`: por seguridad, el navegador bloquea las fotos de las obras en archivos locales (sale un aviso con el enlace a la versión clásica). Para verlo en el computador:
+
+1. En Visual Studio Code instale la extensión **Live Server**.
+2. Abra la carpeta `santamaria-web`, clic derecho sobre `index.html` → *Open with Live Server*.
+
+Las demás páginas (`sitio.html`, catálogos y hojas de vida) sí abren con doble clic. Publicado en Netlify, todo funciona normal.
 
 ## Publicación
 
@@ -68,7 +85,7 @@ El sitio se publica en Netlify conectado a este repositorio: cada vez que se sub
 - [ ] Confirmar técnica y medidas de cada obra (en `datos.js` están como "Óleo sobre lienzo" salvo que se sepa otra cosa).
 - [ ] Confirmar los años de experiencia (1990–2002 Bogotá y 2002–2015 fábrica de muebles se calcularon con el Media Kit).
 - [ ] Confirmar el año de "Mujeres en el Poder" (se asumió 2019) y el del reconocimiento del Consulado del Ecuador.
-- [ ] Fotos de ebanistería: marcos, muebles y puertas del taller (hoy aparecen como "Fotografía próximamente").
+- [ ] Fotos de ebanistería: marcos, muebles y puertas del taller (hoy aparecen como "Fotografía próximamente" y en el museo como piezas ilustrativas).
 - [ ] Foto del maestro en el taller de madera (`CONFIG.retratoEbanista`), para el catálogo y la hoja de vida de ebanista.
 - [ ] Datos de la fábrica de muebles: nombre, tipo de clientes o proyectos destacados, para la hoja de vida de ebanista.
 - [ ] Foto del maestro enseñando, para la sección de formación (hoy usa *La antigua finca*).

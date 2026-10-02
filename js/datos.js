@@ -2,7 +2,8 @@
    CONTENIDO CENTRAL DEL SITIO
    ---------------------------------------------------------------------
    Alimenta todas las páginas, separadas por oficio:
-     index.html                      → las dos secciones: El pintor / El ebanista
+     index.html                      → museo virtual 3D (la casa, piso 1 pintor, piso 2 ebanista)
+     sitio.html                      → versión clásica: secciones El pintor / El ebanista
      catalogo-arte.html              → catálogo del pintor
      catalogo-ebanisteria.html       → catálogo del ebanista
      hoja-de-vida-artista.html       → hoja de vida como pintor
