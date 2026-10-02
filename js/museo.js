@@ -385,16 +385,53 @@
     parrafo(x, 'Toque el atril para ver los catálogos, las hojas de vida y la historia del autor', w / 2, 930, 640, 46);
   });
   const atril = new T.Group(); atril.position.set(2.7, 0, 4.4); mirarHacia(atril, -.38, 1); escena.add(atril);
-  const tablero = bloque(-.56, .56, 0, 1.44, -.025, .025, M.nogal, atril);
+
+  // Estructura inclinada del atril de ebanista
+  const marcoAtril = new T.Group();
+  marcoAtril.position.set(0, 0, 0);
+  atril.add(marcoAtril);
+
+  // 1. Mástil central posterior (soporte detrás del tablero)
+  bloque(-.035, .035, 0, 2.25, -.06, -.01, M.cedro, marcoAtril);
+
+  // 2. Patas de apoyo (quedan DETRÁS y DEBAJO del tablero sin tapar la cartelera)
+  const pataIzq = bloque(-.03, .03, 0, 2.2, -.05, 0, M.nogal, marcoAtril);
+  pataIzq.position.set(-.46, 1.05, 0); pataIzq.rotation.z = -.16; pataIzq.rotation.x = -.15;
+
+  const pataDer = bloque(-.03, .03, 0, 2.2, -.05, 0, M.nogal, marcoAtril);
+  pataDer.position.set(.46, 1.05, 0); pataDer.rotation.z = .16; pataDer.rotation.x = -.15;
+
+  const pataAtras = bloque(-.03, .03, 0, 2.0, -.05, 0, M.nogal, marcoAtril);
+  pataAtras.position.set(0, .95, -.45); pataAtras.rotation.x = .35;
+
+  // Travesaño horizontal inferior de refuerzo
+  bloque(-.52, .52, .25, .32, -.08, -.03, M.nogal, marcoAtril);
+
+  // 3. Repisa de ebanistería (soporta la cartelera)
+  const repisa = bloque(-.62, .62, .82, .89, -.05, .09, M.cedro, marcoAtril);
+  repisa.rotation.x = -.18;
+  bloque(-.48, -.42, .76, .82, -.03, .07, M.nogal, marcoAtril);
+  bloque(.42, .48, .76, .82, -.03, .07, M.nogal, marcoAtril);
+
+  // 4. Tablero / Cartelera con marco fino de madera
+  const grupoTablero = new T.Group();
+  grupoTablero.position.set(0, 1.58, .02);
+  grupoTablero.rotation.x = -.18;
+  marcoAtril.add(grupoTablero);
+
+  // Marco exterior de ebanistería
+  bloque(-.58, .58, -.74, .74, -.02, .02, M.cedro, grupoTablero);
+
+  // Lienzo impreso principal
+  const tablero = bloque(-.55, .55, -.71, .71, .001, .021, M.nogal, grupoTablero);
   tablero.material = [M.nogal, M.nogal, M.nogal, M.nogal, basico({ map: texAtril }), M.nogal];
-  tablero.position.set(0, 1.62, 0); tablero.rotation.x = -.22;
-  bloque(-.6, .6, .86, .9, -.02, .14, M.nogal, atril).rotation.x = -.22;
-  [[-.42, .12, .2], [.42, .12, .2], [0, -.45, -.25]].forEach(([x, z, inc]) => {
-    const pata = bloque(-.025, .025, 0, 2.5, -.025, .025, M.nogal, atril);
-    pata.position.set(x, 1.2, z); pata.rotation.x = inc * (z > 0 ? 1 : -1) * .6; pata.rotation.z = -x * .12;
-  });
-  const sombraAtril = new T.Mesh(new T.CircleGeometry(.8, 20), M.sombra); sombraAtril.rotation.x = -Math.PI / 2; sombraAtril.position.y = .02; atril.add(sombraAtril);
-  const luzAtril = new T.PointLight(0xffd29a, .6, 5, 1.5); luzAtril.position.set(0, 2.6, 1.2); atril.add(luzAtril);
+
+  // Sujetador superior del atril (cabezal de madera)
+  bloque(-.08, .08, .72, .78, -.04, .04, M.cedro, grupoTablero);
+
+  const sombraAtril = new T.Mesh(new T.CircleGeometry(.85, 20), M.sombra);
+  sombraAtril.rotation.x = -Math.PI / 2; sombraAtril.position.y = .02; atril.add(sombraAtril);
+  const luzAtril = new T.PointLight(0xffd29a, .65, 5, 1.5); luzAtril.position.set(0, 2.6, 1.2); atril.add(luzAtril);
 
   /* ---------- 7. PISO 1 · SALA DEL PINTOR ---------- */
   // Rodapiés de madera
