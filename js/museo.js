@@ -36,6 +36,15 @@
   let sistemaLluvia = null;
   let geoLluvia = null;
   let numGotas = 1600;
+
+  function cambiarClima(modo) {
+    modoClima = modo;
+    if (nubes3D) nubes3D.visible = (modo === 'nublado' || modo === 'lluvia');
+    if (sistemaLluvia) sistemaLluvia.visible = (modo === 'lluvia');
+    document.querySelectorAll('.btn-clima').forEach(b => {
+      if (b.id) b.classList.toggle('activo', b.id.toLowerCase().includes(modo));
+    });
+  }
   const canvasElem = $('escena');
   const opcionesWebGL = [
     { canvas: canvasElem, antialias: true, powerPreference: 'high-performance' },
@@ -411,29 +420,164 @@
     crearEstacaSolar(1.75, z);
   }
 
-  // Colinas lejanas
-  [[-90, -160, 60, 9], [40, -190, 80, 12], [150, -140, 55, 8], [-170, -90, 50, 7], [120, 60, 60, 6], [-140, 90, 70, 8]].forEach(([x, z, r, h]) => {
-    const c = new T.Mesh(new T.SphereGeometry(1, 24, 12), std(0x4c5e33, { roughness: 1 }));
-    c.scale.set(r, h, r * .6); c.position.set(x, -1, z); escena.add(c);
-  });
-
-  // Palmas de moriche
-  const geoHoja = new T.CircleGeometry(2.6, 10, -0.42, .84); geoHoja.rotateX(-Math.PI / 2);
-  function moriche(x, z, alto) {
-    const g = new T.Group(); g.position.set(x, 0, z);
-    const tronco = new T.Mesh(new T.CylinderGeometry(.2, .3, alto, 8), M.tronco); tronco.position.y = alto / 2; g.add(tronco);
-    const copa = new T.Group(); copa.position.y = alto; g.add(copa);
-    for (let i = 0; i < 20; i++) {
-      const pivote = new T.Group(); pivote.rotation.y = i / 20 * Math.PI * 2 + Math.random() * .3;
-      const seca = i % 6 === 0;
-      const h = new T.Mesh(geoHoja, seca ? M.hojaSeca : M.hoja);
-      h.rotation.z = seca ? -1.25 : (i % 2 ? .25 : -.35) - Math.random() * .45; h.position.x = .15;
-      pivote.add(h); copa.add(pivote);
+  // SISTEMA DE CLIMA LLANERO (Soleado, Nublado, Lluvia)
+  nubes3D = new T.Group(); escena.add(nubes3D);
+  const matNube = std(0xffffff, { roughness: 1, transparent: true, opacity: 0.85 });
+  for (let i = 0; i < 16; i++) {
+    const nube = new T.Group();
+    const nx = (Math.random() - 0.5) * 320, ny = 38 + Math.random() * 24, nz = (Math.random() - 0.5) * 320;
+    nube.position.set(nx, ny, nz);
+    for (let p = 0; p < 7; p++) {
+      const copo = new T.Mesh(new T.SphereGeometry(7 + Math.random() * 11, 12, 8), matNube);
+      copo.position.set((Math.random() - 0.5) * 24, (Math.random() - 0.5) * 7, (Math.random() - 0.5) * 24);
+      nube.add(copo);
     }
-    const s = new T.Mesh(new T.CircleGeometry(2.6, 20), M.sombra); s.rotation.x = -Math.PI / 2; s.position.y = .02; g.add(s);
+    nubes3D.add(nube);
+  }
+  nubes3D.visible = false;
+
+  geoLluvia = new T.BufferGeometry();
+  const posGotas = new Float32Array(numGotas * 3);
+  for (let i = 0; i < numGotas; i++) {
+    posGotas[i * 3] = (Math.random() - 0.5) * 160;
+    posGotas[i * 3 + 1] = Math.random() * 45;
+    posGotas[i * 3 + 2] = (Math.random() - 0.5) * 160;
+  }
+  geoLluvia.setAttribute('position', new T.BufferAttribute(posGotas, 3));
+  const matLluvia = new T.PointsMaterial({ color: 0x9ec7ff, size: 0.35, transparent: true, opacity: 0.75, fog: false });
+  sistemaLluvia = new T.Points(geoLluvia, matLluvia);
+  sistemaLluvia.visible = false; escena.add(sistemaLluvia);
+
+  // 1. CHOZAS / CANEYES LLANEROS DE PAJA (COMEDOR DE JORNALEROS AL LADO DE LA CASA)
+  const texPaja = lienzo(256, 256, (x, w, h) => {
+    x.fillStyle = '#b8944d'; x.fillRect(0, 0, w, h);
+    for (let i = 0; i < 450; i++) {
+      x.strokeStyle = i % 2 ? '#8f6e30' : '#d6b46b';
+      x.lineWidth = 1 + Math.random() * 2.2;
+      x.beginPath(); x.moveTo(Math.random() * w, Math.random() * h);
+      x.lineTo(Math.random() * w, Math.random() * h); x.stroke();
+    }
+  });
+  const matPaja = std(0xffffff, { map: repetir(texPaja, 4, 4), roughness: 0.95 });
+
+  function crearChozaPaja(x, z, rotY = 0) {
+    const g = new T.Group(); g.position.set(x, 0, z); g.rotation.y = rotY;
+    const posPostes = [[-2.2, -1.5], [0, -1.5], [2.2, -1.5], [-2.2, 1.5], [0, 1.5], [2.2, 1.5]];
+    posPostes.forEach(([px, pz]) => {
+      const h = new T.Mesh(new T.CylinderGeometry(.13, .15, 2.8, 10), M.nogal);
+      h.position.set(px, 1.4, pz); g.add(h);
+    });
+    bloque(-2.4, 2.4, 2.7, 2.85, -1.6, -1.4, M.nogal, g);
+    bloque(-2.4, 2.4, 2.7, 2.85, 1.4, 1.6, M.nogal, g);
+    bloque(-2.3, -2.1, 2.7, 2.85, -1.5, 1.5, M.nogal, g);
+    bloque(2.1, 2.3, 2.7, 2.85, -1.5, 1.5, M.nogal, g);
+
+    const techo = new T.Mesh(new T.ConeGeometry(3.7, 2.3, 4), matPaja);
+    techo.position.set(0, 3.85, 0); techo.rotation.y = Math.PI / 4; g.add(techo);
+
+    // Comedor de jornaleros adentro
+    bloque(-1.4, 1.4, .75, .82, -.45, .45, M.cedro, g);
+    [[-1.2, -.35], [1.2, -.35], [-1.2, .35], [1.2, .35]].forEach(([mx, mz]) => {
+      bloque(mx - .06, mx + .06, 0, .75, mz - .06, mz + .06, M.nogal, g);
+    });
+    [-.75, .75].forEach(bz => {
+      bloque(-1.4, 1.4, .42, .48, bz - .16, bz + .16, M.cedro, g);
+      [-1.2, 1.2].forEach(bx => bloque(bx - .05, bx + .05, 0, .42, bz - .14, bz + .14, M.nogal, g));
+    });
+
+    const farol = new T.Mesh(new T.SphereGeometry(.1, 8, 8), basico({ color: 0xffcb6e }));
+    farol.position.set(0, 2.4, 0); g.add(farol);
+    const luzCaney = new T.PointLight(0xffb84d, 0.8, 6, 1.5);
+    luzCaney.position.set(0, 2.3, 0); g.add(luzCaney);
+
+    const s = new T.Mesh(new T.PlaneGeometry(5.2, 3.8), M.sombra);
+    s.rotation.x = -Math.PI / 2; s.position.y = .01; g.add(s);
     escena.add(g);
   }
-  [[-19, 6, 11], [-23, -4, 13], [-17, -18, 12], [20, 4, 10.5], [24, -9, 12.5], [18, -20, 11], [-34, 22, 12], [36, 26, 13], [-8, 42, 11], [14, 46, 12]].forEach(p => moriche(...p));
+  // Chozas / Caneyes colocados al lado de la casa (visibles desde la fachada)
+  crearChozaPaja(-17.5, 3.5, 0.25);
+  crearChozaPaja(17.5, 3.5, -0.25);
+
+  // 2. LAGUNA LLANERA CON AGUA REFLECTANTE Detrás de la Casa
+  const texAgua = lienzo(256, 256, (x, w, h) => {
+    x.fillStyle = '#1c6282'; x.fillRect(0, 0, w, h);
+    x.strokeStyle = 'rgba(130, 215, 245, 0.45)'; x.lineWidth = 2;
+    for (let i = 0; i < 40; i++) {
+      const rx = Math.random() * w, ry = Math.random() * h, rw = 20 + Math.random() * 40;
+      x.beginPath(); x.ellipse(rx, ry, rw, rw * 0.3, 0, 0, Math.PI * 2); x.stroke();
+    }
+  });
+  const matAgua = std(0xffffff, { map: repetir(texAgua, 6, 3), roughness: 0.2, metalness: 0.1 });
+  const laguna = new T.Mesh(new T.PlaneGeometry(100, 48), matAgua);
+  laguna.rotation.x = -Math.PI / 2; laguna.position.set(0, 0.015, -45); escena.add(laguna);
+
+  // Lirios de agua en la laguna
+  const matLirios = std(0x2d6832, { roughness: 0.8 });
+  for (let l = 0; l < 18; l++) {
+    const lirio = new T.Mesh(new T.CircleGeometry(0.8 + Math.random() * 0.6, 10), matLirios);
+    lirio.rotation.x = -Math.PI / 2;
+    lirio.position.set((Math.random() - 0.5) * 80, 0.02, -45 + (Math.random() - 0.5) * 35);
+    escena.add(lirio);
+  }
+
+  // 3. GANADO LLANERO (VACAS CEBÚ BLANCAS COMO LA FOTO)
+  function crearVacaCebu(x, z, rotY = 0) {
+    const g = new T.Group(); g.position.set(x, 0, z); g.rotation.y = rotY;
+    const matPiel = std(0xf2f0e6, { roughness: 0.8 });
+    const matCuerno = std(0x3a332c, { roughness: 0.7 });
+    
+    bloque(-.38, .38, .45, 1.05, -.75, .75, matPiel, g);
+    const giba = new T.Mesh(new T.SphereGeometry(.28, 10, 10), matPiel);
+    giba.scale.set(1, 1.2, 1.3); giba.position.set(0, 1.15, .25); g.add(giba);
+    bloque(-.18, .18, .85, 1.25, .75, 1.15, matPiel, g);
+    [-.18, .18].forEach(cx => {
+      const c = new T.Mesh(new T.CylinderGeometry(.02, .035, .32, 8), matCuerno);
+      c.position.set(cx, 1.35, .88); c.rotation.z = cx > 0 ? -.35 : .35; c.rotation.x = -.2; g.add(c);
+    });
+    [[-.28, -.5], [.28, -.5], [-.28, .5], [.28, .5]].forEach(([px, pz]) => {
+      bloque(px - .08, px + .08, 0, .5, pz - .08, pz + .08, matPiel, g);
+    });
+
+    const s = new T.Mesh(new T.CircleGeometry(1.0, 16), M.sombra);
+    s.rotation.x = -Math.PI / 2; s.position.y = .01; g.add(s);
+    escena.add(g);
+  }
+  // Grupo de ganado cebú cerca de la laguna y el morichal
+  [[-14, -38, 0.4], [-8, -48, -0.6], [12, -42, 2.2], [18, -46, -1.8], [-22, -46, 0.8]].forEach(p => crearVacaCebu(...p));
+
+  // 4. PALMAS DE MORICHE REALISTAS (MORICHAL LLANERO COMO LA FOTO)
+  const geoHoja = new T.CircleGeometry(2.8, 10, -0.42, .84); geoHoja.rotateX(-Math.PI / 2);
+  function moricheRealista(x, z, alto = 14) {
+    const g = new T.Group(); g.position.set(x, 0, z);
+    const tronco = new T.Mesh(new T.CylinderGeometry(.22, .35, alto, 12), M.tronco);
+    tronco.position.y = alto / 2; g.add(tronco);
+    for (let y = 1; y < alto; y += .8) {
+      const an = new T.Mesh(new T.TorusGeometry(.24 + (1 - y / alto) * .08, .012, 6, 12), M.tronco);
+      an.rotation.x = Math.PI / 2; an.position.y = y; g.add(an);
+    }
+
+    const copa = new T.Group(); copa.position.y = alto; g.add(copa);
+    for (let s = 0; s < 10; s++) {
+      const p = new T.Group(); p.rotation.y = s / 10 * Math.PI * 2;
+      const hs = new T.Mesh(geoHoja, M.hojaSeca);
+      hs.rotation.z = -1.35; hs.position.x = .1; p.add(hs); copa.add(p);
+    }
+    for (let i = 0; i < 22; i++) {
+      const p = new T.Group(); p.rotation.y = i / 22 * Math.PI * 2 + (Math.random() * .2);
+      const h = new T.Mesh(geoHoja, M.hoja);
+      h.rotation.z = (i % 2 ? 0.15 : -0.25) - Math.random() * 0.4;
+      h.position.x = .15; p.add(h); copa.add(p);
+    }
+    const s = new T.Mesh(new T.CircleGeometry(3.2, 20), M.sombra);
+    s.rotation.x = -Math.PI / 2; s.position.y = .02; g.add(s);
+    escena.add(g);
+  }
+  [
+    [-22, 6, 14], [-26, 2, 16], [-19, -12, 15], [-24, -20, 17],
+    [23, 4, 14], [28, -6, 16], [20, -18, 15], [26, -26, 17],
+    [-38, 20, 16], [38, 22, 17], [-12, -44, 15], [16, -48, 16],
+    [-35, -42, 18], [35, -40, 18], [0, -58, 16]
+  ].forEach(p => moricheRealista(...p));
 
   /* ---------- 5. LA CASA ---------- */
   // Límites de la casa: x -12.5..12.5, z -15.5..0 (fachada en z = 0). Piso 1: y 0..5, piso 2: y 5..10.
