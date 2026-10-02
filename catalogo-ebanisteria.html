@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="es" data-solo-claro="1">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Catálogo de ebanistería · Edgar Santamaría Caleño</title>
+  <meta name="description" content="Catálogo del maestro ebanista Edgar Santamaría Caleño: muebles, puertas, carpintería integral, marcos de autor y bastidores a la medida." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="js/marca.js"></script>
+  <link rel="stylesheet" href="css/marca.css" />
+  <link rel="stylesheet" href="css/catalogo.css" />
+</head>
+<body>
+
+  <!-- Barra de herramientas (no sale al imprimir) -->
+  <div class="no-imprimir sticky top-0 z-50 mb-7 flex flex-wrap items-center justify-between gap-3 bg-nogal/95 px-4 py-3 text-sm text-lino backdrop-blur" style="padding-top: calc(.75rem + env(safe-area-inset-top))">
+    <a href="index.html#ebanista" class="hover:text-oroclaro">← Volver al sitio</a>
+    <div class="flex flex-wrap gap-2">
+      <button onclick="window.print()" class="rounded-full bg-lino px-4 py-2 text-nogal hover:bg-oroclaro">Guardar como PDF</button>
+      <a href="catalogo-arte.html" class="rounded-full border border-lino/40 px-4 py-2 hover:border-oroclaro">Ver catálogo de arte</a>
+      <a data-wa="Hola Maestro Santamaría, vi su catálogo de ebanistería y quisiera cotizar un trabajo." class="rounded-full border border-lino/40 px-4 py-2 hover:border-oroclaro">WhatsApp</a>
+    </div>
+  </div>
+
+  <div id="catalogo">
+
+  <!-- 1 · PORTADA -->
+  <section class="hoja madera-banda text-lino">
+    <div class="absolute inset-0" style="background: radial-gradient(ellipse at 50% 30%, rgba(20,12,6,.2), rgba(20,12,6,.82) 70%)"></div>
+    <!-- Esquina de un marco tallado: ensamble a inglete y perfil de moldura, en línea dorada -->
+    <svg class="absolute left-1/2 top-[22mm] h-[118mm] w-[118mm] -translate-x-1/2" viewBox="0 0 200 200" fill="none" stroke="#D9BD86" aria-hidden="true">
+      <g stroke-width=".9">
+        <path d="M20 20H190M20 20V190" stroke-width="1.6"/>
+        <path d="M30 30H190M30 30V190"/><path d="M36 36H190M36 36V190"/>
+        <path d="M44 44H190M44 44V190" stroke-width="1.3"/>
+        <path d="M52 52H190M52 52V190"/><path d="M58 58H190M58 58V190" stroke-width="1.6"/>
+        <path d="M20 20L58 58" stroke-width="1.2"/>
+      </g>
+      <g stroke-width=".5" opacity=".55">
+        <path d="M70 24c30 2 60-2 120 1M66 40c40 2 80-3 124 0M80 48c30 1 70-1 110 1"/>
+        <path d="M24 70c2 30-2 60 1 120M40 66c2 40-3 80 0 124M48 80c1 30-1 70 1 110"/>
+      </g>
+      <g stroke-width=".7" opacity=".8">
+        <path d="M58 58H190V190H58Z" stroke-dasharray="2 3"/>
+      </g>
+    </svg>
+    <div class="absolute inset-x-0 top-[156mm] text-center">
+      <p style="font-size:8.5pt;letter-spacing:.14em;color:#D9BD86">Catálogo de ebanistería</p>
+      <h1 class="serif mt-[4mm]" style="font-size:46pt;font-weight:400;line-height:.96">La madera,<br><em style="color:#D9BD86">hecha a la medida</em></h1>
+      <p class="serif mt-[7mm] italic" style="font-size:14.5pt;color:#d8ccb6;line-height:1.35">Muebles, puertas y carpintería integral.<br>Marcos de autor y bastidores para el arte.</p>
+      <div class="mx-auto my-[7mm] h-[.35mm] w-[22mm] bg-oro"></div>
+      <p class="serif" style="font-size:19pt;font-weight:500">Maestro Edgar Santamaría Caleño</p>
+      <p class="mt-[2mm]" style="font-size:8.5pt;letter-spacing:.14em;color:#D9BD86">Ebanista y carpintero</p>
+      <p class="mt-[1.5mm]" style="font-size:8pt;letter-spacing:.1em;color:#b3a58f">Meta, Colombia</p>
+    </div>
+    <img src="img/marca/firma-dorada.png" alt="Firma Santamaría" class="absolute bottom-[11mm] left-1/2 h-[17mm] w-auto -translate-x-1/2">
+  </section>
+
+  <!-- 2 · SEMBLANZA DEL EBANISTA -->
+  <section class="hoja">
+    <div class="absolute inset-y-0 left-0 w-[74mm] madera-banda">
+      <img id="retratoEbanista" alt="El maestro en su taller" class="hidden h-full w-full object-cover">
+      <!-- Ensamble de cola de milano: se ve mientras no haya foto del maestro en el taller -->
+      <svg id="dibujoEnsamble" class="absolute left-1/2 top-1/2 w-[50mm] -translate-x-1/2 -translate-y-1/2" viewBox="0 0 100 140" fill="none" stroke="#D9BD86" stroke-width="1" aria-hidden="true">
+        <path d="M10 10H90V60H10Z"/><path d="M10 60l8 20h14l-6-20M42 60l-6 20h28l-6-20M74 60l6 20h10V60" />
+        <path d="M10 80H90V130H10Z"/><path d="M18 80l-8-20M32 80l10-20M64 80l-6-20M80 80l-6-20" opacity=".5"/>
+        <path d="M14 20c20 2 50-2 72 1M14 35c25 2 45-3 72 0M14 95c20 2 50-2 72 1M14 112c25 2 45-3 72 0" opacity=".45" stroke-width=".6"/>
+      </svg>
+      <div class="absolute inset-0" style="background:linear-gradient(180deg,rgba(20,12,6,.1),rgba(20,12,6,.35))"></div>
+    </div>
+    <div class="absolute left-[88mm] right-[18mm] top-[22mm]">
+      <h2 class="serif" style="font-size:31pt;line-height:1.02;font-weight:500">El ebanista</h2>
+      <p class="serif mt-[2mm] italic" style="font-size:14pt!important;color:#8E4F32">Un oficio heredado, perfeccionado en su propia fábrica</p>
+      <div class="mt-[6mm] space-y-[3mm]">
+        <p>Edgar Santamaría Caleño creció entre las herramientas del taller familiar de carpintería en San Martín de los Llanos, Meta. Desde la escuela tallaba madera, y de su familia heredó el oficio y el respeto por el material.</p>
+        <p>Después de doce años dedicados a la pintura en Bogotá, regresó a su pueblo y fundó su propia fábrica de muebles. Durante trece años la dirigió y surtió de muebles al departamento del Meta: diseño, producción, acabados y atención directa a cada cliente.</p>
+        <p>Esa experiencia de empresa se une a la mirada de artista. Construye desde siempre los bastidores y los marcos de sus propias pinturas, y lleva ese mismo cuidado a cada mueble, puerta o cocina que sale de su taller.</p>
+        <p class="serif italic" style="font-size:13pt;line-height:1.35">Hoy trabaja desde su taller en el Meta, donde cada pieza se diseña para su espacio y se construye para durar generaciones.</p>
+      </div>
+      <img src="img/marca/firma-oscura.png" alt="Firma" class="mt-[5mm] h-[15mm] w-auto">
+    </div>
+    <div class="absolute bottom-[24mm] left-[88mm] right-[18mm] flex border-t border-tinta/25 pt-[4mm]">
+      <div class="flex-1" style="font-size:7.6pt;color:#6F6258"><b class="serif block" style="font-size:25pt;font-weight:500;color:#2E2621;line-height:1">13</b>años al frente de su fábrica de muebles</div>
+      <div class="flex-1" style="font-size:7.6pt;color:#6F6258"><b class="serif block" style="font-size:25pt;font-weight:500;color:#2E2621;line-height:1">6</b>líneas de trabajo a la medida</div>
+      <div class="flex-1" style="font-size:7.6pt;color:#6F6258"><b class="serif block" style="font-size:25pt;font-weight:500;color:#2E2621;line-height:1">2</b>oficios unidos en cada marco</div>
+    </div>
+    <div class="folio" style="left:88mm"><span>El ebanista</span><span class="n"></span></div>
+  </section>
+
+  <!-- 3 · HOGAR Y ARQUITECTURA -->
+  <section class="hoja">
+    <div class="madera-banda relative h-[52mm] text-lino">
+      <div class="absolute inset-0" style="background:linear-gradient(180deg,rgba(20,12,6,.15),rgba(20,12,6,.72))"></div>
+      <div class="absolute inset-x-[18mm] bottom-[9mm]">
+        <h2 class="serif" style="font-size:34pt;font-weight:500">Para el hogar y la arquitectura</h2>
+        <p class="serif mt-[2mm] italic" style="font-size:13pt;color:#D9BD86">Piezas pensadas para su espacio y hechas para durar</p>
+      </div>
+    </div>
+    <div id="serviciosHogar" class="mx-[18mm] mt-[8mm] grid grid-cols-3 gap-[9mm]"></div>
+    <div class="mx-[18mm] mt-[9mm]">
+      <h3 class="serif border-t border-tinta/20 pt-[3mm]" style="font-size:15pt;font-weight:600">Trabajos realizados</h3>
+      <div id="trabajosMadera" class="mt-[4mm] grid grid-cols-3 gap-[6mm]"></div>
+    </div>
+    <div class="absolute inset-x-0 bottom-0 h-[40mm] bg-moriche px-[18mm] pt-[7mm] text-lino">
+      <p class="serif italic" style="font-size:12pt!important;color:#D9BD86">Para quién trabajamos</p>
+      <div class="mt-[3mm] grid grid-cols-4 gap-[6mm]" style="font-size:8.4pt;line-height:1.4">
+        <div class="border-l border-oroclaro/50 pl-[3mm]">Hogares, fincas y casas de campo</div>
+        <div class="border-l border-oroclaro/50 pl-[3mm]">Arquitectos y diseñadores de interiores</div>
+        <div class="border-l border-oroclaro/50 pl-[3mm]">Hoteles, restaurantes y comercios</div>
+        <div class="border-l border-oroclaro/50 pl-[3mm]">Constructoras y obras nuevas</div>
+      </div>
+      <div class="folio" style="color:#a9b2a3"><span>Hogar y arquitectura</span><span class="n"></span></div>
+    </div>
+  </section>
+
+  <!-- 4 · PARA EL ARTE -->
+  <section class="hoja" style="background:#F6F2EA">
+    <div class="px-[18mm] pt-[20mm]">
+      <h2 class="serif" style="font-size:32pt;font-weight:500">Para el arte</h2>
+      <p class="mt-[2mm] max-w-[150mm]" style="color:#6F6258">El soporte y el marco determinan la vida de una pintura. Como pintor, el maestro sabe lo que una obra necesita; como ebanista, sabe construirlo.</p>
+      <div id="serviciosArte" class="mt-[8mm] grid grid-cols-3 gap-[9mm]"></div>
+      <div class="mt-[9mm] grid grid-cols-[100mm_1fr] items-center gap-[10mm]">
+        <div class="border border-tinta/15 bg-lino p-[4mm]">
+          <!-- Plano de un bastidor estructural -->
+          <svg viewBox="0 0 360 215" xmlns="http://www.w3.org/2000/svg" font-family="Jost" font-size="10" fill="#3b2f26" class="w-full">
+            <g stroke="#3b2f26" stroke-width="1.1" fill="none">
+              <rect x="20" y="35" width="175" height="160"/><rect x="34" y="49" width="147" height="132"/>
+              <rect x="100" y="49" width="15" height="132" fill="#d9ccb5" fill-opacity=".5"/>
+              <rect x="34" y="107" width="147" height="15" fill="#d9ccb5" fill-opacity=".5"/>
+              <path d="M20 35l14 14M195 35l-14 14M20 195l14-14M195 195l-14-14"/>
+            </g>
+            <g fill="#B8914F" stroke="#7a5c2e" stroke-width=".8">
+              <path d="M24 45l7-7 5 5-7 7z"/><path d="M191 45l-7-7-5 5 7 7z"/><path d="M24 185l7 7 5-5-7-7z"/><path d="M191 185l-7 7-5-5 7-7z"/>
+            </g>
+            <g stroke="#9a7a45" stroke-width=".7" fill="none"><path d="M195 70h22"/><path d="M188 42 L217 20"/><path d="M181 114h36"/><path d="M186 190 L217 175"/></g>
+            <text x="222" y="23">Ensamble a inglete</text><text x="222" y="35" fill="#7a6a5c">de precisión</text>
+            <text x="222" y="73">Listón perimetral</text><text x="222" y="85" fill="#7a6a5c">madera seca y cepillada</text>
+            <text x="222" y="117">Travesaño en cruz</text><text x="222" y="129" fill="#7a6a5c">refuerzo en gran formato</text>
+            <text x="222" y="178">Cuñas de retensado</text><text x="222" y="190" fill="#7a6a5c">en las cuatro esquinas</text>
+          </svg>
+        </div>
+        <div>
+          <p class="serif italic" style="font-size:15pt!important;line-height:1.3;color:#33443A">El soporte invisible que define la permanencia de una pintura.</p>
+          <p class="mt-[3mm]" style="font-size:8.6pt!important;color:#6F6258">Cada bastidor se construye según el formato y el peso de la obra. Las cuñas permiten devolver la tensión a la tela con el paso de los años, sin desmontar la pieza.</p>
+        </div>
+      </div>
+      <div class="mt-[10mm] border-t-[.4mm] border-oro pt-[3mm]">
+        <h3 class="serif" style="font-size:15pt;font-weight:600">Cajas de embalaje para obra de arte</h3>
+        <p class="mt-[1.5mm] max-w-[160mm]" style="font-size:8.6pt!important">Cajas de madera reforzada a la medida para transportar y exportar obra enmarcada: interior acolchado, esquineros, barrera contra la humedad y madera tratada bajo norma fitosanitaria NIMF 15. Para artistas, galerías y coleccionistas.</p>
+      </div>
+    </div>
+    <div class="folio"><span>Para el arte</span><span class="n"></span></div>
+  </section>
+
+  <!-- 5 · CÓMO TRABAJAMOS Y FORMACIÓN -->
+  <section class="hoja">
+    <div class="px-[18mm] pt-[20mm]">
+      <h2 class="serif" style="font-size:32pt;font-weight:500">Cómo trabajamos</h2>
+      <p class="mt-[2mm] max-w-[150mm]" style="color:#6F6258">Cada proyecto se diseña y se construye a la medida, con atención directa del maestro de principio a fin.</p>
+      <ol class="mt-[8mm] grid grid-cols-4 gap-[6mm]">
+        <li class="border-t-[.4mm] border-oro pt-[3mm]"><span class="serif italic" style="font-size:22pt;color:#B8914F">1</span><h3 class="serif" style="font-size:13pt;font-weight:600">Visita y medidas</h3><p style="font-size:8.2pt!important;line-height:1.45">Conocemos el espacio, tomamos medidas y escuchamos lo que necesita.</p></li>
+        <li class="border-t-[.4mm] border-oro pt-[3mm]"><span class="serif italic" style="font-size:22pt;color:#B8914F">2</span><h3 class="serif" style="font-size:13pt;font-weight:600">Diseño y cotización</h3><p style="font-size:8.2pt!important;line-height:1.45">Proponemos diseño, madera, acabado, tiempos y valor.</p></li>
+        <li class="border-t-[.4mm] border-oro pt-[3mm]"><span class="serif italic" style="font-size:22pt;color:#B8914F">3</span><h3 class="serif" style="font-size:13pt;font-weight:600">Fabricación</h3><p style="font-size:8.2pt!important;line-height:1.45">La pieza se construye en el taller con ensambles tradicionales y acabados a mano.</p></li>
+        <li class="border-t-[.4mm] border-oro pt-[3mm]"><span class="serif italic" style="font-size:22pt;color:#B8914F">4</span><h3 class="serif" style="font-size:13pt;font-weight:600">Entrega e instalación</h3><p style="font-size:8.2pt!important;line-height:1.45">Llevamos e instalamos la pieza, y le explicamos cómo cuidarla.</p></li>
+      </ol>
+    </div>
+    <div class="absolute inset-x-0 top-[112mm] h-[62mm] madera-banda">
+      <div class="absolute inset-0" style="background:linear-gradient(90deg,rgba(51,68,58,.92),rgba(51,68,58,.55))"></div>
+      <div class="absolute inset-y-0 left-[18mm] right-[18mm] flex flex-col justify-center text-lino">
+        <p class="serif italic" style="font-size:22pt!important;line-height:1.25">Madera que sostiene el arte.<br>Oficio que sostiene el tiempo.</p>
+      </div>
+    </div>
+    <div class="absolute inset-x-[18mm] top-[186mm]">
+      <h2 class="serif" style="font-size:24pt;font-weight:500;color:#33443A">Talleres de ebanistería</h2>
+      <p class="mt-[2mm]" style="font-size:8.6pt!important;color:#6F6258">El maestro aprendió en el taller, y en el taller enseña. Programas para Casas de la Cultura, academias, colegios y comunidades.</p>
+      <div class="mt-[5mm] grid grid-cols-3 gap-[8mm]">
+        <div class="border-t border-moriche/35 pt-[2.6mm]"><h3 class="serif" style="font-size:13pt;font-weight:600">Ebanistería y talla básica</h3><p style="font-size:8.3pt!important">Herramientas manuales, lectura de la veta, ensambles y acabados.</p></div>
+        <div class="border-t border-moriche/35 pt-[2.6mm]"><h3 class="serif" style="font-size:13pt;font-weight:600">Del bastidor al marco</h3><p style="font-size:8.3pt!important">Construcción de soportes profesionales para pintura, un saber que casi ninguna academia enseña.</p></div>
+        <div class="border-t border-moriche/35 pt-[2.6mm]"><h3 class="serif" style="font-size:13pt;font-weight:600">Restauración</h3><p style="font-size:8.3pt!important">Cómo devolverle la vida a un mueble antiguo respetando su historia.</p></div>
+      </div>
+    </div>
+    <div class="folio"><span>Cómo trabajamos y formación</span><span class="n"></span></div>
+  </section>
+
+  <!-- 6 · CONTRAPORTADA -->
+  <section class="hoja madera-oscura text-lino">
+    <div class="absolute inset-0 bg-[rgba(20,13,8,.5)]"></div>
+    <div class="relative px-[18mm] pt-[22mm]">
+      <h2 class="serif max-w-[150mm]" style="font-size:30pt;font-weight:500;line-height:1.05">Cuéntenos su proyecto y le enviamos una propuesta</h2>
+      <p class="serif mt-[4mm] max-w-[145mm] italic" style="font-size:12.5pt!important;color:#d8ccb6;line-height:1.4">Un mueble, una puerta, una cocina completa o el marco para una obra querida. Envíenos fotos del espacio y medidas aproximadas por WhatsApp.</p>
+      <div class="mt-[11mm] grid grid-cols-3 gap-[8mm]">
+        <div class="border-t-[.35mm] border-oro pt-[4mm]"><h3 class="serif" style="font-size:14.5pt;font-weight:600">Taller en el Meta</h3><p class="mt-[2mm]" style="font-size:8.2pt!important;color:#d6cbb8">Fabricación e instalación en el Meta. Consulte la cobertura para proyectos en otras ciudades.</p></div>
+        <div class="border-t-[.35mm] border-oro pt-[4mm]"><h3 class="serif" style="font-size:14.5pt;font-weight:600">Marcos y bastidores</h3><p class="mt-[2mm]" style="font-size:8.2pt!important;color:#d6cbb8">Envíos nacionales e internacionales, con embalaje en caja de madera hecha en el taller.</p></div>
+        <div class="border-t-[.35mm] border-oro pt-[4mm]"><h3 class="serif" style="font-size:14.5pt;font-weight:600">Cotización sin compromiso</h3><p class="mt-[2mm]" style="font-size:8.2pt!important;color:#d6cbb8">Propuesta con diseño, tipo de madera, acabado, tiempos de entrega y valor.</p></div>
+      </div>
+    </div>
+    <div class="absolute inset-x-[18mm] bottom-[22mm] grid grid-cols-[1fr_34mm] items-end gap-[10mm] border-t border-oroclaro/35 pt-[9mm]">
+      <div>
+        <p class="serif" style="font-size:21pt!important;font-weight:500">Maestro Edgar Santamaría Caleño</p>
+        <p class="mb-[6mm] mt-[1.4mm]" style="font-size:8pt!important;letter-spacing:.1em;color:#D9BD86">Ebanista y carpintero · Muebles, puertas y enmarcado de autor</p>
+        <p class="serif" style="font-size:15pt!important;line-height:1.5"><span class="inline-block w-[22mm] font-sans" style="font-size:7.5pt;color:#a39680">Correo</span>santamaria.art1@gmail.com</p>
+        <p class="serif" style="font-size:15pt!important;line-height:1.5"><span class="inline-block w-[22mm] font-sans" style="font-size:7.5pt;color:#a39680">WhatsApp</span>(+57) 320 829 6045 · 317 393 5276</p>
+        <p class="serif" style="font-size:15pt!important;line-height:1.5"><span class="inline-block w-[22mm] font-sans" style="font-size:7.5pt;color:#a39680">Redes</span>@santamaria_art · fb/santamaria.art</p>
+      </div>
+      <div class="text-center" style="font-size:6.8pt;color:#a39680;line-height:1.4">
+        <img src="img/marca/qr-whatsapp.svg" alt="Código QR de WhatsApp" class="mx-auto mb-[2mm] h-[30mm] w-[30mm]">
+        Escanee para escribir<br>por WhatsApp
+      </div>
+    </div>
+  </section>
+  </div>
+
+  <script src="js/datos.js"></script>
+  <script src="js/catalogo.js"></script>
+  <script>
+    iniciarCatalogo(() => {
+      // Foto del maestro en el taller de madera (si existe reemplaza el dibujo del ensamble)
+      if (CONFIG.retratoEbanista) {
+        const img = document.getElementById('retratoEbanista');
+        img.src = enlaceDrive(CONFIG.retratoEbanista); img.classList.remove('hidden');
+        document.getElementById('dibujoEnsamble').classList.add('hidden');
+      }
+      document.getElementById('serviciosHogar').innerHTML = tarjetasServicio(SERVICIOS.maderaHogar);
+      document.getElementById('serviciosArte').innerHTML = tarjetasServicio(SERVICIOS.maderaArte);
+      // Trabajos realizados: obras de la categoría "ebanisteria" (las 3 primeras)
+      document.getElementById('trabajosMadera').innerHTML = obrasDe('madera').slice(0, 3).map(o => `
+        <figure>
+          <div style="height:46mm;background:#241A13"><img src="${esc(fotoObra(o))}" alt="${esc(o.titulo)}" onerror="imgFallback(this)" style="width:100%;height:100%;object-fit:cover"></div>
+          <figcaption class="mt-[2mm]" style="font-size:8pt;line-height:1.35"><b style="font-weight:500">${esc(o.titulo)}</b><br><span style="color:#6F6258">${esc(o.tecnica)}</span></figcaption>
+        </figure>`).join('');
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,27 @@
+/* =====================================================================
+       HOJA DE VIDA EN CÓDIGO
+       En pantalla es una página adaptable; al imprimir o "Guardar como PDF"
+       se acomoda en formato A4. El contenido de experiencia, exposiciones y
+       reconocimientos sale de la pestaña "trayectoria" (ver js/datos.js).
+       Lo usan hoja-de-vida-artista.html y hoja-de-vida-ebanista.html.
+       ===================================================================== */
+    @page { size: A4; margin: 14mm 0; }
+    @page :first { margin-top: 0; }
+    @media print {
+      body { background: #fff !important; font-size: 9.5pt; }
+      .no-imprimir { display: none !important; }
+      .cv { box-shadow: none !important; margin: 0 !important; max-width: none !important; }
+      .cv-grid { grid-template-columns: 62mm 1fr !important; }
+      section.bloque { break-inside: auto; }
+      .det-expo { display: none; } /* al imprimir, las exposiciones van en una línea */
+      li.bloque, aside section.bloque { break-inside: avoid; }
+      .cv header { padding-top: 8mm !important; padding-bottom: 8mm !important; }
+      .cv h2.text-3xl { font-size: 16pt; }
+      .cv h3.text-xl { font-size: 11.5pt; }
+      .cv p, .cv li { font-size: 8.6pt; line-height: 1.4; }
+      #secciones { row-gap: 0; }
+      #secciones > section + section, .space-y-10 > * + * { margin-top: 1.1rem !important; }
+      ol.space-y-5 > * + * { margin-top: .5rem !important; }
+      .cv-grid > div, .cv-grid > aside { padding-top: 7mm !important; padding-bottom: 7mm !important; }
+      * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    }

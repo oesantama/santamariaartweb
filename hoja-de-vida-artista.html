@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es" data-solo-claro="1" data-area="arte">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Hoja de vida artística · Edgar Santamaría Caleño</title>
+  <meta name="description" content="Hoja de vida del pintor Edgar Santamaría Caleño: experiencia, exposiciones, premios y reconocimientos." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="js/marca.js"></script>
+  <link rel="stylesheet" href="css/marca.css" />
+  <link rel="stylesheet" href="css/hoja-de-vida.css" />
+</head>
+<body class="bg-[#d9d2c5] font-sans font-light text-tinta antialiased">
+
+  <div class="no-imprimir sticky top-0 z-50 flex flex-wrap items-center justify-between gap-3 bg-nogal/95 px-4 py-3 text-sm text-lino backdrop-blur" style="padding-top: calc(.75rem + env(safe-area-inset-top))">
+    <a href="index.html#pintor" class="hover:text-oroclaro">← Volver al sitio</a>
+    <div class="flex flex-wrap gap-2">
+      <button onclick="window.print()" class="rounded-full bg-lino px-4 py-2 text-nogal hover:bg-oroclaro">Guardar como PDF</button>
+      <a href="catalogo-arte.html" class="rounded-full border border-lino/40 px-4 py-2 hover:border-oroclaro">Ver catálogo de arte</a>
+      <a href="hoja-de-vida-ebanista.html" class="rounded-full border border-lino/40 px-4 py-2 hover:border-oroclaro">Hoja de vida como ebanista</a>
+    </div>
+  </div>
+
+  <article class="cv mx-auto my-6 max-w-5xl bg-lino shadow-2xl sm:my-10">
+    <!-- Encabezado -->
+    <header class="madera-oscura relative px-7 py-12 text-lino sm:px-12">
+      <div class="absolute inset-0 bg-[rgba(20,13,8,.45)]"></div>
+      <div class="relative flex flex-col gap-8 sm:flex-row sm:items-center">
+        <img id="retrato" alt="Edgar Santamaría Caleño" onerror="imgFallback(this)" class="h-32 w-32 rounded-full border-2 border-oro object-cover grayscale-[.3]" />
+        <div>
+          <h1 class="font-serif text-4xl font-medium leading-tight sm:text-5xl">Edgar Santamaría Caleño</h1>
+          <p id="subtitulo" class="mt-2 font-serif text-xl italic text-oroclaro"></p>
+          <img src="img/marca/firma-dorada.png" alt="Firma" class="mt-3 h-10 w-auto" />
+          <p id="origen" class="mt-2 text-sm text-lino/70"></p>
+        </div>
+      </div>
+    </header>
+
+    <div class="cv-grid grid md:grid-cols-[18rem_1fr]">
+      <!-- Columna lateral -->
+      <aside class="space-y-9 bg-papel px-7 py-10 sm:px-10">
+        <section class="bloque">
+          <h2 class="font-serif text-xl font-semibold">Contacto</h2>
+          <ul class="mt-3 space-y-2 text-sm">
+            <li><a href="mailto:santamaria.art1@gmail.com" class="break-all hover:text-oro">santamaria.art1@gmail.com</a></li>
+            <li><a data-wa="Hola Maestro Santamaría, vi su hoja de vida y quisiera contactarlo." class="hover:text-oro">+57 320 829 6045</a></li>
+            <li><a data-wa-num="573173935276" data-wa="Hola Maestro Santamaría, vi su hoja de vida y quisiera contactarlo." class="hover:text-oro">+57 317 393 5276</a></li>
+            <li><a data-red="instagram" class="hover:text-oro">Instagram: @santamaria_art</a></li>
+            <li><a data-red="facebook" class="hover:text-oro">Facebook: santamaria.art</a></li>
+          </ul>
+        </section>
+        <section class="bloque">
+          <h2 id="tituloTecnicas" class="font-serif text-xl font-semibold"></h2>
+          <ul id="tecnicas" class="mt-3 flex flex-wrap gap-2 text-xs"></ul>
+        </section>
+        <section class="bloque">
+          <h2 class="font-serif text-xl font-semibold">En cifras</h2>
+          <dl id="cifras" class="mt-3 grid grid-cols-2 gap-3"></dl>
+        </section>
+        <section class="bloque">
+          <h2 class="font-serif text-xl font-semibold">Servicios</h2>
+          <ul id="servicios" class="mt-3 space-y-1.5 text-sm leading-snug"></ul>
+        </section>
+        <section class="bloque">
+          <h2 class="font-serif text-xl font-semibold">Idiomas</h2>
+          <!-- Agregar inglés u otros idiomas cuando se confirme el nivel -->
+          <p class="mt-3 text-sm">Español (nativo)</p>
+        </section>
+      </aside>
+
+      <!-- Columna principal: se llena con los datos de trayectoria -->
+      <div class="space-y-10 px-7 py-10 sm:px-12">
+        <section class="bloque">
+          <h2 class="font-serif text-3xl">Perfil</h2>
+          <p id="resumen" class="mt-3 leading-relaxed"></p>
+          <p id="empirico" class="mt-3 font-serif text-lg italic leading-snug text-moriche"></p>
+        </section>
+        <div id="secciones" class="space-y-10"></div>
+      </div>
+    </div>
+
+    <section id="bloqueCert" class="no-imprimir border-t border-tinta/15 px-7 py-10 sm:px-12">
+      <h2 class="font-serif text-3xl">Certificados y reconocimientos</h2>
+      <p class="mt-2 text-sm text-gris">Documentos originales. Toque cualquiera para verlo en grande.</p>
+      <div id="galeriaCert" class="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-6"></div>
+    </section>
+
+    <footer class="flex flex-wrap justify-between gap-2 border-t border-tinta/15 px-7 py-5 text-xs text-gris sm:px-12">
+      <span><span id="nombreDoc"></span> · Actualizada <span id="fecha"></span></span>
+      <span id="lema" class="font-serif italic"></span>
+    </footer>
+  </article>
+
+  <script src="js/datos.js"></script>
+  <script src="js/hoja-de-vida.js"></script>
+</body>
+</html>

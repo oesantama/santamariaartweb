@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="es" data-solo-claro="1">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Catálogo de arte · Edgar Santamaría Caleño</title>
+  <meta name="description" content="Catálogo del pintor Edgar Santamaría Caleño: colección, trayectoria, reconocimientos, encargos y envíos." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="js/marca.js"></script>
+  <link rel="stylesheet" href="css/marca.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="js/marca.js"></script>
+  <link rel="stylesheet" href="css/marca.css" />
+  <link rel="stylesheet" href="css/catalogo.css" />
+</head>
+<body>
+
+  <!-- Barra de herramientas (no sale al imprimir) -->
+  <div class="no-imprimir sticky top-0 z-50 mb-7 flex flex-wrap items-center justify-between gap-3 bg-nogal/95 px-4 py-3 text-sm text-lino backdrop-blur" style="padding-top: calc(.75rem + env(safe-area-inset-top))">
+    <a href="index.html" class="hover:text-oroclaro">← Volver al sitio</a>
+    <div class="flex flex-wrap gap-2">
+      <button onclick="window.print()" class="rounded-full bg-lino px-4 py-2 text-nogal hover:bg-oroclaro">Guardar como PDF</button>
+      <a href="catalogo-ebanisteria.html" class="rounded-full border border-lino/40 px-4 py-2 hover:border-oroclaro">Ver catálogo de ebanistería</a>
+      <a data-wa="Hola Maestro Santamaría, vi su catálogo de arte y quisiera más información." class="rounded-full border border-lino/40 px-4 py-2 hover:border-oroclaro">WhatsApp</a>
+    </div>
+  </div>
+
+  <div id="catalogo">
+
+  <!-- 1 · PORTADA -->
+  <section class="hoja madera-oscura text-lino">
+    <div class="absolute inset-0" style="background: radial-gradient(ellipse at 50% 35%, rgba(185,145,80,.16), rgba(0,0,0,.4) 75%)"></div>
+    <div class="absolute left-1/2 top-[24mm] -translate-x-1/2">
+      <div class="marco"><div class="paspartu"><div class="lienzo" style="width:124mm;height:84mm"><img id="obraPortada" alt="Obra destacada" onerror="imgFallback(this)"></div></div></div>
+    </div>
+    <div class="absolute inset-x-0 top-[156mm] text-center">
+      <p style="font-size:8.5pt;letter-spacing:.14em;color:#D9BD86">Catálogo de arte</p>
+      <h1 class="serif mt-[4mm]" style="font-size:46pt;font-weight:400;line-height:.96">Del Llano<br><em style="color:#D9BD86">a Nueva York</em></h1>
+      <p class="serif mt-[7mm] italic" style="font-size:14.5pt;color:#d8ccb6;line-height:1.35">Retrato, paisaje y folclor llanero.<br>Óleo, acrílico, carbón y pastel.</p>
+      <div class="mx-auto my-[7mm] h-[.35mm] w-[22mm] bg-oro"></div>
+      <p class="serif" style="font-size:19pt;font-weight:500">Maestro Edgar Santamaría Caleño</p>
+      <p class="mt-[2mm]" style="font-size:8.5pt;letter-spacing:.14em;color:#D9BD86">Artista plástico</p>
+      <p class="mt-[1.5mm]" style="font-size:8pt;letter-spacing:.1em;color:#b3a58f">Meta, Colombia</p>
+    </div>
+    <img src="img/marca/firma-dorada.png" alt="Firma Santamaría" class="absolute bottom-[11mm] left-1/2 h-[17mm] w-auto -translate-x-1/2">
+  </section>
+
+  <!-- 2 · SEMBLANZA DEL PINTOR -->
+  <section class="hoja">
+    <div class="absolute inset-y-0 left-0 w-[74mm] madera-oscura">
+      <img id="retrato" alt="Soy yo y qué…, autorretrato" onerror="imgFallback(this)" class="h-full w-full object-cover" style="object-position:38% center">
+    </div>
+    <div class="absolute left-[88mm] right-[18mm] top-[22mm]">
+      <h2 class="serif" style="font-size:31pt;line-height:1.02;font-weight:500">El pintor</h2>
+      <p class="serif mt-[2mm] italic" style="font-size:14pt!important;color:#8E4F32">Realismo en la mirada, color en libertad</p>
+      <div class="mt-[6mm] space-y-[3mm]">
+        <p>Edgar Santamaría Caleño nació en San Martín de los Llanos, Meta. Desde niño degradaba colores y sombras en sus cuadernos de escuela para pintar los paisajes y personajes de su región. A los veinte años se fue a Bogotá, donde pintó sin parar durante doce años y se abrió camino con coleccionistas y clientes de arte.</p>
+        <p>En 2016 llegó a Nueva York y volvió de lleno a los lienzos. Expuso en muestras colectivas de Nueva York y Nueva Jersey y recibió reconocimientos de consulados, de la Asamblea Nacional del Ecuador y premios de la comunidad latina, entre ellos uno por su retrato de Shakira.</p>
+        <p>Su técnica es libre: realismo en la mirada de sus personajes y montañas de color vibrante que envuelven la escena. Pinta el folclor y la gente del Llano, retratos y la ciudad que lo acogió. Sus influencias son el realismo y el impresionismo.</p>
+        <p class="serif italic" style="font-size:13pt;line-height:1.35">Hoy pinta desde su taller en el Meta, donde cada obra nace completa, con un bastidor y un marco hechos por sus propias manos.</p>
+      </div>
+      <img src="img/marca/firma-oscura.png" alt="Firma" class="mt-[5mm] h-[15mm] w-auto">
+    </div>
+    <div class="absolute bottom-[24mm] left-[88mm] right-[18mm] flex border-t border-tinta/25 pt-[4mm]">
+      <div class="flex-1" style="font-size:7.6pt;color:#6F6258"><b class="serif block" style="font-size:25pt;font-weight:500;color:#2E2621;line-height:1">12</b>años pintando en Bogotá</div>
+      <div class="flex-1" style="font-size:7.6pt;color:#6F6258"><b class="serif block" style="font-size:25pt;font-weight:500;color:#2E2621;line-height:1" data-n="exposicion"></b>exposiciones en Nueva York y Nueva Jersey</div>
+      <div class="flex-1" style="font-size:7.6pt;color:#6F6258"><b class="serif block" style="font-size:25pt;font-weight:500;color:#2E2621;line-height:1" data-n="reconocimiento"></b>premios y reconocimientos</div>
+    </div>
+    <div class="folio" style="left:88mm"><span>El pintor</span><span class="n"></span></div>
+  </section>
+
+  <!-- 3 · COLECCIÓN (obras con destacada = si) -->
+  <div id="paginasColeccion"></div>
+
+  <!-- TRAYECTORIA Y RECONOCIMIENTOS (se genera con la pestaña "trayectoria") -->
+  <section class="hoja">
+    <div class="px-[18mm] pt-[20mm]">
+      <h2 class="serif" style="font-size:32pt;font-weight:500">Trayectoria y reconocimientos</h2>
+      <p class="mt-[2mm] max-w-[150mm]" style="color:#6F6258">Exposiciones colectivas y premios en Nueva York y Nueva Jersey, respaldados por certificados originales.</p>
+      <div class="mt-[8mm] grid grid-cols-[70mm_1fr] gap-[10mm]">
+        <div>
+          <h3 class="serif border-t-[.4mm] border-oro pt-[3mm]" style="font-size:15pt;font-weight:600">Premios y reconocimientos</h3>
+          <ol id="catPremios" class="mt-[3mm] space-y-[3.2mm]"></ol>
+          <div id="catTrofeos" class="mt-[6mm] grid grid-cols-3 gap-[2.5mm]"></div>
+        </div>
+        <div>
+          <h3 class="serif border-t-[.4mm] border-oro pt-[3mm]" style="font-size:15pt;font-weight:600">Exposiciones colectivas</h3>
+          <ol id="catExpos" class="mt-[3mm] space-y-[2.2mm]"></ol>
+        </div>
+      </div>
+    </div>
+    <div class="folio"><span>Trayectoria</span><span class="n"></span></div>
+  </section>
+
+
+  <!-- ENCARGOS Y FORMACIÓN ARTÍSTICA -->
+  <section class="hoja">
+    <div class="px-[18mm] pt-[20mm]">
+      <h2 class="serif" style="font-size:32pt;font-weight:500">Obras por encargo</h2>
+      <p class="mt-[2mm] max-w-[150mm]" style="color:#6F6258">Retratos, paisajes y escenas a partir de sus recuerdos o fotografías, en óleo, acrílico, carbón o pastel. Cada encargo se entrega firmado, con bastidor, marco de autor y certificado de autenticidad.</p>
+      <ol class="mt-[8mm] grid grid-cols-4 gap-[6mm]">
+        <li class="border-t-[.4mm] border-oro pt-[3mm]"><span class="serif italic" style="font-size:22pt;color:#B8914F">1</span><h3 class="serif" style="font-size:13pt;font-weight:600">Conversación</h3><p style="font-size:8.2pt!important;line-height:1.45">Usted comparte la idea, las fotografías de referencia y el espacio donde irá la obra.</p></li>
+        <li class="border-t-[.4mm] border-oro pt-[3mm]"><span class="serif italic" style="font-size:22pt;color:#B8914F">2</span><h3 class="serif" style="font-size:13pt;font-weight:600">Propuesta</h3><p style="font-size:8.2pt!important;line-height:1.45">Se acuerdan técnica, formato, marco, tiempos y valor.</p></li>
+        <li class="border-t-[.4mm] border-oro pt-[3mm]"><span class="serif italic" style="font-size:22pt;color:#B8914F">3</span><h3 class="serif" style="font-size:13pt;font-weight:600">Ejecución</h3><p style="font-size:8.2pt!important;line-height:1.45">El maestro pinta la obra y construye su bastidor y su marco en el taller.</p></li>
+        <li class="border-t-[.4mm] border-oro pt-[3mm]"><span class="serif italic" style="font-size:22pt;color:#B8914F">4</span><h3 class="serif" style="font-size:13pt;font-weight:600">Entrega</h3><p style="font-size:8.2pt!important;line-height:1.45">Embalaje profesional, envío asegurado y certificado firmado.</p></li>
+      </ol>
+    </div>
+    <div class="absolute inset-x-0 top-[128mm] h-[70mm]">
+      <img id="fotoTaller" alt="Taller de pintura" onerror="imgFallback(this)" class="h-full w-full object-cover">
+      <div class="absolute inset-0" style="background:linear-gradient(180deg,rgba(51,68,58,.15),rgba(36,26,19,.55))"></div>
+    </div>
+    <div class="absolute inset-x-[18mm] top-[208mm]">
+      <h2 class="serif" style="font-size:24pt;font-weight:500;color:#33443A">Talleres de pintura y dibujo</h2>
+      <div class="mt-[4mm] grid grid-cols-3 gap-[8mm]">
+        <div class="border-t border-moriche/35 pt-[2.6mm]"><h3 class="serif" style="font-size:13pt;font-weight:600">Óleo y acrílico</h3><p style="font-size:8.3pt!important">Color, composición, veladuras y empaste, del boceto a la obra terminada.</p></div>
+        <div class="border-t border-moriche/35 pt-[2.6mm]"><h3 class="serif" style="font-size:13pt;font-weight:600">Carbón y pastel</h3><p style="font-size:8.3pt!important">Valores, luz y sombra para el retrato y el paisaje realista.</p></div>
+        <div class="border-t border-moriche/35 pt-[2.6mm]"><h3 class="serif" style="font-size:13pt;font-weight:600">Paisaje y territorio</h3><p style="font-size:8.3pt!important">La llanura, el río y el morichal como motivo pictórico e identitario.</p></div>
+      </div>
+      <p class="mt-[5mm]" style="font-size:8.4pt!important;color:#6F6258">Para Casas de la Cultura, academias, colegios y comunidades: talleres intensivos, cursos por ciclos y demostraciones en vivo.</p>
+    </div>
+    <div class="folio"><span>Encargos y formación</span><span class="n"></span></div>
+  </section>
+
+  <!-- 6 · CONTRAPORTADA -->
+  <section class="hoja madera-oscura text-lino">
+    <div class="absolute inset-0 bg-[rgba(20,13,8,.5)]"></div>
+    <div class="relative px-[18mm] pt-[22mm]">
+      <h2 class="serif max-w-[150mm]" style="font-size:30pt;font-weight:500;line-height:1.05">Del taller en el Meta a su colección, en cualquier lugar del mundo</h2>
+      <p class="serif mt-[4mm] max-w-[145mm] italic" style="font-size:12.5pt!important;color:#d8ccb6;line-height:1.4">Cada obra viaja con el mismo cuidado con el que fue creada. El embalaje se fabrica en el propio taller, con criterio de ebanista.</p>
+      <div class="mt-[11mm] grid grid-cols-3 gap-[8mm]">
+        <div class="border-t-[.35mm] border-oro pt-[4mm]"><h3 class="serif" style="font-size:14.5pt;font-weight:600">Tubo rígido</h3><p class="mt-[2mm]" style="font-size:8.2pt!important;color:#d6cbb8">Para lienzos y papeles sin montar, enrollados con protección libre de ácido y film de burbuja.</p></div>
+        <div class="border-t-[.35mm] border-oro pt-[4mm]"><h3 class="serif" style="font-size:14.5pt;font-weight:600">Caja de madera reforzada</h3><p class="mt-[2mm]" style="font-size:8.2pt!important;color:#d6cbb8">Para obra enmarcada. Interior acolchado, esquineros, barrera contra la humedad y madera tratada bajo norma NIMF 15.</p></div>
+        <div class="border-t-[.35mm] border-oro pt-[4mm]"><h3 class="serif" style="font-size:14.5pt;font-weight:600">Certificado de autenticidad</h3><p class="mt-[2mm]" style="font-size:8.2pt!important;color:#d6cbb8">Firmado por el maestro, con fotografía, técnica, medidas, año y registro único de la obra.</p></div>
+      </div>
+      <p class="mt-[7mm]" style="font-size:8.4pt!important;color:#b9ab94">Todos los envíos incluyen seguro, número de seguimiento y acompañamiento personalizado hasta la entrega.</p>
+    </div>
+    <div class="absolute inset-x-[18mm] bottom-[22mm] grid grid-cols-[1fr_34mm] items-end gap-[10mm] border-t border-oroclaro/35 pt-[9mm]">
+      <div>
+        <p class="serif" style="font-size:21pt!important;font-weight:500">Maestro Edgar Santamaría Caleño</p>
+        <p class="mb-[6mm] mt-[1.4mm]" style="font-size:8pt!important;letter-spacing:.1em;color:#D9BD86">Artista plástico · Obra original, retratos por encargo y formación</p>
+        <p class="serif" style="font-size:15pt!important;line-height:1.5"><span class="inline-block w-[22mm] font-sans" style="font-size:7.5pt;color:#a39680">Correo</span>santamaria.art1@gmail.com</p>
+        <p class="serif" style="font-size:15pt!important;line-height:1.5"><span class="inline-block w-[22mm] font-sans" style="font-size:7.5pt;color:#a39680">WhatsApp</span>(+57) 320 829 6045 · 317 393 5276</p>
+        <p class="serif" style="font-size:15pt!important;line-height:1.5"><span class="inline-block w-[22mm] font-sans" style="font-size:7.5pt;color:#a39680">Redes</span>@santamaria_art · fb/santamaria.art</p>
+      </div>
+      <div class="text-center" style="font-size:6.8pt;color:#a39680;line-height:1.4">
+        <img src="img/marca/qr-whatsapp.svg" alt="Código QR de WhatsApp" class="mx-auto mb-[2mm] h-[30mm] w-[30mm]">
+        Escanee para escribir<br>por WhatsApp
+      </div>
+    </div>
+  </section>
+  </div>
+
+  <script src="js/datos.js"></script>
+  <script src="js/catalogo.js"></script>
+  <script>
+    /* Página de trayectoria: premios a la izquierda, exposiciones a la derecha */
+    function paginaTrayectoria() {
+      const premios = TRAYECTORIA.filter(t => t.tipo === 'reconocimiento').sort((a, b) => porAnio(a, b));
+      const expos = TRAYECTORIA.filter(t => t.tipo === 'exposicion').sort((a, b) => porAnio(a, b));
+      document.getElementById('catPremios').innerHTML = premios.map(t => `
+        <li><p style="font-size:9pt!important;line-height:1.3"><b style="font-weight:500">${esc(t.titulo)}</b>${t.anio ? ` <span style="color:#B8914F">${esc(t.anio)}</span>` : ''}</p>
+        <p style="font-size:7.6pt!important;line-height:1.35;color:#6F6258">${esc(t.detalle)}</p></li>`).join('');
+      document.getElementById('catExpos').innerHTML = expos.map(t => `
+        <li class="grid grid-cols-[11mm_1fr] gap-[2mm]"><span class="serif italic" style="font-size:10pt;color:#B8914F">${esc(t.anio)}</span>
+        <div><p style="font-size:8.6pt!important;line-height:1.25"><b style="font-weight:500">${esc(t.titulo)}</b></p>
+        <p style="font-size:7.3pt!important;line-height:1.3;color:#6F6258">${esc(t.lugar)}</p></div></li>`).join('');
+      // Miniaturas de los trofeos y reconocimientos principales
+      const fotos = premios.slice(0, 3).map(t => certificadosDe(t)[0]).filter(Boolean);
+      document.getElementById('catTrofeos').innerHTML = fotos.map(src => `<div style="height:30mm;background:#241A13"><img src="${esc(src)}" alt="" style="width:100%;height:100%;object-fit:contain"></div>`).join('');
+    }
+
+    iniciarCatalogo(() => {
+      const obras = obrasDe('arte');
+      const destacadas = obras.filter(o => esSi(o.destacada));
+      document.getElementById('obraPortada').src = CONFIG.portadaCatalogo ? enlaceDrive(CONFIG.portadaCatalogo) : fotoObra(destacadas[0]);
+      document.getElementById('retrato').src = enlaceDrive(CONFIG.retrato);
+      document.getElementById('fotoTaller').src = enlaceDrive(CONFIG.fotoTaller);
+      paginasColeccion('paginasColeccion', destacadas.length ? destacadas : obras.slice(0, 4), {
+        texto: 'Retrato, paisaje y folclor llanero en óleo y empaste. Cada pieza se entrega con bastidor y marco hechos por el propio autor.',
+        pie: '<b style="font-weight:500;color:#2E2621">Obras y retratos por encargo.</b> Consulte por formatos, temáticas y comisiones para colecciones privadas y corporativas.'
+      });
+      paginaTrayectoria();
+    });
+  </script>
+</body>
+</html>

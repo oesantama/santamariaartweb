@@ -1,0 +1,22 @@
+/* =====================================================================
+       CATÁLOGO EN CÓDIGO
+       Cada ".hoja" mide exactamente A4 (210 × 297 mm). En pantalla se ven como
+       páginas una debajo de otra (y se reducen en celulares); al imprimir o
+       "Guardar como PDF" salen como catálogo. Lo usan catalogo-arte.html y
+       catalogo-ebanisteria.html.
+       ===================================================================== */
+    @page { size: A4; margin: 0; }
+    body { background: #d9d2c5; font-family: 'Jost', sans-serif; font-weight: 350; color: #2E2621; }
+    .hoja { width: 210mm; height: 297mm; position: relative; overflow: hidden; margin: 0 auto 28px;
+            background-color: #EEE7DA; box-shadow: 0 10px 40px -10px rgba(40,25,10,.35); }
+    .serif { font-family: 'Cormorant Garamond', serif; }
+    .hoja p { font-size: 9.6pt; line-height: 1.58; }
+    .folio { position: absolute; bottom: 10mm; left: 18mm; right: 18mm; display: flex; justify-content: space-between; font-size: 7pt; letter-spacing: .06em; color: #6F6258; }
+    .folio .n { font-family: 'Cormorant Garamond', serif; font-size: 10pt; font-style: italic; }
+    .lienzo img { display: block; width: 100%; height: 100%; object-fit: cover; }
+    @media print {
+      body { background: none; }
+      .hoja { margin: 0; box-shadow: none; zoom: 1 !important; break-after: page; }
+      .no-imprimir { display: none !important; }
+      * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    }
