@@ -75,10 +75,12 @@ Las demás páginas (`sitio.html`, catálogos y hojas de vida) sí abren con dob
 
 ## Publicación
 
-El sitio se publica en Netlify conectado a este repositorio: cada vez que se suben cambios a GitHub, Netlify actualiza la página en uno o dos minutos.
+El sitio se publica en **Cloudflare Pages** conectado a este repositorio: cada vez que se suben cambios a GitHub (`git push`), la página se actualiza sola en uno o dos minutos.
 
+- Configuración del proyecto en Cloudflare: *Framework preset* = **None**, *Build command* = vacío, *Build output directory* = `/`.
+- Cabeceras de caché y seguridad: archivo `_headers` (sirve también en Netlify; `netlify.toml` queda como alternativa).
 - Formulario de contacto: FormSubmit hacia santamaria.art1@gmail.com (la primera vez llega un correo de activación que hay que confirmar).
-- Dominio: se conecta en Netlify → *Domain management*.
+- Dominio propio: Cloudflare → *Workers & Pages* → el proyecto → *Custom domains*.
 
 ## Pendientes
 
