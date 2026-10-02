@@ -65,7 +65,7 @@
   renderer.toneMapping = T.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1.05;
   const escena = new T.Scene();
-  escena.fog = new T.Fog(0xefc49e, 65, 270);
+  escena.fog = new T.Fog(0xbde0fe, 80, 320);
   const camara = new T.PerspectiveCamera(tactil ? 70 : 62, 1, 0.05, 500);
   camara.rotation.order = 'YXZ';
   const ANISO = Math.min(8, renderer.capabilities.getMaxAnisotropy());
@@ -212,26 +212,29 @@
   });
 
   /* ---------- 4. EXTERIOR ---------- */
-  // Cielo de amanecer llanero (rosados, dorados y azul matutino)
+  // Cielo de 9:00 AM en los morichales llaneros (Azul claro despejado)
   const cielo = new T.Mesh(new T.SphereGeometry(320, 32, 16), new T.ShaderMaterial({
     side: T.BackSide, depthWrite: false, fog: false,
     uniforms: {
-      arriba: { value: new T.Color('#1f3763') },
-      medio: { value: new T.Color('#d47763') },
-      horizonte: { value: new T.Color('#ffc17a') }
+      arriba: { value: new T.Color('#2c6eb8') },
+      medio: { value: new T.Color('#61b0f5') },
+      horizonte: { value: new T.Color('#c4e5ff') }
     },
     vertexShader: 'varying vec3 vP; void main(){ vP = normalize(position); gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }',
     fragmentShader: 'uniform vec3 arriba; uniform vec3 medio; uniform vec3 horizonte; varying vec3 vP; void main(){ float h = vP.y; vec3 c = h > .15 ? mix(medio, arriba, smoothstep(.15, .68, h)) : mix(horizonte, medio, smoothstep(-.02, .15, h)); gl_FragColor = vec4(c, 1.0); }'
   }));
   escena.add(cielo);
-  const sol = new T.Mesh(new T.CircleGeometry(11, 32), basico({ color: 0xfff0cb, fog: false }));
-  sol.position.set(-95, 18, -230); sol.lookAt(0, 0, 0); escena.add(sol);
-  const halo = new T.Mesh(new T.CircleGeometry(38, 32), basico({ color: 0xffd19e, transparent: true, opacity: .35, fog: false, depthWrite: false }));
-  halo.position.set(-95, 18, -232); halo.lookAt(0, 0, 0); escena.add(halo);
 
-  const hemi = new T.HemisphereLight(0xd9e4f5, 0x485832, .62); escena.add(hemi);
-  const luzSol = new T.DirectionalLight(0xffdfb3, 1.25); luzSol.position.set(-45, 26, 50); escena.add(luzSol);
-  const luzRelleno = new T.DirectionalLight(0xa5c4ea, .3); luzRelleno.position.set(45, 20, -30); escena.add(luzRelleno);
+  // Sol radiante de 9:00 AM
+  const sol = new T.Mesh(new T.CircleGeometry(10, 32), basico({ color: 0xfffbe6, fog: false }));
+  sol.position.set(-70, 85, -200); sol.lookAt(0, 0, 0); escena.add(sol);
+  const halo = new T.Mesh(new T.CircleGeometry(32, 32), basico({ color: 0xe0f2ff, transparent: true, opacity: .35, fog: false, depthWrite: false }));
+  halo.position.set(-70, 85, -202); halo.lookAt(0, 0, 0); escena.add(halo);
+
+  // Iluminación radiante de mañana despejada
+  const hemi = new T.HemisphereLight(0xdbf0ff, 0x556e3b, .75); escena.add(hemi);
+  const luzSol = new T.DirectionalLight(0xfff5e6, 1.35); luzSol.position.set(-50, 75, 60); escena.add(luzSol);
+  const luzRelleno = new T.DirectionalLight(0xbde3ff, .35); luzRelleno.position.set(50, 40, -30); escena.add(luzRelleno);
 
   const suelo = new T.Mesh(new T.PlaneGeometry(500, 500), M.hierba);
   suelo.rotation.x = -Math.PI / 2; suelo.position.y = -0.02; escena.add(suelo);
