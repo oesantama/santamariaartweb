@@ -1,0 +1,10 @@
+# Archivos que Cloudflare NO publica en el sitio (misma sintaxis que .gitignore)
+.git
+.gitignore
+.assetsignore
+.wrangler
+node_modules
+netlify.toml
+README.md
+contenido
+originales

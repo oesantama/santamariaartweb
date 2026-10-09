@@ -137,12 +137,14 @@
         <div class="flex flex-col justify-between gap-8 lg:flex-row lg:items-end">
           <div>
             <h3 class="font-serif text-4xl md:text-5xl">Colección</h3>
-            <p class="mt-4 max-w-md text-gris dark:text-lino/60">Cada obra se entrega con bastidor, marco de autor y certificado de autenticidad. Toque una obra para verla en grande.</p>
+            <p class="mt-4 max-w-md text-gris dark:text-lino/60">Cada obra se entrega con bastidor, marco de autor y certificado de autenticidad. Toque una obra para verla en grande. En «Vendidas» están las que ya hacen parte de colecciones privadas.</p>
           </div>
           <div id="filtros" class="flex flex-wrap gap-2" role="group" aria-label="Filtrar colección">
+            <button data-filtro="exposicion" class="filtro">Exposición noviembre</button>
             <button data-filtro="todas" class="filtro">Todas</button>
             <button data-filtro="pintura" class="filtro">Óleo y acrílico</button>
             <button data-filtro="dibujo" class="filtro">Carbón y pastel</button>
+            <button data-filtro="vendidas" class="filtro">Vendidas</button>
           </div>
         </div>
         <div id="galeria" class="mt-14 gap-8 sm:columns-2 lg:columns-3" aria-live="polite"></div>
@@ -362,18 +364,20 @@
   <script src="js/datos.js"></script>
   <script>
     /* ================= GALERÍA ================= */
-    let filtroActual = 'todas';
+    let filtroActual = 'exposicion';
 
     function tarjeta(obra, i) {
-      const disponible = !/^(no|vendida|vendido)$/i.test(obra.disponible || '');
+      const vendida = esVendida(obra);
+      const disponible = !vendida && !/^no$/i.test(obra.disponible || '');
       const detalle = [obra.tecnica, obra.medidas, obra.anio].filter(Boolean).join(' · ');
       const accion = disponible
         ? `<a href="${enlaceWA(`Hola Maestro Santamaría, me interesa ${obra.categoria === 'ebanisteria' ? 'su trabajo de' : 'la obra'} "${obra.titulo}". ¿Podría darme más información?`)}" target="_blank" rel="noopener" class="mt-4 inline-block rounded-full bg-lino px-5 py-2 text-sm text-nogal transition hover:bg-oroclaro">${obra.categoria === 'ebanisteria' ? 'Cotizar' : 'Adquirir / Consultar'}</a>`
-        : `<a href="${enlaceWA(`Hola Maestro Santamaría, vi la obra "${obra.titulo}" y me gustaría encargar una pieza similar.`)}" target="_blank" rel="noopener" class="mt-4 inline-block rounded-full border border-lino/40 px-5 py-2 text-sm transition hover:border-oroclaro">Colección privada · Encargar una similar</a>`;
+        : `<a href="${enlaceWA(`Hola Maestro Santamaría, vi la obra "${obra.titulo}" y me gustaría encargar una pieza similar.`)}" target="_blank" rel="noopener" class="mt-4 inline-block rounded-full border border-lino/40 px-5 py-2 text-sm transition hover:border-oroclaro">${vendida ? 'Colección privada' : 'No está a la venta'} · Encargar una similar</a>`;
       return `
         <article class="obra mb-8 break-inside-avoid cursor-zoom-in">
           <div class="relative overflow-hidden bg-nogal/10">
-            <img src="${esc(fotoObra(obra))}" alt="${esc(obra.titulo)}" data-i="${i}" onerror="imgFallback(this)" loading="lazy" class="${obra.imagen ? 'h-auto' : 'aspect-[4/5] object-cover'} w-full cursor-zoom-in" />
+            <img src="${esc(miniObra(obra))}" alt="${esc(obra.titulo)}" data-i="${i}" onerror="imgFallback(this)" loading="lazy" class="${obra.imagen ? 'h-auto' : 'aspect-[4/5] object-cover'} w-full cursor-zoom-in" />
+            ${vendida ? '<span class="absolute right-3 top-3 flex items-center gap-1.5 rounded-full bg-nogal/80 px-3 py-1 text-xs text-lino"><span class="h-2 w-2 rounded-full bg-[#c0392b]"></span>Vendida</span>' : ''}
             <div class="ficha absolute inset-x-0 bottom-0 bg-gradient-to-t from-nogal/95 via-nogal/70 to-transparent p-6 pt-16 text-lino">
               <p class="text-xs text-oroclaro">${CATEGORIAS[obra.categoria]}</p>
               <h3 class="mt-1 font-serif text-2xl leading-tight">${esc(obra.titulo)}</h3>
@@ -385,7 +389,13 @@
     }
 
     // En "Todas" solo aparecen obras con fotografía; los marcadores se ven dentro de su categoría
-    const listaActual = () => filtroActual === 'todas' ? obrasDe('arte').filter(o => o.imagen) : OBRAS.filter(o => o.categoria === filtroActual);
+    const listaActual = () => {
+      const conFoto = obrasDe('arte').filter(o => o.imagen);
+      if (filtroActual === 'exposicion') { const expo = deColeccion('exposicion').filter(o => o.imagen); return expo.length ? expo : conFoto.filter(o => !esVendida(o)); }
+      if (filtroActual === 'vendidas') return conFoto.filter(esVendida);
+      if (filtroActual === 'todas') return conFoto;
+      return OBRAS.filter(o => o.categoria === filtroActual);
+    };
 
     function mostrarGaleria(filtro = filtroActual) {
       filtroActual = filtro;

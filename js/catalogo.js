@@ -6,10 +6,10 @@
 
 // Ficha de una obra dentro de una página de colección (respeta el formato de la foto)
 function fichaObra(o, i) {
-  const vendida = /^(no|vendida)/i.test(o.disponible || '');
   const nota = o.categoria === 'ebanisteria'
     ? 'Pieza a la medida · Cotización sin compromiso'
-    : vendida ? 'Colección privada · Se aceptan encargos similares' : 'Precio a consultar · Incluye certificado de autenticidad';
+    : esVendida(o) ? 'Colección privada · Se aceptan encargos similares'
+    : /^no$/i.test(o.disponible || '') ? 'Obra de exposición · Se aceptan encargos similares' : 'Precio a consultar · Incluye certificado de autenticidad';
   return `<div>
     <div class="flex h-[68mm] items-end"><div class="marco"><div class="paspartu"><div class="lienzo" style="height:55mm;max-width:76mm">
       <img src="${esc(fotoObra(o))}" alt="${esc(o.titulo)}" onerror="imgFallback(this)" style="width:auto;max-width:76mm;height:55mm;object-fit:cover"></div></div></div></div>

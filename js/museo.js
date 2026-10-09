@@ -69,7 +69,7 @@
   await cargarDatos(() => {});
   // Espera las tipografías para dibujar los letreros (máximo 2,5 s)
   await Promise.race([
-    Promise.all([document.fonts.load(`500 40px ${SERIF}`), document.fonts.load(`italic 400 40px ${SERIF}`), document.fonts.load(`300 20px ${SANS}`), document.fonts.load(`400 20px ${SANS}`)]).catch(() => {}),
+    Promise.all([document.fonts.load(`500 40px ${SERIF}`), document.fonts.load(`600 40px ${SERIF}`), document.fonts.load(`italic 400 40px ${SERIF}`), document.fonts.load(`300 20px ${SANS}`), document.fonts.load(`400 20px ${SANS}`)]).catch(() => {}),
     new Promise(r => setTimeout(r, 2500))
   ]);
 
@@ -375,7 +375,7 @@
 
     luzSol.color.copy(lerpC(k0.luzCol, k1.luzCol));
     const intSol = lerpVal(k0.luzInt, k1.luzInt);
-    const fuera = camara.position.z > 0.5;
+    const fuera = camara.position.z > 0.5 || camara.position.z < -15.6 || Math.abs(camara.position.x) > 12.6;
     luzSol.intensity = intSol * (fuera ? 1.0 : 0.15);
     hemi.color.copy(lerpC(k0.hemiSky, k1.hemiSky));
     hemi.groundColor.copy(lerpC(k0.hemiGnd, k1.hemiGnd));
@@ -935,21 +935,159 @@
   sombraAtril.rotation.x = -Math.PI / 2; sombraAtril.position.y = .02; atril.add(sombraAtril);
   const luzAtril = new T.PointLight(0xffd29a, .65, 5, 1.5); luzAtril.position.set(0, 2.6, 1.2); atril.add(luzAtril);
 
+  /* ---------- 6b. LOS APEROS DEL LLANERO (frente al atril, al otro lado del camino) ---------- */
+  // Cerca de madera curtida con la silla de montar sobre la baranda, el sombrero en el poste y la soga enrollada
+  const aperos = new T.Group(); aperos.position.set(-3.8, 0, 5.2); mirarHacia(aperos, .4, 1); escena.add(aperos);
+  {
+    const g = aperos;
+    const V3 = (x, y, z) => new T.Vector3(x, y, z);
+    const texCerca = texMadera('#8d7c68', '#43372b', { lineas: 130 });
+    const matCerca = std(0xffffff, { map: repetir(texCerca, 1, 1), roughness: .97 });
+    const matPoste = std(0xffffff, { map: repetir(texCerca, 1, 1, Math.PI / 2), roughness: .97 });
+    // Cuero repujado: pieza recortada con borde redondeado, costura y adornos (se dibuja en un canvas con transparencia)
+    const texCuero = (w, h, radio, adorno) => lienzo(w, h, (x, W, H) => {
+      const ruta = ins => { x.beginPath(); if (x.roundRect) x.roundRect(ins, ins, W - 2 * ins, H - 2 * ins, Math.max(2, radio - ins)); else x.rect(ins, ins, W - 2 * ins, H - 2 * ins); };
+      const gr = x.createLinearGradient(0, 0, W, H); gr.addColorStop(0, '#7a3f1b'); gr.addColorStop(.5, '#5f2f13'); gr.addColorStop(1, '#4a230e');
+      x.fillStyle = gr; ruta(2); x.fill();
+      for (let i = 0; i < 900; i++) { x.fillStyle = `rgba(${i % 2 ? '30,12,4' : '150,90,50'},.12)`; x.fillRect(Math.random() * W, Math.random() * H, 2, 2); }
+      x.strokeStyle = '#2c1406'; x.lineWidth = 3; ruta(3); x.stroke();
+      x.strokeStyle = '#d8b07a'; x.lineWidth = 2; x.setLineDash([7, 6]); ruta(14); x.stroke(); x.setLineDash([]);
+      if (adorno) {
+        x.strokeStyle = 'rgba(30,12,4,.55)'; x.lineWidth = 3;
+        for (let k = 0; k < 5; k++) { const cx = W * (.2 + k * .15), cy = H * (.35 + (k % 2) * .25); x.beginPath(); x.arc(cx, cy, W * .06, 0, Math.PI * 1.6); x.stroke(); x.beginPath(); x.arc(cx + W * .05, cy + W * .03, W * .03, Math.PI, Math.PI * 2.7); x.stroke(); }
+      }
+    });
+    const piezaCuero = (tex) => std(0xffffff, { map: tex, transparent: true, alphaTest: .5, side: T.DoubleSide, roughness: .55 });
+    const matFaldon = piezaCuero(texCuero(512, 360, 90, true));
+    const matEstribera = piezaCuero(texCuero(160, 512, 70, false));
+    const cuero = std(0x250902, { roughness: .42 });  // colores en valor lineal (Three.js r149)
+    const cueroOscuro = std(0x0c0301, { roughness: .5 });
+    const plata = std(0xd0d3d6, { metalness: .85, roughness: .3 });
+    const fieltro = std(0x251a0f, { roughness: 1, side: T.DoubleSide });
+    const texSoga = lienzo(64, 256, (x, w, h) => {
+      x.fillStyle = '#b48d58'; x.fillRect(0, 0, w, h);
+      x.strokeStyle = '#6f5330'; x.lineWidth = 5;
+      for (let y = -w; y < h + w; y += 16) { x.beginPath(); x.moveTo(0, y); x.lineTo(w, y + w * .7); x.stroke(); }
+    });
+    const matSoga = std(0xffffff, { map: repetir(texSoga, 1, 8), roughness: .95 });
+
+    // Postes rústicos y tres barandas
+    [[-1.65, 1.42, .1], [.35, 1.58, .115], [1.75, 1.38, .1]].forEach(([x, alto, r]) => {
+      const p = new T.Mesh(new T.CylinderGeometry(r * .9, r * 1.08, alto, 9), matPoste);
+      p.position.set(x, alto / 2, 0); p.rotation.z = (Math.random() - .5) * .04; g.add(p);
+      const tapa = new T.Mesh(new T.CylinderGeometry(r * .9, r * .9, .02, 9), std(0x6b5b49, { roughness: 1 })); tapa.position.set(x, alto, 0); g.add(tapa);
+    });
+    [.42, .82, 1.22].forEach((y, k) => {
+      const b = bloque(-1.82, 1.9, y - .065, y + .065, .1, .17, matCerca, g);
+      b.rotation.z = (k - 1) * .012;
+    });
+
+    // Silla de montar a horcajadas sobre la baranda de arriba
+    const silla = new T.Group(); silla.position.set(-.62, 1.29, .135); g.add(silla);
+    const geoArco = new T.CylinderGeometry(.24, .24, .62, 24, 1, true, Math.PI, Math.PI); geoArco.rotateZ(-Math.PI / 2);
+    const arco = new T.Mesh(geoArco, std(0x250902, { roughness: .42, side: T.DoubleSide })); silla.add(arco);
+    const asiento = new T.Mesh(new T.SphereGeometry(.5, 24, 12, 0, Math.PI * 2, 0, Math.PI / 2), cuero);
+    asiento.scale.set(.46, .22, .3); asiento.position.y = .2; silla.add(asiento);
+    const borren = new T.Mesh(new T.SphereGeometry(.5, 16, 10), cuero); borren.scale.set(.1, .3, .4); borren.position.set(-.27, .3, 0); borren.rotation.z = .35; silla.add(borren);
+    const cuerno = new T.Mesh(new T.CylinderGeometry(.035, .045, .17, 12), cueroOscuro); cuerno.position.set(.27, .38, 0); cuerno.rotation.z = -.2; silla.add(cuerno);
+    const tope = new T.Mesh(new T.CylinderGeometry(.07, .06, .03, 16), cueroOscuro); tope.position.set(.29, .47, 0); tope.rotation.z = -.2; silla.add(tope);
+    [-1, 1].forEach(l => {
+      // Faldón, estribera y estribo de cada lado
+      const faldon = new T.Mesh(new T.PlaneGeometry(.7, .49), matFaldon); faldon.position.set(0, -.2, l * .248); faldon.rotation.x = l * .1; silla.add(faldon);
+      const estribera = new T.Mesh(new T.PlaneGeometry(.21, .72), matEstribera); estribera.position.set(-.04, -.44, l * .275); estribera.rotation.x = l * .05; silla.add(estribera);
+      const correa = bloque(-.025, .025, -.98, -.75, -.01, .01, cueroOscuro, silla); correa.position.set(-.04, 0, l * .29);
+      const estribo = new T.Group(); estribo.position.set(-.04, -1.0, l * .29); silla.add(estribo);
+      bloque(-.075, .075, -.03, 0, -.06, .06, M.cedro, estribo);
+      [-1, 1].forEach(k => bloque(k * .07 - .012, k * .07 + .012, 0, .14, -.012, .012, M.cedro, estribo));
+      [-.18, .18].forEach(x => {
+        const concho = new T.Mesh(new T.CylinderGeometry(.03, .03, .012, 14), plata);
+        concho.rotation.x = Math.PI / 2; concho.position.set(x, -.08, l * .26); silla.add(concho);
+      });
+      const tira = bloque(-.008, .008, -.42, 0, -.004, .004, cueroOscuro, silla); tira.position.set(.22, -.04, l * .262);
+    });
+    const cincha = bloque(-.05, .05, -.95, -.3, -.01, .01, cueroOscuro, silla); cincha.position.set(.1, 0, .3); cincha.rotation.z = .05;
+
+    // Sombrero llanero colgado del poste central
+    const sombrero = new T.Group(); sombrero.position.set(.35, 1.41, 0); sombrero.rotation.set(-.12, .4, .14); sombrero.scale.setScalar(1.25); g.add(sombrero);
+    const ala = new T.Mesh(new T.LatheGeometry([new T.Vector2(.12, .1), new T.Vector2(.2, .095), new T.Vector2(.28, .1), new T.Vector2(.33, .12), new T.Vector2(.36, .15)], 32), fieltro);
+    sombrero.add(ala);
+    const copa = new T.Mesh(new T.LatheGeometry([new T.Vector2(.13, .1), new T.Vector2(.135, .19), new T.Vector2(.125, .25), new T.Vector2(.095, .275), new T.Vector2(.04, .262), new T.Vector2(0, .27)], 32), fieltro);
+    sombrero.add(copa);
+    const cinta = new T.Mesh(new T.TorusGeometry(.134, .013, 8, 32), matSoga); cinta.rotation.x = Math.PI / 2; cinta.position.y = .118; sombrero.add(cinta);
+
+    // Soga enrollada colgada de una estaca del poste, con la punta suelta
+    const estaca = new T.Mesh(new T.CylinderGeometry(.012, .012, .12, 6), M.metal); estaca.rotation.x = Math.PI / 2; estaca.position.set(.35, 1.08, .2); g.add(estaca);
+    for (let k = 0; k < 6; k++) {
+      const r = .27 + (k % 3) * .012;
+      const vuelta = new T.Mesh(new T.TorusGeometry(r, .013, 6, 40), matSoga);
+      vuelta.position.set(.35 + (Math.random() - .5) * .02, 1.08 - r + .02, .21 + k * .012);
+      vuelta.rotation.set((Math.random() - .5) * .08, (Math.random() - .5) * .08, (Math.random() - .5) * .3);
+      g.add(vuelta);
+    }
+    const punta = new T.CatmullRomCurve3([V3(.2, .62, .23), V3(.16, .42, .26), V3(.2, .22, .28), V3(.14, .03, .34), V3(-.02, .01, .48)]);
+    g.add(new T.Mesh(new T.TubeGeometry(punta, 30, .012, 6), matSoga));
+
+    // Pasto de sabana al pie de la cerca y sombra
+    const matPasto = std(0x4c5a24, { roughness: 1 });
+    for (let i = 0; i < 40; i++) {
+      const c = new T.Mesh(new T.ConeGeometry(.018, .2 + Math.random() * .25, 3), matPasto);
+      c.position.set(-1.8 + Math.random() * 3.7, .12, (Math.random() - .5) * .6); c.rotation.z = (Math.random() - .5) * .5; g.add(c);
+    }
+    const s = new T.Mesh(new T.PlaneGeometry(4.2, 1.4), M.sombra); s.rotation.x = -Math.PI / 2; s.position.set(0, .012, .05); g.add(s);
+    const luz = new T.PointLight(0xffd29a, .5, 5, 1.5); luz.position.set(-.3, 2.4, 1.3); g.add(luz);
+  }
+
+  /* ---------- 6c. MURALES DE LOS COSTADOS Y FOTOS DE SAN MARTÍN EN LA FACHADA ---------- */
+  // Los murales se dibujan en js/murales.js; brillan un poco para que se vean también de noche
+  const matMural = dibujar => { const t = lienzo(2048, 1214, dibujar); return std(0xffffff, { map: t, emissive: 0xffffff, emissiveMap: t, emissiveIntensity: .22, roughness: .9 }); };
+  const MURAL = { ancho: 13.6, alto: 13.6 * 1214 / 2048, z: -7.75 };
+  const muralCuadrillas = plano(MURAL.ancho, MURAL.alto, matMural(dibujarMuralCuadrillas));
+  muralCuadrillas.position.set(ANCHO + .06, .75 + MURAL.alto / 2, MURAL.z); mirarHacia(muralCuadrillas, 1, 0);
+  const muralLlano = plano(MURAL.ancho, MURAL.alto, matMural(dibujarMuralLlano));
+  muralLlano.position.set(-ANCHO - .06, .75 + MURAL.alto / 2, MURAL.z); mirarHacia(muralLlano, -1, 0);
+  // Dos cuadros a los lados de la puerta: la iglesia de San Martín y El Embrujo Llanero (La Bola)
+  const FOTOS_SM = [
+    { clave: 'iglesia', titulo: 'Iglesia de San Martín', lugar: 'San Martín de los Llanos', x: -3.04 },
+    { clave: 'embrujo', titulo: 'El Embrujo Llanero', lugar: '«La Bola» · entrada de San Martín', x: 3.04 }
+  ];
+
   /* ---------- 7. PISO 1 · SALA DEL PINTOR ---------- */
   // Rodapiés de madera
   bloque(-12.2, 12.2, 0, .14, -15.2, -15.15, M.nogal); bloque(-12.2, -12.15, 0, .14, -15.2, -0.3, M.nogal); bloque(12.15, 12.2, 0, .14, -15.2, -0.3, M.nogal);
-  // Muro central para colgar obras por ambas caras
-  bloque(-4.6, 4.6, 0, 3.8, -8.17, -7.83, M.pared);
-  bloque(-4.65, 4.65, 3.8, 3.88, -8.22, -7.78, M.nogal);
+  // Muro central de la exposición, en vinotinto para que resalten las obras (se cuelga por ambas caras)
+  const MURO_C = 6.0;
+  M.vinotinto = std(0x250604, { roughness: .92 });   // vinotinto #6a2a22 en valor lineal
+  M.verdeSalon = std(0x070f09, { roughness: .95 });  // verde #2f4436 en valor lineal
+  bloque(-MURO_C, MURO_C, 0, 3.8, -8.17, -7.83, M.vinotinto);
+  bloque(-MURO_C - .05, MURO_C + .05, 3.8, 3.88, -8.22, -7.78, M.nogal);
+  bloque(-MURO_C - .05, MURO_C + .05, 0, .14, -8.2, -7.8, M.nogal);
+  // Muro izquierdo pintado de verde: colección privada en montaje de salón
+  { const p = plano(14.8, 4.62, M.verdeSalon); p.position.set(-12.18, 2.45, -7.75); mirarHacia(p, 1, 0); }
   [[-7, -4], [-7, -12], [4, -4], [4, -12]].forEach(([x, z]) => { const l = new T.PointLight(0xffe2bd, .4, 15, 1.3); l.position.set(x, 4.3, z); escena.add(l); });
-  // Bancas de museo
+  [-3, -7.75, -12.5].forEach(z => { const l = new T.PointLight(0xffe6c4, .45, 7, 1.4); l.position.set(-10.2, 4.2, z); escena.add(l); });
+  // Banca de museo frente a la colección privada
   function banca(x, z, rot = 0) {
     const g = new T.Group(); g.position.set(x, 0, z); g.rotation.y = rot;
     bloque(-1, 1, .42, .48, -.22, .22, M.cedro, g);
     [-.85, .85].forEach(px => bloque(px - .05, px + .05, 0, .42, -.2, .2, M.metal, g));
     escena.add(g);
   }
-  banca(-6.5, -11.2); banca(0, -11.8);
+  banca(-8, -7.75, Math.PI / 2);
+
+  // Caballete de pintor para la primera obra de la exposición, junto a la entrada
+  const CABALLETE = { x: 5.6, z: -4.3, nx: -.55, nz: .84 };
+  {
+    const g = new T.Group(); g.position.set(CABALLETE.x, 0, CABALLETE.z); mirarHacia(g, CABALLETE.nx, CABALLETE.nz); escena.add(g);
+    [-1, 1].forEach(l => { const p = bloque(-.035, .035, 0, 2.55, -.03, .03, M.cedro, g); p.position.set(l * .5, 1.24, .12); p.rotation.z = -l * .14; p.rotation.x = -.06; });
+    const atras = bloque(-.035, .035, 0, 2.3, -.03, .03, M.cedro, g); atras.position.set(0, 1.08, -.42); atras.rotation.x = .3;
+    bloque(-.62, .62, .74, .8, .06, .2, M.cedro, g);                       // repisa donde apoya la obra
+    bloque(-.62, .62, .8, .84, .17, .2, M.cedro, g);
+    bloque(-.46, .46, .32, .37, .06, .12, M.cedro, g);                     // travesaño
+    bloque(-.05, .05, .84, 2.5, .02, .07, M.cedro, g);                      // mástil central
+    const s = new T.Mesh(new T.CircleGeometry(.8, 20), M.sombra); s.rotation.x = -Math.PI / 2; s.position.y = .015; g.add(s);
+    const luz = new T.SpotLight(0xffe2bd, 1.1, 7, .5, .6, 1.3); luz.position.set(CABALLETE.x + CABALLETE.nx * 2.2, 4.2, CABALLETE.z + CABALLETE.nz * 2.2);
+    luz.target.position.set(CABALLETE.x, 1.6, CABALLETE.z); escena.add(luz, luz.target);
+  }
 
   // Textura de "luz de museo" sobre el muro detrás de cada obra
   const texHalo = lienzo(256, 256, (x, w, h) => {
@@ -964,23 +1102,25 @@
   const PARADAS = [];       // paradas del recorrido guiado
 
   // Cuelga una obra: devuelve el centro y la normal para crear su parada
-  function colgarObra(tex, x, z, nx, nz, maxAncho, maxAlto, y = 1.75) {
+  function colgarObra(tex, x, z, nx, nz, maxAncho, maxAlto, y = 1.75, { halo: conHalo = true, lampara = true, m = .1, prof = .09 } = {}) {
     const img = tex.image; const asp = img.width / img.height;
     let w = maxAncho, h = w / asp; if (h > maxAlto) { h = maxAlto; w = h * asp; }
     const g = new T.Group(); g.position.set(x + nx * .02, y, z + nz * .02); mirarHacia(g, nx, nz); escena.add(g);
-    const halo = plano(w + 2.2, h + 1.8, matHalo, g); halo.position.set(0, .15, .001);
-    const lienzoObra = plano(w, h, basico({ map: tex }), g); lienzoObra.position.z = .07;
+    const halo = conHalo ? plano(w + 2.2, h + 1.8, matHalo, g) : null;
+    if (halo) halo.position.set(0, .15, .001);
+    const lienzoObra = plano(w, h, basico({ map: tex }), g); lienzoObra.position.z = prof - .02;
     // Marco: cuatro listones y un filete dorado
-    const m = .1;
-    bloque(-w / 2 - m, w / 2 + m, h / 2, h / 2 + m, 0, .09, matMarco, g);
-    bloque(-w / 2 - m, w / 2 + m, -h / 2 - m, -h / 2, 0, .09, matMarco, g);
-    bloque(-w / 2 - m, -w / 2, -h / 2, h / 2, 0, .09, matMarco, g);
-    bloque(w / 2, w / 2 + m, -h / 2, h / 2, 0, .09, matMarco, g);
-    bloque(-w / 2 - .012, w / 2 + .012, -h / 2 - .012, h / 2 + .012, 0, .068, M.oro, g);
+    bloque(-w / 2 - m, w / 2 + m, h / 2, h / 2 + m, 0, prof, matMarco, g);
+    bloque(-w / 2 - m, w / 2 + m, -h / 2 - m, -h / 2, 0, prof, matMarco, g);
+    bloque(-w / 2 - m, -w / 2, -h / 2, h / 2, 0, prof, matMarco, g);
+    bloque(w / 2, w / 2 + m, -h / 2, h / 2, 0, prof, matMarco, g);
+    bloque(-w / 2 - .012, w / 2 + .012, -h / 2 - .012, h / 2 + .012, 0, prof - .022, M.oro, g);
     // Lámpara de riel
-    const lamp = new T.Mesh(new T.CylinderGeometry(.05, .07, .22, 10), M.metal);
-    lamp.position.set(0, Math.min(4.55 - y, h / 2 + 1.3), .9); lamp.rotation.x = .9; g.add(lamp);
-    return { g, w, h, objetos: [lienzoObra, ...g.children.filter(c => c !== halo)] };
+    if (lampara) {
+      const lamp = new T.Mesh(new T.CylinderGeometry(.05, .07, .22, 10), M.metal);
+      lamp.position.set(0, Math.min(4.55 - y, h / 2 + 1.3), .9); lamp.rotation.x = .9; g.add(lamp);
+    }
+    return { g, w, h, lienzoObra, objetos: [lienzoObra, ...g.children.filter(c => c !== halo)] };
   }
 
   // Ficha pequeña al lado de la obra
@@ -996,13 +1136,27 @@
     return c;
   }
 
-  // Lugares para colgar en el piso 1: [x, z, normal x, normal z, ancho máx, alto máx]
+  // Lugares de la exposición en el piso 1, en el orden del recorrido:
+  // [x, z, normal x, normal z, ancho máx, alto máx, altura del centro, en caballete]
   const MUROS = [
-    [-2.25, -7.83, 0, 1, 1.75, 1.55], [2.25, -7.83, 0, 1, 1.75, 1.55],                           // muro central, cara de entrada
-    [-12.15, -3.0, 1, 0, 2.0, 1.6], [-12.15, -6.6, 1, 0, 2.0, 1.6], [-12.15, -10.2, 1, 0, 2.0, 1.6], [-12.15, -13.4, 1, 0, 1.8, 1.6], // muro izquierdo
-    [-8.6, -15.15, 0, 1, 2.2, 1.7], [-4.1, -15.15, 0, 1, 2.2, 1.7], [.4, -15.15, 0, 1, 2.2, 1.7], [4.9, -15.15, 0, 1, 2.2, 1.7], // fondo
-    [2.25, -8.17, 0, -1, 1.75, 1.55], [-2.25, -8.17, 0, -1, 1.75, 1.55]                          // muro central, cara de atrás
+    [CABALLETE.x, CABALLETE.z, CABALLETE.nx, CABALLETE.nz, 1.15, 1.45, 1.6, true],                            // caballete de la entrada
+    [-4.85, -7.83, 0, 1, 1.7, 1.7], [-2.35, -7.83, 0, 1, 1.45, 1.7], [2.35, -7.83, 0, 1, 1.45, 1.7], [4.85, -7.83, 0, 1, 1.7, 1.7], // muro central, cara de entrada
+    [4.5, -8.17, 0, -1, 2.0, 1.7], [1.5, -8.17, 0, -1, 2.0, 1.7], [-1.5, -8.17, 0, -1, 2.0, 1.7], [-4.5, -8.17, 0, -1, 2.0, 1.7],   // muro central, cara de atrás
+    [6.6, -15.15, 0, 1, 2.2, 1.8], [3.3, -15.15, 0, 1, 2.2, 1.8], [0, -15.15, 0, 1, 2.2, 1.8],                                       // muro del fondo
+    [-3.3, -15.15, 0, 1, 2.2, 1.8], [-6.6, -15.15, 0, 1, 2.2, 1.8], [-9.9, -15.15, 0, 1, 2.2, 1.8],
+    [-8.25, -.3, 0, -1, 1.7, 1.6, 1.95, false, true], [-3.6, -.3, 0, -1, 2.4, 2.1, 1.95],                                           // muro de la entrada, por dentro
+    [3.6, -.3, 0, -1, 2.4, 2.1, 1.95], [8.25, -.3, 0, -1, 1.7, 1.6, 1.95, false, true]                                                 // (los de los extremos van entre ventanas, sin cartela)
   ];
+  // Muro de la entrada por dentro, pintado de vinotinto alrededor de la puerta y las ventanas
+  {
+    const pintar = (x0, x1, y0, y1) => { const p = plano(x1 - x0, y1 - y0, M.vinotinto); p.position.set((x0 + x1) / 2, (y0 + y1) / 2, -.305); p.rotation.y = Math.PI; };
+    const techo = P2 - .21;
+    [[-12.2, -10.72], [-9.28, -7.22], [-5.78, -1.3], [1.3, 5.78], [7.22, 9.28], [10.72, 12.2]].forEach(([a, b]) => pintar(a, b, 0, techo));
+    [-10, -6.5, 6.5, 10].forEach(x => { pintar(x - .72, x + .72, 0, 1.1); pintar(x - .72, x + .72, 3.1, techo); });
+    pintar(-1.3, 1.3, PUERTA.alto, techo);
+  }
+  // Muro de salón de la colección privada (obras vendidas), sobre el muro izquierdo
+  const SALON = { x: -12.18, z0: -1.4, z1: -14.7, filas: [3.02, 1.98, .94], alto: .84, hueco: .2 };
   const PISO1 = 'Piso 1 · El pintor', PISO2 = 'Piso 2 · El ebanista', AFUERA = 'La entrada';
 
   // Rótulo de sala (vinilo sobre el muro)
@@ -1016,7 +1170,8 @@
     p.position.set(x + nx * .02, y, z + nz * .02); mirarHacia(p, nx, nz);
     return p;
   }
-  rotulo('Sala del pintor', 'Retrato, paisaje y folclor llanero', 0, 2.35, -7.83, 0, 1, 2.1);
+  rotulo('Sala del pintor', 'Exposición · Noviembre 2026', 0, 2.35, -7.83, 0, 1, 2.1, false);
+  rotulo('Colección privada', 'Obras que ya encontraron hogar', SALON.x, 4.2, (SALON.z0 + SALON.z1) / 2, 1, 0, 2.6, false);
 
   /* ---------- 8. ESCALERA ---------- */
   const ESC = { x0: 9.4, x1: 12.1, zIni: -5.0, zFin: -13.6, pasos: 16 };
@@ -1255,11 +1410,25 @@
   for (let i = 0; i < 5; i++) { const t = bloque(-.04, .04, 0, 2.3, -.12, .12, M.pino); t.position.set(11.7, P2 + 1.15, -1.4 - i * .3); t.rotation.z = .12; }
 
   /* ---------- 10. OBRAS Y PARADAS ---------- */
-  const obras = obrasDe('arte').filter(o => o.imagen).slice(0, MUROS.length);
-  const texturas = await Promise.all(obras.map(o => cargarTextura(fotoObra(o))));
-  // La obra del marco dorado del taller (Primavera en Forest Park o la primera disponible)
-  const iMarco = Math.max(0, obras.findIndex(o => /forest/i.test(o.titulo)));
-  if (texturas[iMarco]) { marcoConObra.material = basico({ map: texturas[iMarco] }); }
+  // Cuadros de San Martín en la fachada (con la foto si está configurada)
+  const cuadrosSM = [];
+  for (const f of FOTOS_SM) {
+    const ruta = (CONFIG.fotosSanMartin || {})[f.clave];
+    f.foto = ruta ? await cargarTextura(ruta) : null;
+    const tex = f.foto || lienzo(600, 800, (x, w, h) => dibujarMarcoFoto(x, w, h, f.titulo, f.lugar));
+    const c = colgarObra(tex, f.x, 0, 0, 1, 1.25, 1.65, 2.05, { halo: false, lampara: false, m: .07, prof: .07 });
+    cuadrosSM.push(...c.objetos);
+  }
+  // Exposición (si la hoja no trae la columna "coleccion", se usan las obras no vendidas) y colección privada
+  let obras = deColeccion('exposicion').filter(o => o.imagen);
+  if (!obras.length) obras = obrasDe('arte').filter(o => o.imagen && !esVendida(o));
+  obras = obras.slice(0, MUROS.length);
+  const vendidas = obrasDe('arte').filter(o => o.imagen && esVendida(o));
+  // Todas las obras se exhiben en el piso 1: el marco del taller queda con su lienzo en blanco
+  const [texturas, texVendidas] = await Promise.all([
+    Promise.all(obras.map(o => cargarTextura(miniObra(o)))),
+    Promise.all(vendidas.map(o => cargarTextura(miniObra(o))))
+  ]);
 
   const V = (x, y, z) => new T.Vector3(x, y, z);
   const OJO = { afuera: 1.7, p1: 1.65, p2: P2 + 1.65 };
@@ -1285,31 +1454,78 @@
     }
   });
   tablero.userData.accion = 'autor'; INTERACTIVOS.push(tablero);
+  const nAp = new T.Vector3(0, 0, 1).applyQuaternion(aperos.quaternion);
+  const iAperos = PARADAS.length;
+  aperos.traverse(o => { if (o.isMesh) { o.userData.parada = iAperos; INTERACTIVOS.push(o); } });
+  PARADAS.push({
+    id: 'aperos', piso: AFUERA, nombre: 'Los aperos del llanero', zona: 'afuera',
+    pos: V(aperos.position.x + nAp.x * 2.9, OJO.afuera, aperos.position.z + nAp.z * 2.9), mira: V(aperos.position.x - .2, 1.05, aperos.position.z),
+    ficha: {
+      sup: 'La entrada', titulo: 'Los aperos del llanero', detalle: 'Silla de montar, sombrero y soga sobre la cerca',
+      texto: 'Al terminar la faena, el llanero deja la silla sobre la cerca, cuelga el sombrero en el poste y enrolla la soga: el mismo Llano que inspira la obra del maestro.',
+      acciones: [{ txt: 'Entrar al museo', parada: 'entrada', clase: 'boton-oscuro' }, { txt: 'Ir al atril', parada: 'atril', clase: 'boton-borde' }]
+    }
+  });
+  cuadrosSM.forEach(o => { o.userData.parada = PARADAS.length; INTERACTIVOS.push(o); });
+  PARADAS.push({
+    id: 'san-martin', piso: AFUERA, nombre: 'San Martín de los Llanos', zona: 'afuera', pos: V(0, OJO.afuera, 7.2), mira: V(0, 2.2, 0),
+    ficha: {
+      sup: 'La entrada', titulo: 'San Martín de los Llanos', detalle: 'La iglesia y El Embrujo Llanero, «La Bola»',
+      texto: 'La tierra natal del maestro: su iglesia y El Embrujo Llanero, el monumento que recibe a los viajeros a la entrada del pueblo.',
+      acciones: [
+        ...FOTOS_SM.filter(f => f.foto).map(f => ({ txt: f.titulo, fn: () => abrirVisor([{ src: CONFIG.fotosSanMartin[f.clave], titulo: f.titulo }]), clase: 'boton-oscuro' })),
+        { txt: 'Entrar al museo', parada: 'entrada', clase: 'boton-borde' }
+      ]
+    }
+  });
+  muralLlano.userData.parada = PARADAS.length; INTERACTIVOS.push(muralLlano);
+  PARADAS.push({
+    id: 'mural-llano', piso: AFUERA, nombre: 'Mural · Postales del Llano', zona: 'afuera', pos: V(-22, OJO.afuera, -6.8), mira: V(-ANCHO, 4.4, MURAL.z),
+    ficha: {
+      sup: 'Costado de la casa', titulo: 'Postales del Llano', detalle: 'Caño Cristales, el morichal, el joropo, el obelisco de Puerto López, las garzas y la faena llanera',
+      texto: 'Los paisajes y costumbres del Meta que inspiran la pintura del maestro, en un mural de postales.',
+      acciones: [{ txt: 'Ver el mural de las Cuadrillas', parada: 'mural-cuadrillas', clase: 'boton-oscuro' }, { txt: 'Entrar al museo', parada: 'entrada', clase: 'boton-borde' }]
+    }
+  });
+  muralCuadrillas.userData.parada = PARADAS.length; INTERACTIVOS.push(muralCuadrillas);
+  PARADAS.push({
+    id: 'mural-cuadrillas', piso: AFUERA, nombre: 'Mural · Cuadrillas de San Martín', zona: 'afuera', pos: V(22, OJO.afuera, -6.8), mira: V(ANCHO, 4.4, MURAL.z),
+    ficha: {
+      sup: 'Costado de la casa', titulo: 'Cuadrillas de San Martín', detalle: '48 jinetes · 12 galanes, 12 moros, 12 guahibos y 12 cachaceros',
+      texto: 'Desde 1735, cada noviembre, en las fiestas de San Martín de Tours, cuarenta y ocho jinetes recrean a caballo el encuentro de los pueblos. El maestro es sanmartinero: este mural es un homenaje a su tierra.',
+      acciones: [{ txt: 'Entrar al museo', parada: 'entrada', clase: 'boton-oscuro' }, { txt: 'Ver las Postales del Llano', parada: 'mural-llano', clase: 'boton-borde' }]
+    }
+  });
   hojasPuerta.forEach(h => { h.userData.accion = 'entrar'; INTERACTIVOS.push(h); });
 
   // Piso 1
   PARADAS.push({
     id: 'entrada', piso: PISO1, nombre: 'Sala del pintor', zona: 'p1', pos: V(0, OJO.p1, -2.4), mira: V(0, 2.1, -7.83),
     ficha: {
-      sup: PISO1, titulo: 'Sala del pintor', detalle: `${obras.length} obras · Retrato, paisaje y folclor llanero`,
+      sup: PISO1, titulo: 'Sala del pintor', detalle: `Exposición de noviembre 2026 · ${obras.length} obras · ${vendidas.length} en colección privada`,
       texto: PERFIL.arte.empirico,
       acciones: [{ txt: 'Catálogo de arte', href: 'catalogo-arte.html', clase: 'boton-borde' }]
     }
   });
   obras.forEach((o, i) => {
     const t = texturas[i]; if (!t) return;
-    const [x, z, nx, nz, mw, mh] = MUROS[i];
-    const { g, w, h, objetos } = colgarObra(t, x, z, nx, nz, mw, mh);
-    cartela(o, g, w, h);
+    const [x, z, nx, nz, mw, mh, y = 1.75, enCaballete = false, sinCartela = false] = MUROS[i];
+    const { g, w, h, objetos } = colgarObra(t, x, z, nx, nz, mw, mh, y, enCaballete ? { halo: false, lampara: false, m: .06, prof: .06 } : {});
+    let centroY = y;
+    if (enCaballete) {
+      // La obra se apoya sobre la repisa del caballete, un poco adelante del mástil
+      centroY = .84 + h / 2 + .06; g.position.y = centroY;
+      g.position.x += nx * .1; g.position.z += nz * .1; g.rotation.x = -.06;
+    } else if (!sinCartela) cartela(o, g, w, h);
     const dist = Math.max(2.5, h * 1.9, w * 1.35);
     const indice = PARADAS.length;
     objetos.forEach(ob => { ob.userData.parada = indice; INTERACTIVOS.push(ob); });
-    const vendida = /^(no|vendida)/i.test(o.disponible || '');
+    const vendida = esVendida(o) || /^no/i.test(o.disponible || '');
     PARADAS.push({
       id: 'obra-' + i, piso: PISO1, nombre: o.titulo, zona: 'p1',
-      pos: V(x + nx * dist, OJO.p1, z + nz * dist), mira: V(x, 1.75, z), encuadre: { w: w + .5, h: h + .5, nx, nz },
+      pos: V(x + nx * dist, OJO.p1, z + nz * dist), mira: V(x, centroY, z), encuadre: { w: w + .5, h: h + .5, nx, nz },
       ficha: {
-        sup: PISO1, titulo: o.titulo, detalle: [o.tecnica, o.medidas, o.anio].filter(Boolean).join(' · '), texto: o.concepto,
+        sup: `${PISO1} · Exposición noviembre 2026`, titulo: o.titulo, detalle: [o.tecnica, o.medidas, o.anio].filter(Boolean).join(' · '), texto: o.concepto,
         acciones: [
           { txt: 'Ver en grande', fn: () => abrirVisor([{ src: fotoObra(o), titulo: o.titulo }]), clase: 'boton-oscuro' },
           vendida
@@ -1318,6 +1534,66 @@
         ]
       }
     });
+  });
+
+  // Colección privada: todas las obras vendidas en montaje de salón (filas parejas, con el punto rojo de "vendida")
+  const SALON_OBRAS = []; // { y, z, w, h } de cada obra vendida, por índice
+  {
+    const largo = SALON.z0 - SALON.z1;
+    const anchoDe = (t, a) => t ? Math.min(a * 1.6, a * t.image.width / t.image.height) + .09 : 0;
+    // Reparte las obras en filas de largo parecido; si alguna fila no cabe, se reduce el alto de todas
+    const reparto = alto => {
+      const anchos = texVendidas.map(t => anchoDe(t, alto));
+      const meta = anchos.reduce((a, w) => a + (w ? w + SALON.hueco : 0), 0) / SALON.filas.length;
+      const filas = SALON.filas.map(() => ({ items: [], largo: 0 }));
+      let f = 0;
+      anchos.forEach((w, i) => {
+        if (!w) return;
+        if (f < filas.length - 1 && filas[f].items.length && filas[f].largo + w / 2 > meta) f++;
+        filas[f].items.push(i); filas[f].largo += w + SALON.hueco;
+      });
+      return { filas, anchos, cabe: filas.every(r => r.largo - SALON.hueco <= largo), alto };
+    };
+    let r = reparto(SALON.alto);
+    while (!r.cabe && r.alto > .45) r = reparto(r.alto - .04);
+    const matPunto = basico({ color: 0xb3261e });
+    const zc = (SALON.z0 + SALON.z1) / 2;
+    r.filas.forEach((fila, k) => {
+      const n = fila.items.length; if (!n) return;
+      const suma = fila.items.reduce((a, i) => a + r.anchos[i], 0);
+      const hueco = n > 1 ? Math.min(.6, (largo - suma) / (n - 1)) : 0;
+      let z = zc + (suma + hueco * (n - 1)) / 2; // el muro mira hacia +x: se avanza hacia -z
+      fila.items.forEach(i => {
+        const aw = r.anchos[i]; z -= aw / 2;
+        const { g, w, h, objetos } = colgarObra(texVendidas[i], SALON.x, z, 1, 0, r.alto * 1.6, r.alto, SALON.filas[k], { halo: false, lampara: false, m: .045, prof: .05 });
+        const punto = new T.Mesh(new T.CircleGeometry(.028, 16), matPunto); punto.position.set(w / 2 + .1, -h / 2 + .02, .005); g.add(punto);
+        objetos.forEach(ob => { ob.userData.vendida = i; INTERACTIVOS.push(ob); });
+        SALON_OBRAS[i] = { y: SALON.filas[k], z, w, h };
+        z -= aw / 2 + hueco;
+      });
+    });
+  }
+  const fichaVendida = (o, i) => ({
+    sup: `${PISO1} · Colección privada`, titulo: o.titulo,
+    detalle: ['Vendida', o.tecnica, o.medidas, o.anio].filter(Boolean).join(' · '),
+    texto: o.concepto || 'Esta obra ya hace parte de una colección privada. El maestro acepta encargos de obras similares.',
+    acciones: [
+      { txt: 'Ver en grande', fn: () => abrirVisor(vendidas.map(v => ({ src: fotoObra(v), titulo: `${v.titulo} · Colección privada` })), i), clase: 'boton-oscuro' },
+      ...(o.fotoAutor ? [{ txt: 'Con el maestro', fn: () => abrirVisor([{ src: o.fotoAutor, titulo: `${o.titulo} · con el maestro` }]), clase: 'boton-borde' }] : []),
+      { txt: 'Encargar una similar', href: enlaceWA(`Hola Maestro Santamaría, vi la obra "${o.titulo}" en la colección privada de su casa-museo virtual y me gustaría encargar una pieza similar.`), clase: 'boton-borde', externo: true }
+    ]
+  });
+  PARADAS.push({
+    id: 'coleccion', piso: PISO1, nombre: 'Colección privada', zona: 'p1', pos: V(-6.9, OJO.p1, -7.75), mira: V(SALON.x, 2.1, -7.75),
+    ficha: {
+      sup: `${PISO1} · Colección privada`, titulo: 'Obras que ya encontraron hogar',
+      detalle: `${vendidas.length} obras vendidas · Toque cualquiera para verla de cerca`,
+      texto: 'Retratos, paisajes y encargos que hoy hacen parte de colecciones privadas. El punto rojo junto a cada obra indica que ya fue vendida.',
+      acciones: [
+        { txt: 'Ver todas en grande', fn: () => abrirVisor(vendidas.map(v => ({ src: fotoObra(v), titulo: `${v.titulo} · Colección privada` })), 0), clase: 'boton-oscuro' },
+        { txt: 'Encargar una obra', href: enlaceWA('Hola Maestro Santamaría, vi la colección privada en su casa-museo virtual y me gustaría encargar una obra.'), clase: 'boton-borde', externo: true }
+      ]
+    }
   });
   // Muro de reconocimientos
   {
@@ -1414,8 +1690,8 @@
 
   /* ---------- 11. ZONAS, LÍMITES Y OBSTÁCULOS ---------- */
   const ZONAS = {
-    afuera: { y: OJO.afuera, x: [-45, 45], z: [2.2, 48], obst: [[2.1, 3.3, 3.9, 4.9]], suelo: [suelo, camino, patio] },
-    p1: { y: OJO.p1, x: [-11.7, 11.7], z: [-14.7, -.9], obst: [[-5.0, 5.0, -8.6, -7.4], [8.9, 12.3, -15.3, -4.6], [-7.6, -5.4, -11.6, -10.8], [-1.1, 1.1, -12.2, -11.4]], suelo: [piso1] },
+    afuera: { y: OJO.afuera, x: [-45, 45], z: [-28, 48], obst: [[-13.9, 13.9, -17.2, 2.2], [2.1, 3.3, 3.9, 4.9], [-5.6, -2.0, 4.3, 6.0]], suelo: [suelo, camino, patio] },
+    p1: { y: OJO.p1, x: [-11.7, 11.7], z: [-14.7, -.9], obst: [[-MURO_C, MURO_C, -8.6, -7.4], [8.9, 12.3, -15.3, -4.6], [-8.25, -7.75, -8.75, -6.75], [CABALLETE.x - .6, CABALLETE.x + .6, CABALLETE.z - .6, CABALLETE.z + .6]], suelo: [piso1] },
     p2: {
       y: OJO.p2, x: [-11.6, 11.6], z: [-14.7, -.9],
       obst: [[-12.2, -3.6, -15.3, -14.0], [-12.3, -11.0, -14.0, -8.3], [-3.5, 1.1, -15.3, -14.5], [-2.9, .5, -11.0, -8.6], [3.2, 6.0, -7.0, -5.8], [6.7, 9.0, -2.4, -.6], [8.95, 12.3, -13.5, -4.6]],
@@ -1538,6 +1814,14 @@
     viajar(puntos, v.mira, P.zona, () => { if (P.ficha) mostrarFicha(P.ficha); });
   }
 
+  // Se acerca a una obra de la colección privada y muestra su ficha
+  function verVendida(i) {
+    const s = SALON_OBRAS[i], o = vendidas[i]; if (!s || !o) return;
+    const pos = ajustar(V(SALON.x + (camara.aspect < 1 ? 2.4 : 2.8), OJO.p1, s.z), 'p1');
+    estado.parada = indiceDe('coleccion'); actualizarGuia();
+    viajar(ruta(camara.position.clone(), estado.zona, pos, 'p1'), V(SALON.x, s.y, s.z), 'p1', () => mostrarFicha(fichaVendida(o, i)));
+  }
+
   /* ---------- 13. INTERFAZ ---------- */
   function mostrarFicha(f) {
     $('fichaSup').textContent = f.sup || ''; $('fichaTitulo').textContent = f.titulo || '';
@@ -1623,7 +1907,7 @@
     if (tactil || performance.now() - ultimoHover < 90) return;
     ultimoHover = performance.now();
     const g = impactos(ev, [escena], true).find(h => !h.object.userData.ignorar);
-    lienzo3D.classList.toggle('sobre-objeto', !!g && (g.object.userData.parada !== undefined || !!g.object.userData.accion));
+    lienzo3D.classList.toggle('sobre-objeto', !!g && (g.object.userData.parada !== undefined || g.object.userData.vendida !== undefined || !!g.object.userData.accion));
   });
   lienzo3D.addEventListener('pointerup', ev => {
     lienzo3D.classList.remove('arrastrando');
@@ -1635,6 +1919,7 @@
     if (!golpe) return;
     const u = golpe.object.userData;
     // 1) ¿Tocó una obra, una pieza o un objeto activo?
+    if (u.vendida !== undefined) return verVendida(u.vendida);
     if (u.parada !== undefined || u.accion) {
       if (u.parada !== undefined) return irA(u.parada);
       if (u.accion === 'autor') return abrirAutor();
@@ -1667,7 +1952,7 @@
     const dx = -s * adelante + c * lado, dz = -c * adelante - s * lado;
     const p = camara.position, zona = estado.zona, Z = ZONAS[zona];
     // Atajos naturales: cruzar la puerta o tomar la escalera caminando
-    if (zona === 'afuera' && Math.abs(p.x) < 1.6 && p.z + dz < Z.z[0] + .05 && dz < 0) return irA(indiceDe('entrada'));
+    if (zona === 'afuera' && Math.abs(p.x) < 1.6 && p.z + dz < 2.6 && dz < 0) return irA(indiceDe('entrada'));
     if (zona === 'p1' && Math.abs(p.x) < 1.2 && p.z + dz > Z.z[1] - .05 && dz > 0) return irA(indiceDe('fachada'));
     if (zona === 'p1' && p.x > 8.4 && p.z + dz < -4.0 && dz < 0) return irA(indiceDe('taller'));
     if (zona === 'p2' && p.x > 8.4 && p.z < -13.2 && p.z + dz > -13.6 && dz > 0) return irA(indiceDe('reconocimientos'));
@@ -1743,12 +2028,13 @@
 
   // Exposición de controles en consola y ventana
   window.museo = {
-    irA: idx => irAParada(idx),
+    irA: idx => irA(idx),
     PARADAS,
     estado,
     camara,
     setHora: (h) => { horaManual = Math.max(0, Math.min(24, h)); actualizarCicloDiaNoche(); console.log(`Hora fijada manualmente a las ${h}:00 hs`); },
     fijarHoraReal: () => { horaManual = null; actualizarCicloDiaNoche(); console.log('Modo hora real activado.'); },
-    cambiarClima: modo => cambiarClima(modo)
+    cambiarClima: modo => cambiarClima(modo),
+    verVendida: i => verVendida(i)
   };
 })();

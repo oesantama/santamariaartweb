@@ -11,7 +11,7 @@
 
    Hay dos formas de actualizar:
    A) RÁPIDA: hoja de Google con 2 pestañas publicadas como CSV
-        obras        → titulo | categoria | tecnica | medidas | anio | imagen | disponible | destacada | concepto
+        obras        → titulo | categoria | tecnica | medidas | anio | imagen | disponible | destacada | coleccion | concepto
         trayectoria  → area | anio | tipo | titulo | lugar | detalle | certificado
       Pegue los enlaces CSV en CONFIG.hojaObras y CONFIG.hojaTrayectoria.
    B) MANUAL: editar los arreglos OBRAS y TRAYECTORIA de este archivo
@@ -41,7 +41,13 @@ const CONFIG = {
   // REEMPLAZAR por una foto del maestro enseñando cuando la tengan
   fotoTaller: 'img/obras/la-antigua-finca.jpg',
   // Obra de la portada del catálogo de arte (formato horizontal)
-  portadaCatalogo: 'img/obras/cuadrilleros.jpg'
+  portadaCatalogo: 'img/vendidas/cuadrilleros.jpg',
+  // Fotos de San Martín para los cuadros de la fachada del museo (vacío = cuadro "Fotografía próximamente").
+  // Use fotos propias o con permiso del autor, por ejemplo 'img/san-martin/iglesia.jpg'.
+  fotosSanMartin: {
+    iglesia: '',
+    embrujo: ''
+  }
 };
 
 /* Perfil por oficio. Lo usan la página, los catálogos y las hojas de vida. */
@@ -88,50 +94,115 @@ const SERVICIOS = {
 
 /* Obras.
    categoria: pintura | dibujo | ebanisteria
+   coleccion: exposicion (muestra de noviembre, piso 1 del museo) | vendida (colección privada) | vacío
    disponible: si | no        destacada: si → aparece en el catálogo (4 por página)
-   imagen: ruta dentro de /img/obras, enlace de Google Drive o vacío (muestra un marcador)
-   Técnica y medidas marcadas "por confirmar" deben validarse con el maestro. */
+   imagen: ruta dentro de /img/obras o /img/vendidas, enlace de Google Drive o vacío (muestra un marcador)
+   fotoAutor: foto opcional del maestro con la obra
+   Las fotos se recortan y mejoran con originales/procesar.py (cada una tiene su versión liviana en mini/).
+   Títulos, técnicas y medidas de las obras nuevas son provisionales: confirmarlos con el maestro. */
 let OBRAS = [
-  { titulo: 'Reserva guadual', categoria: 'pintura', tecnica: 'Óleo sobre lienzo, empaste', medidas: '', anio: '2018', disponible: 'si', destacada: 'si',
+  // Exposición de noviembre de 2026 (en el museo se cuelgan en este orden: atril, muro central, muro del fondo, muro de la entrada)
+  { titulo: 'Reserva guadual', categoria: 'pintura', tecnica: 'Óleo sobre lienzo, empaste', medidas: '', anio: '2018', disponible: 'si', destacada: 'si', coleccion: 'exposicion',
     concepto: 'Nuestro planeta es el reflejo de cómo queremos ver nuestros paisajes: abundante verde, burbujas de buenos sentimientos y color alegría.',
     imagen: 'img/obras/reserva-guadual.jpg' },
-  { titulo: 'Cuadrilleros', categoria: 'pintura', tecnica: 'Óleo sobre lienzo', medidas: '', anio: '', disponible: 'si', destacada: 'si',
-    concepto: 'Las cuadrillas de San Martín son la esencia de la raza llanera: cuarenta y ocho jinetes que conmemoran nuestra herencia.',
-    imagen: 'img/obras/cuadrilleros.jpg' },
-  { titulo: 'Shakira', categoria: 'pintura', tecnica: 'Óleo sobre lienzo, empaste', medidas: '', anio: '2018', disponible: 'no', destacada: 'si',
+  { titulo: 'Shakira', categoria: 'pintura', tecnica: 'Óleo sobre lienzo, empaste', medidas: '', anio: '2018', disponible: 'no', destacada: 'si', coleccion: 'exposicion',
     concepto: 'Obra reconocida en los Premios Talentos Latinos 2018 de Colombia. Un homenaje a quien representa al país en el mundo.',
     imagen: 'img/obras/shakira.jpg' },
-  { titulo: 'Vientos de Rockaway', categoria: 'pintura', tecnica: 'Óleo sobre lienzo, empaste', medidas: '', anio: '2018', disponible: 'si', destacada: 'si',
-    concepto: 'Si los buenos pensamientos no fluyen, basta con mirar el panorama y escuchar lo que las olas traen a la playa.',
-    imagen: 'img/obras/vientos-de-rockaway.jpg' },
-  { titulo: 'Contemplando a Manhattan', categoria: 'pintura', tecnica: 'Óleo sobre lienzo', medidas: '', anio: '', disponible: 'si', destacada: 'si',
-    concepto: 'No importa qué tan rápido o qué tan lento se avance: lo importante es seguir hacia adelante.',
-    imagen: 'img/obras/contemplando-a-manhattan.jpg' },
-  { titulo: 'La antigua finca', categoria: 'pintura', tecnica: 'Óleo sobre lienzo', medidas: '', anio: '', disponible: 'si', destacada: 'si',
-    concepto: 'Nuestros ancestros respiraban el verde de los campos, sin horario ni límites, entre árboles, jardines y el canto de las aves.',
-    imagen: 'img/obras/la-antigua-finca.jpg' },
-  { titulo: 'Primavera en Forest Park', categoria: 'pintura', tecnica: 'Óleo sobre lienzo', medidas: '', anio: '', disponible: 'si', destacada: 'si',
-    concepto: 'La primavera en Queens: una razón más para pintar y para sonreír.',
-    imagen: 'img/obras/primavera-en-forest-park.jpg' },
-  { titulo: 'Mi Daniel', categoria: 'pintura', tecnica: 'Óleo sobre lienzo', medidas: '', anio: '', disponible: 'no', destacada: 'si',
-    concepto: 'Retrato de su hijo mirando por la ventana en otoño, cuando cada hoja parece convertirse en flor.',
-    imagen: 'img/obras/mi-daniel.jpg' },
-  { titulo: 'Flatiron', categoria: 'pintura', tecnica: 'Óleo sobre lienzo', medidas: '', anio: '', disponible: 'si', destacada: 'no',
+  { titulo: 'Retrato en carbón', categoria: 'dibujo', tecnica: 'Carbón sobre papel', medidas: '', anio: '', disponible: 'si', destacada: 'si', coleccion: 'exposicion', concepto: '',
+    imagen: 'img/obras/retrato-en-carbon.jpg' },
+  { titulo: 'Rostro entre colores', categoria: 'pintura', tecnica: 'Óleo sobre lienzo, técnica mixta', medidas: '', anio: '', disponible: 'si', destacada: 'si', coleccion: 'exposicion', concepto: '',
+    imagen: 'img/obras/rostro-entre-colores.jpg' },
+  { titulo: 'Cabellos al viento', categoria: 'dibujo', tecnica: 'Pastel sobre papel', medidas: '', anio: '', disponible: 'si', destacada: 'si', coleccion: 'exposicion', concepto: '',
+    imagen: 'img/obras/cabellos-al-viento.jpg' },
+  { titulo: 'Flatiron', categoria: 'pintura', tecnica: 'Óleo sobre lienzo', medidas: '', anio: '', disponible: 'si', destacada: 'si', coleccion: 'exposicion',
     concepto: 'La salida del sol sobre Nueva York como la primera bendición del día.',
     imagen: 'img/obras/flatiron.jpg' },
-  { titulo: 'Amado Mora', categoria: 'pintura', tecnica: 'Óleo sobre lienzo, empaste', medidas: '', anio: '', disponible: 'no', destacada: 'no',
-    concepto: 'Retrato del artista y curador Félix Amado Mora, encontrado en pleno corazón de Manhattan.',
-    imagen: 'img/obras/amado-mora.jpg' },
-  { titulo: 'Primero mi felicidad', categoria: 'pintura', tecnica: 'Óleo sobre lienzo, empaste', medidas: '', anio: '2017', disponible: 'si', destacada: 'no',
+  { titulo: 'Manhattan desde el río', categoria: 'pintura', tecnica: 'Óleo sobre lienzo, empaste', medidas: '', anio: '', disponible: 'si', destacada: 'si', coleccion: 'exposicion', concepto: '',
+    imagen: 'img/obras/manhattan-desde-el-rio.jpg' },
+  { titulo: 'Lluvia en la ciudad', categoria: 'pintura', tecnica: 'Óleo sobre lienzo, empaste', medidas: '', anio: '', disponible: 'si', destacada: 'si', coleccion: 'exposicion', concepto: '',
+    imagen: 'img/obras/lluvia-en-la-ciudad.jpg' },
+  { titulo: 'Musa de la ciudad', categoria: 'pintura', tecnica: 'Óleo sobre lienzo, técnica mixta', medidas: '', anio: '', disponible: 'si', destacada: 'si', coleccion: 'exposicion', concepto: '',
+    imagen: 'img/obras/musa-de-la-ciudad.jpg' },
+  { titulo: 'Tarde en el muelle', categoria: 'pintura', tecnica: 'Óleo sobre lienzo', medidas: '', anio: '', disponible: 'si', destacada: 'si', coleccion: 'exposicion', concepto: '',
+    imagen: 'img/obras/tarde-en-el-muelle.jpg' },
+  { titulo: 'La ola', categoria: 'pintura', tecnica: 'Óleo sobre lienzo, empaste', medidas: '', anio: '', disponible: 'si', destacada: 'si', coleccion: 'exposicion', concepto: '',
+    imagen: 'img/obras/la-ola.jpg' },
+  { titulo: 'Bajo la sombrilla', categoria: 'pintura', tecnica: 'Óleo sobre lienzo', medidas: '', anio: '', disponible: 'si', destacada: 'si', coleccion: 'exposicion', concepto: '',
+    imagen: 'img/obras/bajo-la-sombrilla.jpg' },
+  { titulo: 'Los abuelos', categoria: 'dibujo', tecnica: 'Carbón sobre papel', medidas: '', anio: '', disponible: 'si', destacada: 'si', coleccion: 'exposicion', concepto: '',
+    imagen: 'img/obras/los-abuelos.jpg' },
+  { titulo: 'Mujer con orquídeas', categoria: 'dibujo', tecnica: 'Carbón y color sobre papel', medidas: '', anio: '', disponible: 'si', destacada: 'si', coleccion: 'exposicion', concepto: '',
+    imagen: 'img/obras/mujer-con-orquideas.jpg' },
+  { titulo: 'Mirada en grafito', categoria: 'dibujo', tecnica: 'Carbón sobre papel', medidas: '', anio: '', disponible: 'si', destacada: 'si', coleccion: 'exposicion', concepto: '',
+    imagen: 'img/obras/mirada-en-grafito.jpg' },
+  { titulo: 'La antigua finca', categoria: 'pintura', tecnica: 'Óleo sobre lienzo', medidas: '', anio: '', disponible: 'si', destacada: 'si', coleccion: 'exposicion',
+    concepto: 'Nuestros ancestros respiraban el verde de los campos, sin horario ni límites, entre árboles, jardines y el canto de las aves.',
+    imagen: 'img/obras/la-antigua-finca.jpg' },
+  { titulo: 'Primero mi felicidad', categoria: 'pintura', tecnica: 'Óleo sobre lienzo, empaste', medidas: '', anio: '2017', disponible: 'si', destacada: 'si', coleccion: 'exposicion',
     concepto: 'La felicidad es una realidad, y no hay que permitir que nos la arrebaten.',
     imagen: 'img/obras/primero-mi-felicidad.jpg' },
-  { titulo: 'Soy yo y qué…', categoria: 'pintura', tecnica: 'Óleo sobre lienzo, empaste', medidas: '', anio: '2019', disponible: 'no', destacada: 'no',
+  { titulo: 'Soy yo y qué…', categoria: 'pintura', tecnica: 'Óleo sobre lienzo, empaste', medidas: '', anio: '2019', disponible: 'no', destacada: 'si', coleccion: 'exposicion',
     concepto: 'Autorretrato. Fiel a sí mismo, encontrando felicidad dondequiera que vaya.',
     imagen: 'img/obras/soy-yo-y-que.jpg' },
+  { titulo: 'Primavera en Forest Park', categoria: 'pintura', tecnica: 'Óleo sobre lienzo', medidas: '', anio: '', disponible: 'si', destacada: 'si', coleccion: 'exposicion',
+    concepto: 'La primavera en Queens: una razón más para pintar y para sonreír.',
+    imagen: 'img/obras/primavera-en-forest-park.jpg' },
+
+  // Obras sin fotografía todavía
   { titulo: 'Solidaridad y bondad', categoria: 'pintura', tecnica: 'Óleo sobre lienzo', medidas: '91 × 122 cm (36 × 48 in)', anio: '', disponible: 'si', destacada: 'no',
     concepto: 'Obra presentada en la muestra Arte Joven de Colombia Fest.', imagen: '' },
   { titulo: 'Obra por encargo', categoria: 'dibujo', tecnica: 'Carbón y pastel sobre papel', medidas: '91 × 122 cm (36 × 48 in)', anio: '2024', disponible: 'no', destacada: 'no',
     concepto: 'Retrato de gran formato realizado por encargo y entregado personalmente a su destinataria.', imagen: '' },
+
+  // Vendidas: colección privada (muro de salón en el piso 1 del museo)
+  { titulo: 'Cuadrilleros', categoria: 'pintura', tecnica: 'Óleo sobre lienzo', medidas: '', anio: '', disponible: 'no', destacada: 'no', coleccion: 'vendida',
+    concepto: 'Las cuadrillas de San Martín son la esencia de la raza llanera: cuarenta y ocho jinetes que conmemoran nuestra herencia.',
+    imagen: 'img/vendidas/cuadrilleros.jpg' },
+  { titulo: 'Vientos de Rockaway', categoria: 'pintura', tecnica: 'Óleo sobre lienzo, empaste', medidas: '', anio: '2018', disponible: 'no', destacada: 'no', coleccion: 'vendida',
+    concepto: 'Si los buenos pensamientos no fluyen, basta con mirar el panorama y escuchar lo que las olas traen a la playa.',
+    imagen: 'img/vendidas/vientos-de-rockaway.jpg', fotoAutor: 'img/vendidas/vientos-de-rockaway-con-el-autor.jpg' },
+  { titulo: 'Contemplando a Manhattan', categoria: 'pintura', tecnica: 'Óleo sobre lienzo', medidas: '', anio: '', disponible: 'no', destacada: 'no', coleccion: 'vendida',
+    concepto: 'No importa qué tan rápido o qué tan lento se avance: lo importante es seguir hacia adelante.',
+    imagen: 'img/vendidas/contemplando-a-manhattan.jpg' },
+  { titulo: 'Mi Daniel', categoria: 'pintura', tecnica: 'Óleo sobre lienzo', medidas: '', anio: '', disponible: 'no', destacada: 'no', coleccion: 'vendida',
+    concepto: 'Retrato de su hijo mirando por la ventana en otoño, cuando cada hoja parece convertirse en flor.',
+    imagen: 'img/vendidas/mi-daniel.jpg' },
+  { titulo: 'Amado Mora', categoria: 'pintura', tecnica: 'Óleo sobre lienzo, empaste', medidas: '', anio: '', disponible: 'no', destacada: 'no', coleccion: 'vendida',
+    concepto: 'Retrato del artista y curador Félix Amado Mora, encontrado en pleno corazón de Manhattan.',
+    imagen: 'img/vendidas/amado-mora.jpg' },
+  { titulo: 'Tres hermanos', categoria: 'pintura', tecnica: 'Óleo sobre lienzo', medidas: '', anio: '', disponible: 'no', destacada: 'no', coleccion: 'vendida', concepto: '', imagen: 'img/vendidas/tres-hermanos.jpg' },
+  { titulo: 'Los caballos', categoria: 'pintura', tecnica: 'Óleo sobre lienzo', medidas: '', anio: '', disponible: 'no', destacada: 'no', coleccion: 'vendida', concepto: '', imagen: 'img/vendidas/los-caballos.jpg' },
+  { titulo: 'La puerta verde', categoria: 'pintura', tecnica: 'Óleo sobre lienzo, empaste', medidas: '', anio: '', disponible: 'no', destacada: 'no', coleccion: 'vendida', concepto: '', imagen: 'img/vendidas/la-puerta-verde.jpg' },
+  { titulo: 'Retrato con flor', categoria: 'dibujo', tecnica: 'Carbón y color sobre papel', medidas: '', anio: '', disponible: 'no', destacada: 'no', coleccion: 'vendida', concepto: '', imagen: 'img/vendidas/retrato-con-flor.jpg' },
+  { titulo: 'Velero al atardecer', categoria: 'pintura', tecnica: 'Óleo sobre lienzo, empaste', medidas: '', anio: '', disponible: 'no', destacada: 'no', coleccion: 'vendida', concepto: '', imagen: 'img/vendidas/velero-al-atardecer.jpg' },
+  { titulo: 'Pastor alemán', categoria: 'pintura', tecnica: 'Óleo sobre lienzo, empaste', medidas: '', anio: '', disponible: 'no', destacada: 'no', coleccion: 'vendida', concepto: '', imagen: 'img/vendidas/pastor-aleman.jpg' },
+  { titulo: 'Niña de rizos', categoria: 'dibujo', tecnica: 'Carbón sobre papel', medidas: '', anio: '', disponible: 'no', destacada: 'no', coleccion: 'vendida', concepto: '', imagen: 'img/vendidas/nina-de-rizos.jpg' },
+  { titulo: 'Palmeras junto al lago', categoria: 'pintura', tecnica: 'Óleo sobre lienzo', medidas: '', anio: '', disponible: 'no', destacada: 'no', coleccion: 'vendida', concepto: '', imagen: 'img/vendidas/palmeras-junto-al-lago.jpg' },
+  { titulo: 'Dulces sueños', categoria: 'pintura', tecnica: 'Óleo sobre lienzo', medidas: '', anio: '', disponible: 'no', destacada: 'no', coleccion: 'vendida', concepto: '', imagen: 'img/vendidas/dulces-suenos.jpg' },
+  { titulo: 'Retrato en azul', categoria: 'pintura', tecnica: 'Óleo sobre lienzo', medidas: '', anio: '', disponible: 'no', destacada: 'no', coleccion: 'vendida', concepto: '', imagen: 'img/vendidas/retrato-en-azul.jpg' },
+  { titulo: 'Ola al atardecer', categoria: 'pintura', tecnica: 'Óleo sobre lienzo, empaste', medidas: '', anio: '', disponible: 'no', destacada: 'no', coleccion: 'vendida', concepto: '', imagen: 'img/vendidas/ola-al-atardecer.jpg' },
+  { titulo: 'Junto a la fuente', categoria: 'pintura', tecnica: 'Óleo sobre lienzo, empaste', medidas: '', anio: '', disponible: 'no', destacada: 'no', coleccion: 'vendida', concepto: '', imagen: 'img/vendidas/junto-a-la-fuente.jpg' },
+  { titulo: 'Sonrisa', categoria: 'dibujo', tecnica: 'Carbón sobre papel', medidas: '', anio: '', disponible: 'no', destacada: 'no', coleccion: 'vendida', concepto: '', imagen: 'img/vendidas/sonrisa.jpg' },
+  { titulo: 'Eucaliptos', categoria: 'pintura', tecnica: 'Óleo sobre lienzo', medidas: '', anio: '', disponible: 'no', destacada: 'no', coleccion: 'vendida', concepto: '', imagen: 'img/vendidas/eucaliptos.jpg' },
+  { titulo: 'Retrato de graduación', categoria: 'pintura', tecnica: 'Óleo sobre lienzo', medidas: '', anio: '', disponible: 'no', destacada: 'no', coleccion: 'vendida', concepto: '', imagen: 'img/vendidas/retrato-de-graduacion.jpg' },
+  { titulo: 'Remanso', categoria: 'pintura', tecnica: 'Óleo sobre lienzo', medidas: '', anio: '', disponible: 'no', destacada: 'no', coleccion: 'vendida', concepto: '', imagen: 'img/vendidas/remanso.jpg' },
+  { titulo: 'El conferencista', categoria: 'dibujo', tecnica: 'Carbón sobre papel', medidas: '', anio: '', disponible: 'no', destacada: 'no', coleccion: 'vendida', concepto: '', imagen: 'img/vendidas/el-conferencista.jpg' },
+  { titulo: 'Oleaje', categoria: 'pintura', tecnica: 'Óleo sobre lienzo, empaste', medidas: '', anio: '', disponible: 'no', destacada: 'no', coleccion: 'vendida', concepto: '', imagen: 'img/vendidas/oleaje.jpg' },
+  { titulo: 'Dama con aretes', categoria: 'dibujo', tecnica: 'Carbón y pastel sobre papel', medidas: '', anio: '', disponible: 'no', destacada: 'no', coleccion: 'vendida', concepto: '', imagen: 'img/vendidas/dama-con-aretes.jpg' },
+  { titulo: 'Abedules', categoria: 'pintura', tecnica: 'Óleo sobre lienzo, empaste', medidas: '', anio: '', disponible: 'no', destacada: 'no', coleccion: 'vendida', concepto: '', imagen: 'img/vendidas/abedules.jpg' },
+  { titulo: 'Retrato familiar', categoria: 'dibujo', tecnica: 'Carbón sobre papel', medidas: '', anio: '', disponible: 'no', destacada: 'no', coleccion: 'vendida', concepto: '', imagen: 'img/vendidas/retrato-familiar.jpg' },
+  { titulo: 'Bosque junto al río', categoria: 'pintura', tecnica: 'Óleo sobre lienzo', medidas: '', anio: '', disponible: 'no', destacada: 'no', coleccion: 'vendida', concepto: '', imagen: 'img/vendidas/bosque-junto-al-rio.jpg' },
+  { titulo: 'Retrato de pareja', categoria: 'dibujo', tecnica: 'Carbón sobre papel', medidas: '', anio: '', disponible: 'no', destacada: 'no', coleccion: 'vendida', concepto: '', imagen: 'img/vendidas/retrato-de-pareja.jpg' },
+  { titulo: 'La marina', categoria: 'dibujo', tecnica: 'Carbón sobre papel', medidas: '', anio: '', disponible: 'no', destacada: 'no', coleccion: 'vendida', concepto: '', imagen: 'img/vendidas/la-marina.jpg' },
+  { titulo: 'Ventana con bicicleta', categoria: 'pintura', tecnica: 'Óleo sobre lienzo', medidas: '', anio: '', disponible: 'no', destacada: 'no', coleccion: 'vendida', concepto: 'Fotografía del maestro con la obra.', imagen: 'img/vendidas/ventana-con-bicicleta-con-el-autor.jpg' },
+  { titulo: 'Retrato en pastel', categoria: 'dibujo', tecnica: 'Pastel sobre papel', medidas: '', anio: '', disponible: 'no', destacada: 'no', coleccion: 'vendida', concepto: '', imagen: 'img/vendidas/retrato-en-pastel.jpg' },
+  { titulo: 'Figura en sepia', categoria: 'dibujo', tecnica: 'Carbón y sepia sobre papel', medidas: '', anio: '', disponible: 'no', destacada: 'no', coleccion: 'vendida', concepto: '', imagen: 'img/vendidas/figura-en-sepia.jpg' },
+  { titulo: 'Río en la selva', categoria: 'pintura', tecnica: 'Óleo sobre lienzo', medidas: '', anio: '', disponible: 'no', destacada: 'no', coleccion: 'vendida', concepto: '', imagen: 'img/vendidas/rio-en-la-selva.jpg' },
+  { titulo: 'Retrato de caballero I', categoria: 'dibujo', tecnica: 'Carbón sobre papel', medidas: '', anio: '', disponible: 'no', destacada: 'no', coleccion: 'vendida', concepto: '', imagen: 'img/vendidas/retrato-de-caballero-1.jpg' },
+  { titulo: 'Retrato de caballero II', categoria: 'dibujo', tecnica: 'Carbón sobre papel', medidas: '', anio: '', disponible: 'no', destacada: 'no', coleccion: 'vendida', concepto: '', imagen: 'img/vendidas/retrato-de-caballero-2.jpg' },
+  { titulo: 'Retrato de caballero III', categoria: 'dibujo', tecnica: 'Carbón sobre papel', medidas: '', anio: '', disponible: 'no', destacada: 'no', coleccion: 'vendida', concepto: '', imagen: 'img/vendidas/retrato-de-caballero-3.jpg' },
+  { titulo: 'Retrato de caballero IV', categoria: 'dibujo', tecnica: 'Pastel sobre papel', medidas: '', anio: '', disponible: 'no', destacada: 'no', coleccion: 'vendida', concepto: '', imagen: 'img/vendidas/retrato-de-caballero-4.jpg' },
+
   // Ebanistería: agregar fotos reales de marcos, muebles y puertas del taller
   { titulo: 'Marcos de autor', categoria: 'ebanisteria', tecnica: 'Talla a mano, acabado en cera', medidas: 'A medida', anio: '', disponible: 'si', destacada: 'no', concepto: '', imagen: '' },
   { titulo: 'Muebles a medida', categoria: 'ebanisteria', tecnica: 'Madera maciza, ensambles tradicionales', medidas: 'A medida', anio: '', disponible: 'si', destacada: 'no', concepto: '', imagen: '' },
@@ -307,6 +378,11 @@ function marcadorObra(titulo) {
   return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
 }
 const fotoObra = o => o && o.imagen ? enlaceDrive(o.imagen) : marcadorObra(o && o.titulo);
+// Versión liviana (carpeta mini/) para miniaturas y para el museo 3D; las fotos de Drive se usan tal cual
+const miniObra = o => o && /^img\//.test(o.imagen || '') ? o.imagen.replace(/\/([^/]+)$/, '/mini/$1') : fotoObra(o);
+// Colección de cada obra: exposicion (muestra actual), vendida (colección privada) o vacío
+const esVendida = o => o.coleccion ? o.coleccion === 'vendida' : /^(no|vendida|vendido)$/i.test(o.disponible || '');
+const deColeccion = c => OBRAS.filter(o => (o.coleccion || '') === c && o.categoria !== 'ebanisteria');
 
 // Lista de certificados de un hito (acepta varias rutas separadas por coma)
 const certificadosDe = t => String(t.certificado || '').split(',').map(s => s.trim()).filter(Boolean).map(enlaceDrive);
@@ -333,9 +409,9 @@ function abrirVisor(fotos, inicio = 0, titulo = '') {
     <img style="max-width:100%;max-height:82vh;box-shadow:0 20px 60px rgba(0,0,0,.5);background:#fff" alt="">
     <p style="color:#EEE7DA;font-family:'Cormorant Garamond',serif;font-size:20px;margin-top:14px;text-align:center"></p>
     <div style="display:flex;gap:10px;margin-top:10px">
-      <button data-a="-1" style="color:#EEE7DA;border:1px solid rgba(238,231,218,.4);border-radius:999px;padding:6px 16px">Anterior</button>
-      <button data-a="0" style="color:#241A13;background:#EEE7DA;border-radius:999px;padding:6px 16px">Cerrar</button>
-      <button data-a="1" style="color:#EEE7DA;border:1px solid rgba(238,231,218,.4);border-radius:999px;padding:6px 16px">Siguiente</button>
+      <button data-a="-1" style="color:#EEE7DA;background:rgba(238,231,218,.12);border:1px solid rgba(238,231,218,.55);border-radius:999px;padding:6px 16px;font:inherit;cursor:pointer">‹ Anterior</button>
+      <button data-a="0" style="color:#241A13;background:#EEE7DA;border:1px solid #EEE7DA;border-radius:999px;padding:6px 16px;font:inherit;cursor:pointer">Cerrar</button>
+      <button data-a="1" style="color:#EEE7DA;background:rgba(238,231,218,.12);border:1px solid rgba(238,231,218,.55);border-radius:999px;padding:6px 16px;font:inherit;cursor:pointer">Siguiente ›</button>
     </div>`;
   const img = v.querySelector('img'), cap = v.querySelector('p');
   const pintar = () => {
