@@ -1677,6 +1677,8 @@
       texto: 'Obra original, retratos por encargo, muebles, puertas, cocinas, marcos y bastidores a la medida.',
       acciones: [
         { txt: 'Escribir por WhatsApp', href: enlaceWA('Hola Maestro Santamaría, visité su casa-museo virtual y quisiera más información.'), clase: 'boton-oscuro', externo: true },
+        { txt: 'Instagram', href: CONFIG.instagram, clase: 'boton-borde', externo: true },
+        { txt: 'Facebook', href: CONFIG.facebook, clase: 'boton-borde', externo: true },
         { txt: 'Ver la versión clásica', href: 'sitio.html', clase: 'boton-borde' }
       ]
     }
