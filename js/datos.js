@@ -28,9 +28,9 @@ const CONFIG = {
   hojaObras: '',        // enlace CSV de la pestaña "obras"
   hojaTrayectoria: '',  // enlace CSV de la pestaña "trayectoria"
 
-  whatsapp: '573208296045',
-  whatsapp2: '573173935276',
-  correo: 'santamaria.art1@gmail.com',
+  whatsapp: '573208296045',     // WhatsApp del maestro (todos los botones del sitio)
+  soporte: '573114225536',      // WhatsApp del administrador del sitio (solo en el pie de la versión clásica)
+  correo: 'contacto@santamariaart.com',
   facebook: 'https://www.facebook.com/santamaria.art',
   instagram: 'https://www.instagram.com/santamaria_art',
 

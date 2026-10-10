@@ -97,7 +97,9 @@ El sitio se publica en **Cloudflare Pages** conectado a este repositorio: cada v
 - Configuración del proyecto en Cloudflare: *Framework preset* = **None**, *Build command* = vacío, *Build output directory* = `/`.
 - Cabeceras de caché y seguridad: archivo `_headers` (sirve también en Netlify; `netlify.toml` queda como alternativa).
 - `.assetsignore`: lo que no se publica (`.git`, `originales/`, `contenido/`, este README).
-- Formulario de contacto: FormSubmit hacia santamaria.art1@gmail.com (la primera vez llega un correo de activación que hay que confirmar).
+- WhatsApp del maestro: +57 320 829 6045 (`CONFIG.whatsapp`). Administrador del sitio: Oscar Santamaría, +57 311 422 5536 (`CONFIG.soporte`, solo en el pie de la versión clásica).
+- Correo del sitio: contacto@santamariaart.com (Cloudflare Email Routing lo reenvía a oscars.santamaria@gmail.com).
+- Formulario de contacto: FormSubmit hacia contacto@santamariaart.com (la primera vez llega un correo de activación que hay que confirmar).
 - Dominio propio: Cloudflare → *Workers & Pages* → el proyecto → *Custom domains*.
 
 ## Pendientes

@@ -1673,7 +1673,7 @@
   PARADAS.push({
     id: 'despedida', piso: AFUERA, nombre: 'Gracias por su visita', zona: 'afuera', pos: V(-6, OJO.afuera, 15), mira: V(0, 4.5, -2),
     ficha: {
-      sup: 'Gracias por su visita', titulo: 'Conversemos sobre su próxima obra', detalle: 'santamaria.art1@gmail.com · +57 320 829 6045',
+      sup: 'Gracias por su visita', titulo: 'Conversemos sobre su próxima obra', detalle: 'contacto@santamariaart.com · +57 320 829 6045',
       texto: 'Obra original, retratos por encargo, muebles, puertas, cocinas, marcos y bastidores a la medida.',
       acciones: [
         { txt: 'Escribir por WhatsApp', href: enlaceWA('Hola Maestro Santamaría, visité su casa-museo virtual y quisiera más información.'), clase: 'boton-oscuro', externo: true },
