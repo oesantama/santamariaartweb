@@ -335,6 +335,12 @@ async function cargarDatos(alActualizar) {
   if (cambio) alActualizar();
 }
 
+/* Íconos oficiales de cada red (con sus colores de marca) */
+const ICONOS_RED = {
+  instagram: `<svg viewBox="0 0 24 24" width="1.35em" height="1.35em" aria-hidden="true"><defs><radialGradient id="degradadoIG" cx="30%" cy="107%" r="150%"><stop offset="0" stop-color="#fdf497"/><stop offset=".05" stop-color="#fdf497"/><stop offset=".45" stop-color="#fd5949"/><stop offset=".6" stop-color="#d6249f"/><stop offset=".9" stop-color="#285AEB"/></radialGradient></defs><rect width="24" height="24" rx="6" fill="url(#degradadoIG)"/><rect x="5" y="5" width="14" height="14" rx="4" fill="none" stroke="#fff" stroke-width="1.8"/><circle cx="12" cy="12" r="3.3" fill="none" stroke="#fff" stroke-width="1.8"/><circle cx="16.4" cy="7.6" r="1.1" fill="#fff"/></svg>`,
+  facebook: `<svg viewBox="0 0 24 24" width="1.35em" height="1.35em" aria-hidden="true"><circle cx="12" cy="12" r="12" fill="#1877F2"/><path d="M15.1 15.5l.5-3.5h-3.3V9.8c0-1 .5-1.9 2-1.9h1.5V5c-.9-.1-1.8-.2-2.7-.2-2.8 0-4.5 1.7-4.5 4.7V12H5.6v3.5h3v8.4c.6.1 1.2.1 1.8.1s1.2 0 1.8-.1v-8.4z" fill="#fff"/></svg>`
+};
+
 /* Enlaces comunes: WhatsApp, redes, correo y año del pie de página */
 function aplicarEnlacesComunes() {
   document.querySelectorAll('[data-wa]').forEach(a => {
@@ -343,6 +349,12 @@ function aplicarEnlacesComunes() {
   });
   document.querySelectorAll('[data-red]').forEach(a => {
     a.href = CONFIG[a.dataset.red]; a.target = '_blank'; a.rel = 'noopener';
+    // data-icono: antepone el ícono de la red (o lo pone solo si el enlace no tiene texto)
+    if (a.hasAttribute('data-icono') && !a.querySelector('svg')) {
+      a.insertAdjacentHTML('afterbegin', ICONOS_RED[a.dataset.red] || '');
+      a.style.display = a.style.display || 'inline-flex'; a.style.alignItems = 'center'; a.style.gap = '.45em';
+      if (!a.textContent.trim()) a.setAttribute('aria-label', a.dataset.red === 'facebook' ? 'Facebook' : 'Instagram');
+    }
   });
   document.querySelectorAll('[data-anio]').forEach(el => el.textContent = new Date().getFullYear());
 

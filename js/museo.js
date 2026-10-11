@@ -1677,8 +1677,8 @@
       texto: 'Obra original, retratos por encargo, muebles, puertas, cocinas, marcos y bastidores a la medida.',
       acciones: [
         { txt: 'Escribir por WhatsApp', href: enlaceWA('Hola Maestro Santamaría, visité su casa-museo virtual y quisiera más información.'), clase: 'boton-oscuro', externo: true },
-        { txt: 'Instagram', href: CONFIG.instagram, clase: 'boton-borde', externo: true },
-        { txt: 'Facebook', href: CONFIG.facebook, clase: 'boton-borde', externo: true },
+        { txt: 'Instagram', href: CONFIG.instagram, clase: 'boton-borde', externo: true, icono: 'instagram' },
+        { txt: 'Facebook', href: CONFIG.facebook, clase: 'boton-borde', externo: true, icono: 'facebook' },
         { txt: 'Ver la versión clásica', href: 'sitio.html', clase: 'boton-borde' }
       ]
     }
@@ -1832,6 +1832,7 @@
     (f.acciones || []).forEach(a => {
       const el = document.createElement(a.href ? 'a' : 'button');
       el.className = 'boton ' + (a.clase || 'boton-borde'); el.textContent = a.txt;
+      if (a.icono) el.insertAdjacentHTML('afterbegin', ICONOS_RED[a.icono] || '');
       if (a.href) { el.href = a.href; if (a.externo) { el.target = '_blank'; el.rel = 'noopener'; } }
       else el.addEventListener('click', () => a.parada ? irA(indiceDe(a.parada)) : a.fn());
       acc.appendChild(el);
