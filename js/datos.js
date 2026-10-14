@@ -203,10 +203,11 @@ let OBRAS = [
   { titulo: 'Retrato de caballero III', categoria: 'dibujo', tecnica: 'Carbón sobre papel', medidas: '', anio: '', disponible: 'no', destacada: 'no', coleccion: 'vendida', concepto: '', imagen: 'img/vendidas/retrato-de-caballero-3.jpg' },
   { titulo: 'Retrato de caballero IV', categoria: 'dibujo', tecnica: 'Pastel sobre papel', medidas: '', anio: '', disponible: 'no', destacada: 'no', coleccion: 'vendida', concepto: '', imagen: 'img/vendidas/retrato-de-caballero-4.jpg' },
 
-  // Ebanistería: agregar fotos reales de marcos, muebles y puertas del taller
-  { titulo: 'Marcos de autor', categoria: 'ebanisteria', tecnica: 'Talla a mano, acabado en cera', medidas: 'A medida', anio: '', disponible: 'si', destacada: 'no', concepto: '', imagen: '' },
-  { titulo: 'Muebles a medida', categoria: 'ebanisteria', tecnica: 'Madera maciza, ensambles tradicionales', medidas: 'A medida', anio: '', disponible: 'si', destacada: 'no', concepto: '', imagen: '' },
-  { titulo: 'Puertas y portones', categoria: 'ebanisteria', tecnica: 'Madera maciza, talla decorativa', medidas: 'A medida', anio: '', disponible: 'si', destacada: 'no', concepto: '', imagen: '' }
+  // Ebanistería: trabajos reales del taller
+  { titulo: 'Closets y muebles a medida', categoria: 'ebanisteria', tecnica: 'Madera y acabados naturales, cajonería y repisas', medidas: 'A la medida', anio: '2024', disponible: 'si', destacada: 'si', concepto: 'Diseño y fabricación para optimizar el espacio con ensambles precisos y finos acabados.', imagen: 'img/obras/muebles-a-medida.jpg' },
+  { titulo: 'Puertas de paso y portones', categoria: 'ebanisteria', tecnica: 'Madera maciza, cerradura de diseño y marco a la medida', medidas: 'A la medida', anio: '2024', disponible: 'si', destacada: 'si', concepto: 'Puertas interiores y principales con vetas seleccionadas y acabados duraderos.', imagen: 'img/obras/puertas-y-portones.jpg' },
+  { titulo: 'Carpintería integral', categoria: 'ebanisteria', tecnica: 'Diseño arquitectónico para alcobas y espacios residenciales', medidas: 'A la medida', anio: '2024', disponible: 'si', destacada: 'si', concepto: 'Solución integral de carpintería que armoniza puertas, closets y acabados en madera.', imagen: 'img/obras/carpinteria-integral.jpg' },
+  { titulo: 'Marcos de autor', categoria: 'ebanisteria', tecnica: 'Talla a mano, ensamble tradicional y acabado en cera', medidas: 'A la medida', anio: '', disponible: 'si', destacada: 'no', concepto: 'Marcos construidos a medida para pinturas y espejos.', imagen: '' }
 ];
 
 /* Trayectoria. tipo: experiencia | exposicion | reconocimiento | formacion | hito
