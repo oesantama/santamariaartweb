@@ -39,13 +39,32 @@
       <img src="img/marca/firma-dorada.png" alt="Santamaría" />
       <span>Casa-Museo</span>
     </a>
-    <nav class="barra-acciones">
-      <button id="btnSoleado" class="boton boton-vidrio btn-clima" onclick="if(window.museo && window.museo.cambiarClima) window.museo.cambiarClima('soleado')">☀️ Soleado</button>
-      <button id="btnNublado" class="boton boton-vidrio btn-clima" onclick="if(window.museo && window.museo.cambiarClima) window.museo.cambiarClima('nublado')">⛅ Nublado</button>
-      <button id="btnLluvia" class="boton boton-vidrio btn-clima" onclick="if(window.museo && window.museo.cambiarClima) window.museo.cambiarClima('lluvia')">🌧️ Lluvia</button>
-      <button id="btnPlano" class="boton boton-vidrio" aria-expanded="false" aria-controls="plano">Plano</button>
-      <button id="btnAutor" class="boton boton-vidrio">El autor</button>
-      <a href="sitio.html" class="boton boton-vidrio"><span class="largo">Versión clásica</span><span class="corto">Clásica</span></a>
+    <nav class="barra-acciones" aria-label="Controles del museo">
+      <div class="control-clima" role="group" aria-label="Ambiente y clima">
+        <button id="btnSoleado" class="boton btn-clima activo" aria-label="Clima soleado" title="Clima soleado" onclick="if(window.museo && window.museo.cambiarClima) window.museo.cambiarClima('soleado')">
+          <span class="btn-icono" aria-hidden="true">☀️</span>
+          <span class="btn-txt">Soleado</span>
+        </button>
+        <button id="btnNublado" class="boton btn-clima" aria-label="Clima nublado" title="Clima nublado" onclick="if(window.museo && window.museo.cambiarClima) window.museo.cambiarClima('nublado')">
+          <span class="btn-icono" aria-hidden="true">⛅</span>
+          <span class="btn-txt">Nublado</span>
+        </button>
+        <button id="btnLluvia" class="boton btn-clima" aria-label="Clima lluvioso" title="Clima lluvioso" onclick="if(window.museo && window.museo.cambiarClima) window.museo.cambiarClima('lluvia')">
+          <span class="btn-icono" aria-hidden="true">🌧️</span>
+          <span class="btn-txt">Lluvia</span>
+        </button>
+      </div>
+      <button id="btnPlano" class="boton boton-vidrio" aria-expanded="false" aria-controls="plano" title="Ver plano de la casa">
+        <span class="btn-icono" aria-hidden="true">🏛️</span>
+        <span>Plano</span>
+      </button>
+      <button id="btnAutor" class="boton boton-vidrio" title="Información del autor">
+        <span class="btn-icono" aria-hidden="true">🎨</span>
+        <span class="largo">El autor</span><span class="corto">Autor</span>
+      </button>
+      <a href="sitio.html" class="boton boton-vidrio boton-clasica" title="Ir a la página clásica">
+        <span class="largo">Versión clásica</span><span class="corto">Clásica</span>
+      </a>
     </nav>
   </header>
 

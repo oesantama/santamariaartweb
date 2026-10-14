@@ -27,8 +27,7 @@
     $('carga').hidden = true; $('avisoTexto').textContent = texto; $('aviso').hidden = false;
   }
   if (location.protocol === 'file:') {
-    aviso('Por seguridad, el navegador no deja cargar las fotos de las obras cuando la página se abre como archivo. Ábrala desde Netlify o con la extensión Live Server de Visual Studio Code.');
-    return;
+    console.warn('Ejecutando en protocolo file://. En producción se sirve vía HTTP/HTTPS.');
   }
   let renderer;
   let modoClima = 'soleado';

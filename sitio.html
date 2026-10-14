@@ -15,6 +15,77 @@
   <script src="js/marca.js"></script>
   <link rel="stylesheet" href="css/marca.css" />
   <style>
+    /* Desplazamiento suave con margen para cabecera fija */
+    section, [id] {
+      scroll-margin-top: 5.5rem;
+    }
+    :focus-visible {
+      outline: 2px solid #B8914F;
+      outline-offset: 3px;
+    }
+    /* Skeletons de carga para galería */
+    .skeleton-card {
+      position: relative;
+      overflow: hidden;
+      border-radius: 1rem;
+      background: rgba(36, 26, 19, 0.08);
+      aspect-ratio: 4/5;
+      margin-bottom: 2rem;
+    }
+    .dark .skeleton-card {
+      background: rgba(238, 231, 218, 0.08);
+    }
+    .skeleton-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      transform: translateX(-100%);
+      background: linear-gradient(90deg, transparent, rgba(217, 189, 134, 0.18), transparent);
+      animation: skeleton-shimmer 1.5s infinite;
+    }
+    @keyframes skeleton-shimmer {
+      100% { transform: translateX(100%); }
+    }
+    /* Estados de alerta para formulario */
+    .estado-alerta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.65rem 1.15rem;
+      border-radius: 999px;
+      font-size: 0.875rem;
+      font-weight: 400;
+      animation: animarAlerta 0.3s cubic-bezier(0.2, 0.7, 0.2, 1);
+    }
+    .estado-alerta.exito {
+      background: rgba(46, 125, 50, 0.12);
+      color: #2e7d32;
+      border: 1px solid rgba(46, 125, 50, 0.35);
+    }
+    .dark .estado-alerta.exito {
+      background: rgba(129, 199, 132, 0.15);
+      color: #a5d6a7;
+      border-color: rgba(129, 199, 132, 0.4);
+    }
+    .estado-alerta.error {
+      background: rgba(198, 40, 40, 0.1);
+      color: #c62828;
+      border: 1px solid rgba(198, 40, 40, 0.35);
+    }
+    .dark .estado-alerta.error {
+      background: rgba(239, 83, 80, 0.15);
+      color: #ef9a9a;
+      border-color: rgba(239, 83, 80, 0.4);
+    }
+    .estado-alerta.cargando {
+      background: rgba(184, 145, 79, 0.15);
+      color: #B8914F;
+      border: 1px solid rgba(184, 145, 79, 0.35);
+    }
+    @keyframes animarAlerta {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
     /* Ficha de la obra: aparece al pasar el cursor; en celular siempre visible */
     @media (hover: hover) {
       .obra .ficha { opacity: 0; transform: translateY(8px); transition: opacity .35s, transform .35s; }
@@ -25,7 +96,7 @@
   </style>
 </head>
 
-<body class="bg-lino font-sans font-light text-tinta antialiased transition-colors dark:bg-nogal dark:text-lino">
+<body class="bg-lino font-sans font-light text-tinta antialiased transition-colors dark:bg-nogal dark:text-lino overflow-x-hidden">
 
   <!-- ============ NAVEGACIÓN ============ -->
   <header id="nav" class="fixed inset-x-0 top-0 z-50 transition-all duration-300" style="padding-top: env(safe-area-inset-top)">
@@ -41,14 +112,14 @@
         <li><a href="#formacion" class="hover:text-oro">Formación</a></li>
         <li><a href="#documentos" class="hover:text-oro">Catálogos y hojas de vida</a></li>
         <li><a href="#contacto" class="hover:text-oro">Contacto</a></li>
-        <li><a href="index.html" class="rounded-full border border-oro px-4 py-1.5 text-oro hover:bg-oro hover:text-lino">Museo 3D</a></li>
+        <li><a href="index.html" class="rounded-full border border-oro px-4 py-1.5 text-oro hover:bg-oro hover:text-lino transition">Museo 3D</a></li>
       </ul>
       <div class="flex items-center gap-2">
-        <button id="btnTema" class="grid h-10 w-10 place-items-center rounded-full hover:bg-black/5 dark:hover:bg-white/10" aria-label="Cambiar entre modo claro y oscuro">
+        <button id="btnTema" class="grid h-11 w-11 min-h-[44px] min-w-[44px] place-items-center rounded-full hover:bg-black/5 dark:hover:bg-white/10 transition" aria-label="Cambiar entre modo claro y oscuro">
           <svg class="h-5 w-5 dark:hidden" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
           <svg class="hidden h-5 w-5 dark:block" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
         </button>
-        <button id="btnMenu" class="grid h-10 w-10 place-items-center rounded-full lg:hidden" aria-label="Abrir menú" aria-expanded="false" aria-controls="menuMovil">
+        <button id="btnMenu" class="grid h-11 w-11 min-h-[44px] min-w-[44px] place-items-center rounded-full lg:hidden hover:bg-black/5 dark:hover:bg-white/10 transition" aria-label="Abrir menú" aria-expanded="false" aria-controls="menuMovil">
           <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h10"/></svg>
         </button>
       </div>
@@ -395,16 +466,35 @@
 
     function mostrarGaleria(filtro = filtroActual) {
       filtroActual = filtro;
+      const gal = document.getElementById('galeria');
       const lista = listaActual();
-      document.getElementById('galeria').innerHTML = lista.length
-        ? lista.map((o, i) => tarjeta(o, i)).join('')
-        : '<p class="text-gris">Pronto habrá nuevas obras en esta categoría. Escríbanos para conocer las piezas disponibles.</p>';
+
+      if (!lista.length) {
+        gal.innerHTML = `
+          <div class="[column-span:all] break-inside-avoid mx-auto my-12 w-full max-w-lg text-center p-8 rounded-3xl border border-oro/30 bg-papel/80 dark:bg-nogal2/80 backdrop-blur shadow-sm">
+            <div class="mx-auto grid h-16 w-16 place-items-center rounded-full bg-oro/15 text-oro text-2xl mb-4" aria-hidden="true">
+              🎨
+            </div>
+            <h4 class="font-serif text-3xl">Próximamente nuevas piezas</h4>
+            <p class="mt-2 text-sm text-gris dark:text-lino/75 leading-relaxed">
+              Actualmente las obras de esta categoría hacen parte de colecciones privadas o están en proceso de curaduría. Escríbanos para consultar disponibilidad o encargar una obra a la medida.
+            </p>
+            <div class="mt-6 flex flex-wrap justify-center gap-3">
+              <a href="${enlaceWA('Hola Maestro Santamaría, quisiera consultar sobre disponibilidad de obras o cotizar una pieza por encargo.')}" target="_blank" rel="noopener" class="inline-flex items-center gap-2 rounded-full bg-oro px-6 py-2.5 text-sm text-nogal font-normal hover:bg-oroclaro transition shadow-sm">
+                Consultar por WhatsApp
+              </a>
+            </div>
+          </div>`;
+      } else {
+        gal.innerHTML = lista.map((o, i) => tarjeta(o, i)).join('');
+      }
+
       document.querySelectorAll('.filtro').forEach(b => {
         const activo = b.dataset.filtro === filtro;
         b.setAttribute('aria-pressed', activo);
         b.className = 'filtro rounded-full border px-5 py-2 text-sm transition ' + (activo
-          ? 'border-tinta bg-tinta text-lino dark:border-lino dark:bg-lino dark:text-nogal'
-          : 'border-tinta/25 hover:border-oro dark:border-lino/25');
+          ? 'border-tinta bg-tinta text-lino dark:border-lino dark:bg-lino dark:text-nogal font-medium shadow-sm'
+          : 'border-tinta/25 hover:border-oro dark:border-lino/25 text-tinta/80 dark:text-lino/80');
       });
     }
     // Clic en una obra: se abre en grande, y se puede pasar a las demás de la misma categoría
@@ -512,26 +602,48 @@
 
     /* Formulario de contacto */
     const form = document.getElementById('formContacto'), estado = document.getElementById('estadoForm');
+    const setEstado = (tipo, msj) => {
+      if (!msj) { estado.innerHTML = ''; return; }
+      const iconos = {
+        exito: '<svg class="h-4 w-4 shrink-0 text-current" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>',
+        error: '<svg class="h-4 w-4 shrink-0 text-current" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01"/></svg>',
+        cargando: '<svg class="h-4 w-4 shrink-0 animate-spin text-current" fill="none" viewBox="0 0 24 24" aria-hidden="true"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path></svg>'
+      };
+      estado.innerHTML = `<span class="estado-alerta ${tipo}">${iconos[tipo] || ''}<span>${esc(msj)}</span></span>`;
+    };
+
     form.addEventListener('submit', async e => {
       e.preventDefault();
       const d = Object.fromEntries(new FormData(form));
       if (d._honey) return;
-      if (!d.nombre.trim() || !d.mensaje.trim()) { estado.textContent = 'Escriba su nombre y su mensaje para poder enviarlo.'; return; }
-      if (!/^\S+@\S+\.\S+$/.test(d.email)) { estado.textContent = 'Revise su correo: debe tener el formato nombre@dominio.com.'; return; }
+      if (!d.nombre.trim() || !d.mensaje.trim()) {
+        setEstado('error', 'Por favor escriba su nombre y su mensaje para enviarlo.');
+        return;
+      }
+      if (!/^\S+@\S+\.\S+$/.test(d.email)) {
+        setEstado('error', 'Revise su correo: debe tener el formato nombre@dominio.com.');
+        return;
+      }
       const boton = form.querySelector('button[type=submit]');
-      boton.disabled = true; boton.textContent = 'Enviando…'; estado.textContent = '';
+      boton.disabled = true;
+      boton.innerHTML = '<span class="inline-flex items-center gap-2"><svg class="h-4 w-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path></svg> Enviando…</span>';
+      setEstado('cargando', 'Enviando su mensaje al Maestro Santamaría…');
       try {
         const r = await fetch(`https://formsubmit.co/ajax/${CONFIG.correo}`, {
           method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
           body: JSON.stringify({ ...d, _subject: `Consulta web: ${d.motivo}`, _template: 'table' })
         });
         if (!r.ok) throw new Error();
-        form.reset(); estado.textContent = 'Mensaje enviado. El maestro le responderá pronto a su correo.';
+        form.reset();
+        setEstado('exito', '¡Mensaje enviado con éxito! El maestro le responderá pronto a su correo.');
       } catch {
         const cuerpo = `Nombre: ${d.nombre}\nCorreo: ${d.email}\nMotivo: ${d.motivo}\n\n${d.mensaje}`;
         location.href = `mailto:${CONFIG.correo}?subject=${encodeURIComponent('Consulta web: ' + d.motivo)}&body=${encodeURIComponent(cuerpo)}`;
-        estado.textContent = 'Abrimos su programa de correo con el mensaje listo para enviar.';
-      } finally { boton.disabled = false; boton.textContent = 'Enviar mensaje'; }
+        setEstado('exito', 'Abrimos su programa de correo con el mensaje listo para enviar.');
+      } finally {
+        boton.disabled = false;
+        boton.textContent = 'Enviar mensaje';
+      }
     });
   </script>
 </body>

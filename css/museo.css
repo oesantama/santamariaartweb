@@ -20,18 +20,29 @@ a { color: inherit; }
 
 /* Botones */
 .boton { display: inline-flex; align-items: center; justify-content: center; gap: .4rem; border: 0; border-radius: 999px;
-  padding: .6rem 1.1rem; font: 400 .875rem/1 var(--sans); text-decoration: none; cursor: pointer; transition: background .2s, color .2s, border-color .2s; }
-.boton-vidrio { background: var(--vidrio); color: var(--lino); border: 1px solid rgba(238,231,218,.22); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
-.boton-vidrio:hover { border-color: var(--oroclaro); color: var(--oroclaro); }
+  min-height: 40px; padding: .55rem 1.05rem; font: 400 .875rem/1 var(--sans); text-decoration: none; cursor: pointer;
+  transition: background .2s cubic-bezier(.2,.7,.2,1), color .2s, border-color .2s, transform .15s, box-shadow .2s; }
+.boton:active { transform: scale(0.97); }
+.boton-vidrio { background: var(--vidrio); color: var(--lino); border: 1px solid rgba(238,231,218,.25); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+.boton-vidrio:hover { border-color: var(--oroclaro); color: var(--oroclaro); box-shadow: 0 4px 14px rgba(0,0,0,.25); }
 .boton-claro { background: var(--lino); color: var(--nogal); }
 .boton-claro:hover { background: var(--oroclaro); }
 .boton-oscuro { background: var(--tinta); color: var(--lino); }
 .boton-oscuro:hover { background: var(--arcilla); }
 .boton-borde { background: transparent; color: var(--tinta); border: 1px solid rgba(46,38,33,.3); }
 .boton-borde:hover { border-color: var(--oro); color: var(--arcilla); }
-.cerrar { position: absolute; top: .6rem; right: .8rem; width: 2.2rem; height: 2.2rem; border: 0; border-radius: 50%;
-  background: transparent; color: inherit; font-size: 1.6rem; line-height: 1; cursor: pointer; opacity: .7; }
-.cerrar:hover { opacity: 1; }
+.cerrar { position: absolute; top: .6rem; right: .8rem; width: 44px; height: 44px; min-width: 44px; min-height: 44px; border: 0; border-radius: 50%;
+  display: inline-flex; align-items: center; justify-content: center; background: rgba(0,0,0,.08); color: inherit; font-size: 1.7rem; line-height: 1; cursor: pointer; opacity: .75; transition: opacity .2s, background .2s, transform .15s; }
+.cerrar:hover { opacity: 1; background: rgba(0,0,0,.15); transform: scale(1.06); }
+.cerrar:active { transform: scale(0.94); }
+
+/* Control de clima segmentado */
+.control-clima { display: inline-flex; align-items: center; background: var(--vidrio); border: 1px solid rgba(238,231,218,.22); border-radius: 999px;
+  padding: 3px; gap: 2px; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); box-shadow: 0 4px 14px rgba(0,0,0,.2); }
+.control-clima .boton { min-height: 34px; padding: .4rem .75rem; font-size: .82rem; background: transparent; border: 1px solid transparent; color: rgba(238,231,218,.85); }
+.control-clima .boton:hover { color: var(--oroclaro); border-color: rgba(217,189,134,.3); }
+.control-clima .boton.activo { background: rgba(184,145,79,.38); border-color: var(--oro); color: #fff; font-weight: 500; box-shadow: 0 0 10px rgba(184,145,79,.3); }
+
 
 /* Carga */
 .carga, .aviso { position: fixed; inset: 0; z-index: 60; display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -115,13 +126,37 @@ a { color: inherit; }
 .guia-texto strong { font: 500 1.15rem/1.15 var(--serif); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
 
 @media (max-width: 640px) {
+  .barra-sup { padding: calc(10px + env(safe-area-inset-top)) 12px 10px; gap: 8px; }
   .marca span { display: none; }
+  .marca img { height: 28px; }
   .largo { display: none; } .corto { display: inline; }
-  .marca img { height: 30px; }
-  .barra-acciones .boton { padding: .5rem .8rem; font-size: .8rem; }
-  .ficha { left: 12px; right: 12px; width: auto; bottom: 104px; max-height: 46vh; padding: 18px 18px 14px; }
+
+  .barra-acciones {
+    gap: 4px;
+    max-width: calc(100vw - 48px);
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    -webkit-overflow-scrolling: touch;
+    padding: 2px 0;
+  }
+  .barra-acciones::-webkit-scrollbar { display: none; }
+
+  .control-clima { padding: 2px; gap: 1px; }
+  .control-clima .btn-txt { display: none; }
+  .control-clima .boton { min-height: 36px; padding: .35rem .55rem; font-size: .95rem; }
+
+  .barra-acciones .boton { min-height: 36px; padding: .4rem .65rem; font-size: .78rem; gap: .25rem; }
+  .barra-acciones .boton .btn-icono { font-size: .9rem; }
+
+  .ficha { left: 12px; right: 12px; width: auto; bottom: 104px; max-height: 48vh; padding: 18px 18px 14px; border-radius: 16px; }
   .ficha h2 { font-size: 1.55rem; }
   .autor-cols { grid-template-columns: 1fr; gap: 16px; }
-  .plano { right: 12px; left: 12px; width: auto; }
+  .plano { right: 12px; left: 12px; width: auto; border-radius: 16px; max-height: calc(100vh - 160px); }
+
+  .guia-barra { gap: 6px; padding: 4px; }
+  .guia-flecha { width: 42px; height: 42px; font-size: 1.6rem; }
+  .guia-texto { width: min(280px, 58vw); }
+  .guia-texto strong { font-size: 1.05rem; }
 }
 @media (prefers-reduced-motion: reduce) { .ficha, .autor-caja { animation: none; } }
