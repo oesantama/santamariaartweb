@@ -11,11 +11,11 @@ function fichaObra(o, i) {
     : esVendida(o) ? 'Colección privada · Se aceptan encargos similares'
     : /^no$/i.test(o.disponible || '') ? 'Obra de exposición · Se aceptan encargos similares' : 'Precio a consultar · Incluye certificado de autenticidad';
   return `<div>
-    <div class="flex h-[68mm] items-end"><div class="marco"><div class="paspartu"><div class="lienzo" style="height:55mm;max-width:76mm">
-      <img src="${esc(fotoObra(o))}" alt="${esc(o.titulo)}" onerror="imgFallback(this)" style="width:auto;max-width:76mm;height:55mm;object-fit:cover"></div></div></div></div>
-    <p class="serif mt-[5mm]" style="font-size:15.5pt!important;font-weight:600;line-height:1.1"><span class="mr-[2mm] italic" style="font-weight:400;color:#B8914F">${['I', 'II', 'III', 'IV'][i]}</span>${esc(o.titulo)}</p>
-    <p class="mb-[2mm] mt-[1.4mm]" style="font-size:7.8pt!important;color:#6F6258;line-height:1.45">${esc([o.tecnica, o.medidas, o.anio].filter(Boolean).join(' · '))}<br>${nota}</p>
-    ${o.concepto ? `<p class="serif italic" style="font-size:10.6pt!important;line-height:1.33">${esc(o.concepto)}</p>` : ''}
+    <div class="flex h-[60mm] items-end"><div class="marco" style="padding: clamp(6px, 1vw, 12px)"><div class="paspartu" style="padding: clamp(3px, .6vw, 6px)"><div class="lienzo" style="height:48mm;max-width:74mm">
+      <img src="${esc(fotoObra(o))}" alt="${esc(o.titulo)}" onerror="imgFallback(this)" style="width:auto;max-width:74mm;height:48mm;object-fit:cover"></div></div></div></div>
+    <p class="serif mt-[3.5mm]" style="font-size:14pt!important;font-weight:600;line-height:1.15"><span class="mr-[2mm] italic" style="font-weight:400;color:#B8914F">${['I', 'II', 'III', 'IV'][i]}</span>${esc(o.titulo)}</p>
+    <p class="mb-[1.5mm] mt-[1mm]" style="font-size:7.5pt!important;color:#6F6258;line-height:1.4">${esc([o.tecnica, o.medidas, o.anio].filter(Boolean).join(' · '))}<br>${nota}</p>
+    ${o.concepto ? `<p class="serif italic" style="font-size:9.5pt!important;line-height:1.3;color:#3b2f26">${esc(o.concepto)}</p>` : ''}
   </div>`;
 }
 
@@ -24,14 +24,14 @@ function paginasColeccion(contenedor, obras, { titulo = 'Colección', texto = ''
   const grupos = []; for (let i = 0; i < obras.length; i += 4) grupos.push(obras.slice(i, i + 4));
   document.getElementById(contenedor).innerHTML = grupos.map((g, n) => `
     <section class="hoja" style="background:#F6F2EA">
-      <div class="px-[18mm] pt-[20mm]">
-        <div class="mb-[9mm] flex items-end justify-between gap-[12mm]">
-          <h2 class="serif whitespace-nowrap" style="font-size:32pt;font-weight:500">${titulo}${grupos.length > 1 ? ` <span class="italic" style="color:#B8914F">${n + 1}</span>` : ''}</h2>
-          <p style="font-size:8.6pt!important;max-width:84mm;color:#6F6258">${texto}</p>
+      <div class="px-[18mm] pt-[18mm]">
+        <div class="mb-[6mm] flex items-end justify-between gap-[10mm]">
+          <h2 class="serif whitespace-nowrap" style="font-size:30pt;font-weight:500">${titulo}${grupos.length > 1 ? ` <span class="italic" style="color:#B8914F">${n + 1}</span>` : ''}</h2>
+          <p style="font-size:8.4pt!important;max-width:86mm;color:#6F6258;line-height:1.4">${texto}</p>
         </div>
-        <div class="grid grid-cols-2 gap-x-[12mm] gap-y-[7mm]">${g.map(fichaObra).join('')}</div>
+        <div class="grid grid-cols-2 gap-x-[12mm] gap-y-[5mm]">${g.map(fichaObra).join('')}</div>
       </div>
-      <p class="absolute inset-x-[18mm] bottom-[20mm] border-t border-tinta/20 pt-[3.4mm]" style="font-size:8.2pt!important;color:#6F6258">${pie}</p>
+      <p class="absolute inset-x-[18mm] bottom-[18mm] border-t border-tinta/20 pt-[3mm]" style="font-size:8pt!important;color:#6F6258">${pie}</p>
       <div class="folio"><span>${titulo}</span><span class="n"></span></div>
     </section>`).join('');
 }

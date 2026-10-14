@@ -5,18 +5,86 @@
        "Guardar como PDF" salen como catálogo. Lo usan catalogo-arte.html y
        catalogo-ebanisteria.html.
        ===================================================================== */
-    @page { size: A4; margin: 0; }
+    @page { size: A4 portrait; margin: 0; }
+    html, body { margin: 0; padding: 0; }
     body { background: #d9d2c5; font-family: 'Jost', sans-serif; font-weight: 350; color: #2E2621; }
-    .hoja { width: 210mm; height: 297mm; position: relative; overflow: hidden; margin: 0 auto 28px;
-            background-color: #EEE7DA; box-shadow: 0 10px 40px -10px rgba(40,25,10,.35); }
+    .hoja {
+      width: 210mm;
+      height: 297mm;
+      position: relative;
+      overflow: hidden;
+      margin: 0 auto 28px;
+      background-color: #EEE7DA;
+      box-shadow: 0 10px 40px -10px rgba(40,25,10,.35);
+      box-sizing: border-box;
+    }
+
+    /* Marca de agua del artista en cada hoja del catálogo */
+    .hoja::before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 140mm;
+      height: 95mm;
+      transform: translate(-50%, -50%) rotate(-7deg);
+      background: url('../img/marca/firma-oscura.png') no-repeat center / contain;
+      opacity: 0.045;
+      pointer-events: none;
+      z-index: 1;
+    }
+    .hoja.madera-oscura::before,
+    .hoja.madera-banda::before {
+      background-image: url('../img/marca/firma-dorada.png');
+      opacity: 0.065;
+    }
+
+    .marco { position: relative; z-index: 2; }
     .serif { font-family: 'Cormorant Garamond', serif; }
     .hoja p { font-size: 9.6pt; line-height: 1.58; }
-    .folio { position: absolute; bottom: 10mm; left: 18mm; right: 18mm; display: flex; justify-content: space-between; font-size: 7pt; letter-spacing: .06em; color: #6F6258; }
+    .folio {
+      position: absolute;
+      bottom: 10mm;
+      left: 18mm;
+      right: 18mm;
+      display: flex;
+      justify-content: space-between;
+      font-size: 7pt;
+      letter-spacing: .06em;
+      color: #6F6258;
+      z-index: 2;
+    }
     .folio .n { font-family: 'Cormorant Garamond', serif; font-size: 10pt; font-style: italic; }
     .lienzo img { display: block; width: 100%; height: 100%; object-fit: cover; }
+
     @media print {
-      body { background: none; }
-      .hoja { margin: 0; box-shadow: none; zoom: 1 !important; break-after: page; }
+      html, body {
+        width: 210mm !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        background: none !important;
+      }
+      .hoja {
+        width: 210mm !important;
+        height: 297mm !important;
+        min-height: 297mm !important;
+        max-height: 297mm !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        box-shadow: none !important;
+        zoom: 1 !important;
+        page-break-after: always !important;
+        break-after: page !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+        overflow: hidden !important;
+        box-sizing: border-box !important;
+      }
+      .hoja:last-of-type,
+      .hoja:last-child {
+        page-break-after: auto !important;
+        break-after: auto !important;
+      }
       .no-imprimir { display: none !important; }
-      * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
     }

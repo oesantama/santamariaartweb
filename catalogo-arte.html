@@ -72,24 +72,37 @@
   <!-- 3 · COLECCIÓN (obras con destacada = si) -->
   <div id="paginasColeccion"></div>
 
-  <!-- TRAYECTORIA Y RECONOCIMIENTOS (se genera con la pestaña "trayectoria") -->
+  <!-- 4 · TRAYECTORIA · PREMIOS Y RECONOCIMIENTOS -->
   <section class="hoja">
     <div class="px-[18mm] pt-[20mm]">
-      <h2 class="serif" style="font-size:32pt;font-weight:500">Trayectoria y reconocimientos</h2>
-      <p class="mt-[2mm] max-w-[150mm]" style="color:#6F6258">Exposiciones colectivas y premios en Nueva York y Nueva Jersey, respaldados por certificados originales.</p>
-      <div class="mt-[8mm] grid grid-cols-[70mm_1fr] gap-[10mm]">
+      <h2 class="serif" style="font-size:32pt;font-weight:500">Premios y reconocimientos</h2>
+      <p class="mt-[2mm] max-w-[150mm]" style="color:#6F6258">Distinciones y homenajes en Nueva York, Nueva Jersey y Colombia, respaldados por certificados y reconocimientos originales.</p>
+      <div class="mt-[8mm] grid grid-cols-[98mm_1fr] gap-[10mm] items-start">
         <div>
-          <h3 class="serif border-t-[.4mm] border-oro pt-[3mm]" style="font-size:15pt;font-weight:600">Premios y reconocimientos</h3>
-          <ol id="catPremios" class="mt-[3mm] space-y-[3.2mm]"></ol>
-          <div id="catTrofeos" class="mt-[6mm] grid grid-cols-3 gap-[2.5mm]"></div>
+          <h3 class="serif border-t-[.4mm] border-oro pt-[3mm]" style="font-size:15pt;font-weight:600">Premios y homenajes</h3>
+          <ol id="catPremios" class="mt-[4mm] space-y-[3.5mm]"></ol>
         </div>
         <div>
-          <h3 class="serif border-t-[.4mm] border-oro pt-[3mm]" style="font-size:15pt;font-weight:600">Exposiciones colectivas</h3>
-          <ol id="catExpos" class="mt-[3mm] space-y-[2.2mm]"></ol>
+          <h3 class="serif border-t-[.4mm] border-oro pt-[3mm]" style="font-size:15pt;font-weight:600">Certificados y trofeos</h3>
+          <p class="mt-[1.5mm]" style="font-size:7.8pt!important;color:#6F6258;line-height:1.4">Galardones y diplomas otorgados por organizaciones culturales e instituciones consulares.</p>
+          <div id="catTrofeos" class="mt-[4mm] grid grid-cols-2 gap-[3mm]"></div>
         </div>
       </div>
     </div>
-    <div class="folio"><span>Trayectoria</span><span class="n"></span></div>
+    <div class="folio"><span>Trayectoria · Premios y reconocimientos</span><span class="n"></span></div>
+  </section>
+
+  <!-- 5 · TRAYECTORIA · EXPOSICIONES COLECTIVAS -->
+  <section class="hoja">
+    <div class="px-[18mm] pt-[20mm]">
+      <h2 class="serif" style="font-size:32pt;font-weight:500">Exposiciones colectivas</h2>
+      <p class="mt-[2mm] max-w-[150mm]" style="color:#6F6258">Muestras de arte y eventos culturales en Nueva York y Nueva Jersey (2018 – 2021).</p>
+      <div class="mt-[8mm]">
+        <h3 class="serif border-t-[.4mm] border-oro pt-[3mm]" style="font-size:15pt;font-weight:600">Registro de muestras internacionales</h3>
+        <ol id="catExpos" class="mt-[4mm] grid grid-cols-2 gap-x-[12mm] gap-y-[2.8mm]"></ol>
+      </div>
+    </div>
+    <div class="folio"><span>Trayectoria · Exposiciones colectivas</span><span class="n"></span></div>
   </section>
 
 
@@ -153,20 +166,29 @@
   <script src="js/datos.js"></script>
   <script src="js/catalogo.js"></script>
   <script>
-    /* Página de trayectoria: premios a la izquierda, exposiciones a la derecha */
+    /* Páginas de trayectoria: premios a la izquierda con trofeos a la derecha, y exposiciones a dos columnas */
     function paginaTrayectoria() {
       const premios = TRAYECTORIA.filter(t => t.tipo === 'reconocimiento').sort((a, b) => porAnio(a, b));
       const expos = TRAYECTORIA.filter(t => t.tipo === 'exposicion').sort((a, b) => porAnio(a, b));
       document.getElementById('catPremios').innerHTML = premios.map(t => `
-        <li><p style="font-size:9pt!important;line-height:1.3"><b style="font-weight:500">${esc(t.titulo)}</b>${t.anio ? ` <span style="color:#B8914F">${esc(t.anio)}</span>` : ''}</p>
-        <p style="font-size:7.6pt!important;line-height:1.35;color:#6F6258">${esc(t.detalle)}</p></li>`).join('');
+        <li class="border-b border-tinta/10 pb-[2mm]">
+          <p style="font-size:8.8pt!important;line-height:1.3"><b style="font-weight:500">${esc(t.titulo)}</b>${t.anio ? ` <span style="color:#B8914F;font-weight:600">${esc(t.anio)}</span>` : ''}</p>
+          <p style="font-size:7.5pt!important;line-height:1.35;color:#6F6258">${esc(t.detalle)}</p>
+        </li>`).join('');
       document.getElementById('catExpos').innerHTML = expos.map(t => `
-        <li class="grid grid-cols-[11mm_1fr] gap-[2mm]"><span class="serif italic" style="font-size:10pt;color:#B8914F">${esc(t.anio)}</span>
-        <div><p style="font-size:8.6pt!important;line-height:1.25"><b style="font-weight:500">${esc(t.titulo)}</b></p>
-        <p style="font-size:7.3pt!important;line-height:1.3;color:#6F6258">${esc(t.lugar)}</p></div></li>`).join('');
-      // Miniaturas de los trofeos y reconocimientos principales
-      const fotos = premios.slice(0, 3).map(t => certificadosDe(t)[0]).filter(Boolean);
-      document.getElementById('catTrofeos').innerHTML = fotos.map(src => `<div style="height:30mm;background:#241A13"><img src="${esc(src)}" alt="" style="width:100%;height:100%;object-fit:contain"></div>`).join('');
+        <li class="grid grid-cols-[12mm_1fr] gap-[2.5mm] items-start border-b border-tinta/10 pb-[2mm]">
+          <span class="serif italic" style="font-size:10pt;color:#B8914F;line-height:1.2">${esc(t.anio || '—')}</span>
+          <div>
+            <p style="font-size:8.3pt!important;line-height:1.25"><b style="font-weight:500">${esc(t.titulo)}</b></p>
+            <p style="font-size:7.2pt!important;line-height:1.3;color:#6F6258">${esc(t.lugar)}</p>
+          </div>
+        </li>`).join('');
+      // Miniaturas de trofeos y certificados principales (4 fotos en cuadrícula 2x2)
+      const fotos = premios.slice(0, 4).map(t => certificadosDe(t)[0]).filter(Boolean);
+      document.getElementById('catTrofeos').innerHTML = fotos.map(src => `
+        <div style="height:36mm;background:#241A13;padding:2mm;border:1px solid rgba(184,145,79,.35)">
+          <img src="${esc(src)}" alt="Reconocimiento" style="width:100%;height:100%;object-fit:contain">
+        </div>`).join('');
     }
 
     iniciarCatalogo(() => {
