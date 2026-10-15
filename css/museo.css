@@ -125,6 +125,62 @@ a { color: inherit; }
 .guia-texto span { font-size: .72rem; letter-spacing: .04em; color: var(--oroclaro); }
 .guia-texto strong { font: 500 1.15rem/1.15 var(--serif); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
 
+/* Boleto de Entrada al Museo */
+.modal-ticket { position: fixed; inset: 0; z-index: 55; display: flex; align-items: center; justify-content: center; padding: 16px;
+  background: rgba(18, 12, 8, 0.75); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); animation: fadeInTicket 0.35s ease; }
+@keyframes fadeInTicket { from { opacity: 0; } to { opacity: 1; } }
+
+.ticket-envoltorio { position: relative; max-width: 660px; width: 100%; }
+.ticket-caja { position: relative; display: flex; background: var(--papel); color: var(--tinta); border-radius: 20px;
+  box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(184, 145, 79, 0.35); overflow: hidden;
+  animation: subirTicket 0.45s cubic-bezier(0.18, 0.89, 0.32, 1.25); transition: transform 0.4s ease, opacity 0.35s ease; }
+@keyframes subirTicket {
+  from { opacity: 0; transform: scale(0.92) translateY(24px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+.ticket-caja.picado { transform: scale(0.96) translateY(-8px); opacity: 0; }
+
+.ticket-cuerpo { flex: 1; padding: 26px 22px 22px 26px; display: flex; flex-direction: column; justify-content: space-between; }
+.ticket-cab { display: flex; align-items: center; gap: 14px; border-bottom: 1px dashed rgba(184, 145, 79, 0.35); padding-bottom: 14px; }
+.ticket-firma { height: 42px; width: auto; }
+.ticket-titulos { display: flex; flex-direction: column; }
+.ticket-etiqueta { font-size: 0.7rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--oro); }
+.ticket-titulos h2 { font: 600 1.5rem/1.1 var(--serif); color: var(--tinta); letter-spacing: 0.02em; }
+.ticket-sub { font-size: 0.8rem; color: var(--gris); }
+
+.ticket-datos { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 16px; margin: 16px 0; }
+.ticket-col { display: flex; flex-direction: column; gap: 2px; }
+.ticket-lbl { font-size: 0.66rem; letter-spacing: 0.08em; font-weight: 500; color: var(--gris); text-transform: uppercase; }
+.ticket-valor { font-size: 0.86rem; color: var(--tinta); font-weight: 400; }
+.ticket-num { font-family: 'Courier New', Courier, monospace; font-size: 1.15rem; font-weight: 700; color: var(--arcilla); letter-spacing: 0.05em; }
+
+.ticket-pie-cuerpo { border-top: 1px dashed rgba(184, 145, 79, 0.35); padding-top: 12px; display: flex; flex-direction: column; gap: 10px; }
+.ticket-lema { font-size: 0.92rem; color: var(--oro); text-align: left; }
+.ticket-acciones { display: flex; flex-wrap: wrap; gap: 10px; }
+.ticket-btn-entrar { background: var(--tinta); color: var(--lino); font-weight: 500; padding: 0.65rem 1.3rem; border-radius: 999px; box-shadow: 0 4px 14px rgba(36, 26, 19, 0.3); }
+.ticket-btn-entrar:hover { background: var(--arcilla); color: #fff; transform: translateY(-1px); }
+
+/* Separador troquelado */
+.ticket-separador { position: relative; width: 20px; display: flex; flex-direction: column; align-items: center; justify-content: space-between; }
+.ticket-muesca { position: absolute; width: 22px; height: 22px; background: rgba(18, 12, 8, 0.75); border-radius: 50%; left: 50%; transform: translateX(-50%); z-index: 2; box-shadow: inset 0 0 0 1px rgba(184, 145, 79, 0.35); }
+.ticket-muesca.top { top: -11px; }
+.ticket-muesca.bottom { bottom: -11px; }
+.ticket-linea { height: 100%; width: 0; border-left: 2px dashed rgba(184, 145, 79, 0.4); }
+
+/* Talón de control (Stub) */
+.ticket-talon { width: 140px; background: rgba(238, 231, 218, 0.55); border-left: 1px solid rgba(184, 145, 79, 0.2); padding: 22px 14px;
+  display: flex; flex-direction: column; align-items: center; justify-content: space-between; text-align: center; }
+.ticket-sello { display: grid; place-items: center; width: 68px; height: 68px; border: 2px dashed var(--arcilla); border-radius: 50%; padding: 2px; transform: rotate(-12deg); opacity: 0.88; }
+.sello-circulo { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; height: 100%; border: 1px solid var(--arcilla); border-radius: 50%; color: var(--arcilla); }
+.sello-texto { font-size: 0.62rem; font-weight: 700; letter-spacing: 0.1em; }
+.sello-sub { font-size: 0.48rem; letter-spacing: 0.05em; }
+
+.ticket-barcode { display: flex; align-items: stretch; justify-content: center; gap: 2px; height: 36px; width: 100%; padding: 0 4px; }
+.barcode-line { background: var(--tinta); opacity: 0.8; height: 100%; }
+.w-1 { width: 1px; } .w-2 { width: 2px; } .w-3 { width: 3px; } .w-4 { width: 4px; }
+.ticket-talon-num { font-family: 'Courier New', Courier, monospace; font-size: 0.78rem; font-weight: 700; color: var(--tinta); letter-spacing: 0.05em; }
+.ticket-cerrar { top: 8px; right: 8px; color: var(--tinta); }
+
 @media (max-width: 640px) {
   .barra-sup { padding: calc(10px + env(safe-area-inset-top)) 12px 10px; gap: 8px; }
   .marca span { display: none; }
@@ -158,5 +214,22 @@ a { color: inherit; }
   .guia-flecha { width: 42px; height: 42px; font-size: 1.6rem; }
   .guia-texto { width: min(280px, 58vw); }
   .guia-texto strong { font-size: 1.05rem; }
+
+  /* Adaptación móvil del boleto */
+  .ticket-caja { flex-direction: column; border-radius: 18px; max-height: calc(100vh - 40px); overflow-y: auto; }
+  .ticket-cuerpo { padding: 18px 16px 14px; }
+  .ticket-cab { gap: 10px; padding-bottom: 10px; }
+  .ticket-firma { height: 34px; }
+  .ticket-titulos h2 { font-size: 1.25rem; }
+  .ticket-datos { grid-template-columns: 1fr; gap: 8px; margin: 10px 0; }
+  .ticket-separador { width: 100%; height: 16px; flex-direction: row; }
+  .ticket-muesca.top { left: -11px; top: 50%; transform: translateY(-50%); }
+  .ticket-muesca.bottom { left: auto; right: -11px; top: 50%; transform: translateY(-50%); }
+  .ticket-linea { width: 100%; height: 0; border-left: 0; border-top: 2px dashed rgba(184, 145, 79, 0.4); }
+  .ticket-talon { width: 100%; flex-direction: row; padding: 12px 16px; border-left: 0; border-top: 1px solid rgba(184, 145, 79, 0.2); }
+  .ticket-sello { width: 50px; height: 50px; }
+  .sello-texto { font-size: 0.54rem; }
+  .ticket-barcode { height: 26px; max-width: 110px; }
 }
-@media (prefers-reduced-motion: reduce) { .ficha, .autor-caja { animation: none; } }
+@media (prefers-reduced-motion: reduce) { .ficha, .autor-caja, .ticket-caja { animation: none; } }
+

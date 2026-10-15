@@ -1871,7 +1871,60 @@
   $('btnAnterior').addEventListener('click', () => irA(estado.parada - 1));
   $('btnSiguiente').addEventListener('click', () => irA(estado.parada + 1));
   document.querySelectorAll('[data-cerrar]').forEach(b => b.addEventListener('click', () => { $(b.dataset.cerrar).hidden = true; }));
-  $('autor').addEventListener('click', e => { if (e.target === $('autor')) $('autor').hidden = true; });
+  /* ---------- BOLETO DE ENTRADA VIRTUAL ---------- */
+  function obtenerNumeroTicket() {
+    let num = localStorage.getItem('santamaria_ticket_consecutivo');
+    if (!num) {
+      const base = 4820 + Math.floor(Math.random() * 60);
+      num = base;
+      localStorage.setItem('santamaria_ticket_consecutivo', String(num));
+    }
+    const pad = String(num).padStart(6, '0');
+    const anio = new Date().getFullYear();
+    return { num, codigo: `SM-${anio}-${pad}`, pad: `#${pad}` };
+  }
+
+  function formatearFechaTicket() {
+    const d = new Date();
+    const meses = ['ENE', 'FEB', 'MAR', 'ABR', 'MAY', 'JUN', 'JUL', 'AGO', 'SEP', 'OCT', 'NOV', 'DIC'];
+    const dia = String(d.getDate()).padStart(2, '0');
+    const mes = meses[d.getMonth()];
+    const anio = d.getFullYear();
+    const hora = String(d.getHours()).padStart(2, '0');
+    const min = String(d.getMinutes()).padStart(2, '0');
+    return `${dia} ${mes} ${anio} · ${hora}:${min}`;
+  }
+
+  function actualizarDatosTicket() {
+    const t = obtenerNumeroTicket();
+    if ($('ticketNumero')) $('ticketNumero').textContent = t.codigo;
+    if ($('ticketTalonNum')) $('ticketTalonNum').textContent = t.pad;
+    if ($('ticketFecha')) $('ticketFecha').textContent = formatearFechaTicket();
+  }
+
+  function abrirTicket() {
+    actualizarDatosTicket();
+    if ($('ticketCaja')) $('ticketCaja').classList.remove('picado');
+    $('modalTicket').hidden = false;
+  }
+
+  function picarYEntrar() {
+    if ($('ticketCaja')) $('ticketCaja').classList.add('picado');
+    sessionStorage.setItem('santamaria_ticket_usado', '1');
+    setTimeout(() => {
+      $('modalTicket').hidden = true;
+      ocultarFicha();
+      irA(indiceDe('entrada'));
+    }, 380);
+  }
+
+  if ($('btnVerTicket')) $('btnVerTicket').addEventListener('click', abrirTicket);
+  if ($('btnPicarTicket')) $('btnPicarTicket').addEventListener('click', picarYEntrar);
+  if ($('btnIrAtrilTicket')) $('btnIrAtrilTicket').addEventListener('click', () => {
+    $('modalTicket').hidden = true;
+    irA(indiceDe('atril'));
+  });
+  if ($('modalTicket')) $('modalTicket').addEventListener('click', e => { if (e.target === $('modalTicket')) $('modalTicket').hidden = true; });
 
   // Mensaje de ayuda según el dispositivo
   $('ayuda').textContent = tactil
@@ -1940,7 +1993,7 @@
 
   const teclas = new Set();
   addEventListener('keydown', ev => {
-    if (ev.key === 'Escape') { ['ficha', 'plano', 'autor'].forEach(id => $(id).hidden = true); return; }
+    if (ev.key === 'Escape') { ['ficha', 'plano', 'autor', 'modalTicket'].forEach(id => { const el = $(id); if (el) el.hidden = true; }); return; }
     if (ev.target.closest && ev.target.closest('input, textarea, select')) return;
     const k = ev.key.toLowerCase();
     if (['w', 'a', 's', 'd', 'arrowup', 'arrowdown', 'arrowleft', 'arrowright'].includes(k)) { teclas.add(k); esconderAyuda(); ev.preventDefault(); }
@@ -2007,7 +2060,13 @@
     setTimeout(() => { $('carga').hidden = true; }, 900);
     estado.parada = 0; actualizarGuia();
     const v = vistaDe(PARADAS[0]);
-    viajar([v.pos], v.mira, 'afuera', () => mostrarFicha(PARADAS[0].ficha), 6);
+    viajar([v.pos], v.mira, 'afuera', () => {
+      mostrarFicha(PARADAS[0].ficha);
+      // Muestra el boleto de entrada virtual al arribar a la casa
+      if (!sessionStorage.getItem('santamaria_ticket_usado')) {
+        setTimeout(abrirTicket, 450);
+      }
+    }, 6);
   }, 250);
 
   // Animación del clima y de la escena
@@ -2034,6 +2093,7 @@
     PARADAS,
     estado,
     camara,
+    abrirTicket,
     setHora: (h) => { horaManual = Math.max(0, Math.min(24, h)); actualizarCicloDiaNoche(); console.log(`Hora fijada manualmente a las ${h}:00 hs`); },
     fijarHoraReal: () => { horaManual = null; actualizarCicloDiaNoche(); console.log('Modo hora real activado.'); },
     cambiarClima: modo => cambiarClima(modo),

@@ -54,6 +54,10 @@
           <span class="btn-txt">Lluvia</span>
         </button>
       </div>
+      <button id="btnVerTicket" class="boton boton-vidrio" title="Ver mi boleto de entrada">
+        <span class="btn-icono" aria-hidden="true">🎫</span>
+        <span class="largo">Boleto</span><span class="corto">Boleto</span>
+      </button>
       <button id="btnPlano" class="boton boton-vidrio" aria-expanded="false" aria-controls="plano" title="Ver plano de la casa">
         <span class="btn-icono" aria-hidden="true">🏛️</span>
         <span>Plano</span>
@@ -67,6 +71,86 @@
       </a>
     </nav>
   </header>
+
+  <!-- Boleto de Entrada al Museo -->
+  <div id="modalTicket" class="modal-ticket" hidden role="dialog" aria-modal="true" aria-labelledby="ticketTitulo">
+    <div class="ticket-envoltorio">
+      <div class="ticket-caja" id="ticketCaja">
+        <!-- Parte Principal del Boleto -->
+        <div class="ticket-cuerpo">
+          <div class="ticket-cab">
+            <img src="img/marca/firma-oscura.png" alt="Santamaría" class="ticket-firma" />
+            <div class="ticket-titulos">
+              <span class="ticket-etiqueta">Boleto de Admisión</span>
+              <h2 id="ticketTitulo">CASA-MUSEO VIRTUAL</h2>
+              <p class="ticket-sub">San Martín de los Llanos, Meta · Colombia</p>
+            </div>
+          </div>
+
+          <div class="ticket-datos">
+            <div class="ticket-col">
+              <span class="ticket-lbl">Nº DE ENTRADA</span>
+              <strong id="ticketNumero" class="ticket-valor ticket-num">SM-2026-004829</strong>
+            </div>
+            <div class="ticket-col">
+              <span class="ticket-lbl">FECHA Y HORA</span>
+              <span id="ticketFecha" class="ticket-valor">14 OCT 2026 · 19:00</span>
+            </div>
+            <div class="ticket-col">
+              <span class="ticket-lbl">TIPO DE ACCESO</span>
+              <span class="ticket-valor">Pase Libre · Invitado de Honor</span>
+            </div>
+            <div class="ticket-col">
+              <span class="ticket-lbl">SALAS HABILITADAS</span>
+              <span class="ticket-valor">Piso 1: Pintor · Piso 2: Ebanista</span>
+            </div>
+          </div>
+
+          <div class="ticket-pie-cuerpo">
+            <p class="ticket-lema font-serif italic">«Donde el lienzo encuentra la madera»</p>
+            <div class="ticket-acciones">
+              <button id="btnPicarTicket" class="boton boton-oscuro ticket-btn-entrar">
+                <span class="ticket-icono-btn" aria-hidden="true">🎫</span>
+                <span>Picar boleto y Entrar</span>
+              </button>
+              <button id="btnIrAtrilTicket" class="boton boton-borde">
+                <span>Ver atril del autor</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Línea Troquelada de División con muescas semicirculares -->
+        <div class="ticket-separador" aria-hidden="true">
+          <span class="ticket-muesca top"></span>
+          <span class="ticket-linea"></span>
+          <span class="ticket-muesca bottom"></span>
+        </div>
+
+        <!-- Talón de Control (Stub) -->
+        <div class="ticket-talon">
+          <div class="ticket-sello" id="ticketSello">
+            <div class="sello-circulo">
+              <span class="sello-texto">VALIDADO</span>
+              <span class="sello-sub">MUSEO ART</span>
+            </div>
+          </div>
+          <div class="ticket-barcode" aria-hidden="true">
+            <span class="barcode-line w-1"></span><span class="barcode-line w-3"></span>
+            <span class="barcode-line w-2"></span><span class="barcode-line w-1"></span>
+            <span class="barcode-line w-4"></span><span class="barcode-line w-2"></span>
+            <span class="barcode-line w-1"></span><span class="barcode-line w-3"></span>
+            <span class="barcode-line w-2"></span><span class="barcode-line w-4"></span>
+            <span class="barcode-line w-1"></span><span class="barcode-line w-2"></span>
+          </div>
+          <span class="ticket-talon-num" id="ticketTalonNum">#004829</span>
+        </div>
+
+        <!-- Botón cerrar accesible -->
+        <button class="cerrar ticket-cerrar" data-cerrar="modalTicket" aria-label="Cerrar boleto">×</button>
+      </div>
+    </div>
+  </div>
 
   <!-- Plano: lista de paradas agrupadas por piso -->
   <aside id="plano" class="plano" hidden>
