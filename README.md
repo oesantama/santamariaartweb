@@ -104,7 +104,8 @@ El sitio se publica en **Cloudflare Pages** conectado a este repositorio: cada v
 
 ## Pendientes
 
-- [ ] Fotos propias (o con permiso) de la iglesia de San Martín y de El Embrujo Llanero para los cuadros de la fachada.
+- [x] Foto de la iglesia de San Martín para la fachada (`img/san-martin/iglesia.jpg`).
+- [ ] Foto propia (o con permiso) de El Embrujo Llanero («La Bola») para el cuadro derecho de la fachada.
 
 - [ ] **Confirmar títulos, técnicas, medidas y años de las obras nuevas** (exposición y vendidas). Los títulos de `datos.js` son provisionales y descriptivos, por ejemplo "Tarde en el muelle" o "Retrato de caballero I".
 - [ ] Confirmar si *Shakira* y *Soy yo y qué…* están a la venta en la exposición (hoy figuran como `disponible: 'no'`).

@@ -45,7 +45,7 @@ const CONFIG = {
   // Fotos de San Martín para los cuadros de la fachada del museo (vacío = cuadro "Fotografía próximamente").
   // Use fotos propias o con permiso del autor, por ejemplo 'img/san-martin/iglesia.jpg'.
   fotosSanMartin: {
-    iglesia: '',
+    iglesia: 'img/san-martin/iglesia.jpg',
     embrujo: ''
   }
 };
